@@ -1,0 +1,51 @@
+{
+    "name": "WhatsApp-Botto-Void",
+    "description": "Modular WhatsApp Bot",
+    "keywords": [
+      "bot",
+      "whatsapp",
+      "stickers",
+      "whatsapp-stickers",
+      "anime",
+      "whatsapp-bot",
+      "whatsapp-sticker-bot",
+      "whatsapp-botto"
+    ],
+    "website": "https://github.com/Synthesized-Infinity/Whatsapp-Botto-void#readme",
+    "repository": "https://github.com/Synthesized-Infinity/Whatsapp-Botto-void.git",
+    "logo": "https://i.ibb.co/HPqwr9Q/whatsapp-botto-void-init.png",
+    "success_url": "/",
+    "env": {
+      "NAME": {
+        "description": "Name of your bot"
+      },
+      "PREFIX": {
+        "description": "Prefix of your bot"
+      },
+      "SESSION": {
+        "description": "A string for the session to be classified and to get access to the server endpoints"
+      },
+      "MODS": {
+        "description": "The phone numbers of the users who you want to be admin for the bot (should be in international format without + and multiple numbers must be separated by a comma \",\")",
+        "required": false
+      },
+      "MONGO_URI": {
+        "description": "A secret String for Mongodb Connection.(Required)"
+      }
+    },
+    "buildpacks": [
+      {
+        "url": "heroku/nodejs"
+      },
+      {
+        "url": "https://github.com/DuckyTeam/heroku-buildpack-imagemagick"
+      },
+  
+      {
+        "url": "https://github.com/clhuang/heroku-buildpack-webp-binaries.git"
+      },
+      {
+        "url": "https://github.com/jonathanong/heroku-buildpack-ffmpeg-latest.git"
+      }
+    ]
+  }
