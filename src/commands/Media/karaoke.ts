@@ -8,11 +8,11 @@ import yts from 'yt-search'
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
-            command: 'lyrics',
-            description: 'Gives you lyrics with song playable on WhatsApp',
+            command: 'karaoke',
+            description: 'Gives you karaoke song playable on WhatsApp',
             category: 'media',
-            aliases: ['ly'],
-            usage: `${client.config.prefix}yts [term]`,
+            aliases: ['sing'],
+            usage: `${client.config.prefix}karaoke [term]`,
             dm: true,
             baseXp: 20
         })
@@ -21,9 +21,9 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         if (!joined) return void M.reply('Please provide a search term')
         const term = joined.trim()
-        const { videos } = await yts(term + " lyrics song")
+        const { videos } = await yts(term + " karaoke song")
         if (!videos || videos.length <= 0) return void M.reply(`No Matching videos found for the term *${term}*`)
-        let text = `There will be Lyrics here in the future👾\nThis command is under Development`
+        let text = `Via Kaoi👾 && Void`
 
         this.client.sendMessage(M.from, text, MessageType.extendedText, {
             quoted: M.WAMessage,
