@@ -22,14 +22,7 @@ export default class Command extends BaseCommand {
         if (!M.urls.length) return void M.reply('Please provide the URL of the YT video you want too download')
         const audio = new YT(M.urls[0], 'audio')
         if (!audio.validateURL()) return void M.reply(`Please provide a Valid YT URL`)
-        const { videoDetails } = await audio.getInfo()
-        M.reply(
-            await audio.getThumbnail(),
-            MessageType.image,
-            Mimetype.jpeg,
-            undefined,
-            `🍥 *Title:* ${videoDetails.title}\n🕰️ *Duration:* ${videoDetails.lengthSeconds}\n🗒️ *Description:* ${videoDetails.description}`
-        )
+        M.reply('👾 sending...')
         M.reply(await audio.getBuffer(), MessageType.audio).catch(() => M.reply('An error occurred...'))
     }
 }

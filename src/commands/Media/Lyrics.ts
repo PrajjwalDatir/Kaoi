@@ -8,10 +8,10 @@ import yts from 'yt-search'
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
-            command: 'yts',
-            description: 'Searches YT',
+            command: 'lyrics',
+            description: 'Gives you lyrics with song playable on WhatsApp',
             category: 'media',
-            aliases: ['ytsearch'],
+            aliases: ['ly'],
             usage: `${client.config.prefix}yts [term]`,
             dm: true,
             baseXp: 20
@@ -23,19 +23,22 @@ export default class Command extends BaseCommand {
         const term = joined.trim()
         const { videos } = await yts(term)
         if (!videos || videos.length <= 0) return void M.reply(`No Matching videos found for the term *${term}*`)
-        const length = videos.length < 10 ? videos.length : 10
-        let text = `🔎 *Results for ${term}*\n`
-        for (let i = 0; i < length; i++) {
-            text += `*#${i + 1}\n*📗 *Title:* ${videos[i].title}\n📕 *Channel:* ${
-                videos[i].author.name
-            }\n 📙 *Duration:* ${videos[i].duration}\n📘 *URL:* ${videos[i].url}\n\n`
-        }
+        let text = `This command is under Development`
+
+        // export const lyrics = async (term: string): Promise<string> => {
+        //     if (!process.env.EIF) return responses.warnings.EIF
+        //     if (!term) responses['empty-query']
+        //     const data = await Utils.fetch(`${process.env.EIF}/lyrics?term=${encodeURI(term)}`, {})
+        //     return data.status !== 200
+        //         ? data.error
+        //         : responses.lyrics.replace(`{T}`, Utils.capitalize(data.term)).replace(`{L}`, data.lyrics)
+        // }
         this.client.sendMessage(M.from, text, MessageType.extendedText, {
             quoted: M.WAMessage,
             contextInfo: {
                 externalAdReply: {
                     title: `Search Term: ${term}`,
-                    body: `👾Handcrafted for you by Kaoi👾`,
+                    body: `👾 Handcrafted for you by Kaoi 👾`,
                     mediaType: 2,
                     thumbnailUrl: videos[0].thumbnail,
                     mediaUrl: videos[0].url
