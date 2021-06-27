@@ -38,6 +38,6 @@ export default class Command extends BaseCommand {
                     mediaUrl: audio.url
                 }
             }
-        })
+        }).catch((reason: any) => M.reply(`an error occupered, Reason: ${reason}`))
     }
 }
