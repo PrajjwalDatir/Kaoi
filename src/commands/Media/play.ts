@@ -25,7 +25,7 @@ export default class Command extends BaseCommand {
         const { videos } = await yts(term)
         if (!videos || videos.length <= 0) return void M.reply(`No Matching videos found for the term : *${term}*`)
         const audio = new YT(videos[0].url, 'audio')
+        M.reply('Sending...')
         M.reply(await audio.getBuffer(), MessageType.audio).catch(() => M.reply('An error occurred...'))
-
     }
 }

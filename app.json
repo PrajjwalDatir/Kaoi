@@ -1,6 +1,6 @@
 {
-    "name": "WhatsApp-Botto-Void",
-    "description": "Modular WhatsApp Bot",
+    "name": "Kaoi",
+    "description": "Maintained Fork of Void",
     "keywords": [
       "bot",
       "whatsapp",
@@ -11,14 +11,11 @@
       "whatsapp-sticker-bot",
       "whatsapp-botto"
     ],
-    "website": "https://github.com/Synthesized-Infinity/Whatsapp-Botto-void#readme",
-    "repository": "https://github.com/Synthesized-Infinity/Whatsapp-Botto-void.git",
-    "logo": "https://i.ibb.co/HPqwr9Q/whatsapp-botto-void-init.png",
+    "website": "https://github.com/PrajjwalDatir/Kaoi#readme",
+    "repository": "https://github.com/PrajjwalDatir/Kaoi.git",
+    "logo": "https://avatars.githubusercontent.com/u/46681482?v=4",
     "success_url": "/",
     "env": {
-      "NAME": {
-        "description": "Name of your bot"
-      },
       "PREFIX": {
         "description": "Prefix of your bot"
       },
@@ -38,7 +35,7 @@
         "url": "heroku/nodejs"
       },
       {
-        "url": "https://github.com/DuckyTeam/heroku-buildpack-imagemagick"
+        "url": "https://github.com/BitMonarchs/heroku-buildpack-imagemagick"
       },
   
       {

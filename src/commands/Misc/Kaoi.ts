@@ -26,7 +26,7 @@ export default class Command extends BaseCommand {
             MessageType.image,
             undefined,
             undefined,
-            `🖤 *Void* 🖤\n\n🍀 *Description: ${pkg.description}*\n\n🌐 *URL: ${pkg.homepage}*\n\n📂 *Repository: ${pkg.repository.url}*`
+            `🖤 *Kaoi* 🖤\n\n🍀 *Description: Maintained Fork of WhatsApp Botto Void\n\n🌐 *URL: https://github.com/PrajjwalDatir/Kaoi#readme\n\n📂 *Repository:* https://github.com/PrajjwalDatir/Kaoi`
         )
     }
 }
