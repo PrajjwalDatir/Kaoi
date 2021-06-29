@@ -45,7 +45,7 @@ export default class Command extends BaseCommand {
                 (await this.client.getStatus(user)).status || 'None'
             }*\n\n🌟 *XP: ${data.Xp || 0}*\n\n👑 *Admin: ${
                 M.groupMetadata?.admins?.includes(user) || false
-            }*\n\n❌ *Ban ${data.ban || false}*`
+            }*\n\n❌ *Ban: ${data.ban || false}*`
         )
     }
 }
