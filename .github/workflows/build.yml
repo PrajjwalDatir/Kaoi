@@ -2,7 +2,7 @@ name: Build Testing
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, kaoi-beta ]
   pull_request:
     branches: [ main ]
 
