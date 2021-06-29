@@ -5,7 +5,7 @@ import { IParsedArgs, ISimplifiedMessage } from '../../typings'
 import { MessageType, Mimetype } from '@adiwajshing/baileys'
 import EventEmitter from 'events'
 import Game, { genRealMove } from 'chess-node'
-import CIG from 'chess-image-generator'
+import CIG from 'chess-image-generator-ts'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
