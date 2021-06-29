@@ -21,21 +21,23 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         if (!joined) return void M.reply('Please provide a search term')
         const term = joined.trim()
-        const { videos } = await yts(term + " karaoke song")
+        const { videos } = await yts(term + ' karaoke song')
         if (!videos || videos.length <= 0) return void M.reply(`No Matching videos found for the term *${term}*`)
         let text = `Via Kaoi👾 && Void`
 
-        this.client.sendMessage(M.from, text, MessageType.extendedText, {
-            quoted: M.WAMessage,
-            contextInfo: {
-                externalAdReply: {
-                    title: `Search Term: ${term}`,
-                    body: `👾 Handcrafted for you by Kaoi 👾`,
-                    mediaType: 2,
-                    thumbnailUrl: videos[0].thumbnail,
-                    mediaUrl: videos[0].url
+        this.client
+            .sendMessage(M.from, text, MessageType.extendedText, {
+                quoted: M.WAMessage,
+                contextInfo: {
+                    externalAdReply: {
+                        title: `Search Term: ${term}`,
+                        body: `👾 Handcrafted for you by Kaoi 👾`,
+                        mediaType: 2,
+                        thumbnailUrl: videos[0].thumbnail,
+                        mediaUrl: videos[0].url
+                    }
                 }
-            }
-        })
+            })
+            .catch((reason: any) => M.reply(`an error occupered, Reason: ${reason}`))
     }
 }

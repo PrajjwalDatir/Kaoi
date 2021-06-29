@@ -34,7 +34,9 @@ export default class Command extends BaseCommand {
             undefined,
             undefined,
             caption
-        ).catch(() => M.reply(caption))
-        M.reply(await track.getAudio(), MessageType.audio)
+        ).catch((reason: any) => M.reply(`an error occupered, Reason: ${reason}`))
+        M.reply(await track.getAudio(), MessageType.audio).catch((reason: any) =>
+            M.reply(`an error occupered, Reason: ${reason}`)
+        )
     }
 }

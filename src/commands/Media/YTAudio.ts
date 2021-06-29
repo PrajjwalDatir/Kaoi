@@ -23,6 +23,8 @@ export default class Command extends BaseCommand {
         const audio = new YT(M.urls[0], 'audio')
         if (!audio.validateURL()) return void M.reply(`Please provide a Valid YT URL`)
         M.reply('👾 sending...')
-        M.reply(await audio.getBuffer(), MessageType.audio).catch(() => M.reply('An error occurred...'))
+        M.reply(await audio.getBuffer(), MessageType.audio).catch((reason: any) =>
+            M.reply(`an error occupered, Reason: ${reason}`)
+        )
     }
 }
