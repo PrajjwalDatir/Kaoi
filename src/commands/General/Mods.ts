@@ -24,6 +24,7 @@ export default class Command extends BaseCommand {
                     user.notify || user.vname || user.name || 'null'
                 }*\n🍀 *Contact: https://wa.me/+${user?.jid?.split('@')[0]}*\n\n`)
         )
+        text += `\nTo deploy your own Bot or To support Kaoi👾\nVisit : https://github.com/PrajjwalDatir/Kaoi `
         return void M.reply(text)
     }
 }
