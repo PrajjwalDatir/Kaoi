@@ -28,11 +28,16 @@ export default class Command extends BaseCommand {
         try {
             pfp = await this.client.getProfilePicture(user)
         } catch (err) {
-            pfp = 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'
+            M.reply(`Profile Picture not Accessible of ${username}`)
+            pfp =
+                'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Kawaii_robot_power_clipart.svg/640px-Kawaii_robot_power_clipart.svg.png'
         }
         const data = await this.client.getUser(user)
         await M.reply(
-            await request.buffer(pfp || 'https://upload.wikimedia.org/wikipedia/commons/a/ac/Default_pfp.jpg'),
+            await request.buffer(
+                pfp ||
+                    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Kawaii_robot_power_clipart.svg/640px-Kawaii_robot_power_clipart.svg.png'
+            ),
             MessageType.image,
             undefined,
             undefined,

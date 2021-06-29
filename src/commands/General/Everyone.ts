@@ -21,6 +21,6 @@ export default class Command extends BaseCommand {
             undefined,
             undefined,
             M.groupMetadata?.participants.map((user) => user.jid)
-        ))
+        ).catch((reason: any) => M.reply(`an error occupered, Reason: ${reason}`)))
     }
 }
