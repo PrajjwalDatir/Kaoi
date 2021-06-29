@@ -4,6 +4,8 @@ import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings'
 import yts from 'yt-search'
+// @ts-ignore
+import Lyrics from 'lyrics-monarch-api'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -23,9 +25,11 @@ export default class Command extends BaseCommand {
         const term = joined.trim()
         const { videos } = await yts(term + ' lyrics song')
         if (!videos || videos.length <= 0) return void M.reply(`No Matching videos found for the term *${term}*`)
-        const response = "await lyrics.getLyrics(term)"
+        const lyrics = new Lyrics()
+        const response = await lyrics.getLyrics(term)
+        if (!((response as any).status === 200)) return
         this.client
-            .sendMessage(M.from, response, MessageType.extendedText, {
+            .sendMessage(M.from, (response as any)?.data?.result?.lirik, MessageType.extendedText, {
                 quoted: M.WAMessage,
                 contextInfo: {
                     externalAdReply: {
