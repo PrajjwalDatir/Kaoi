@@ -21,10 +21,10 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        if (!joined) return void M.reply('Please provide a search term')
+        if (!joined) return void M.reply('🔎 Provide a search term')
         const term = joined.trim()
         const { videos } = await yts(term + ' lyrics song')
-        if (!videos || videos.length <= 0) return void M.reply(`No Matching videos found for the term *${term}*`)
+        if (!videos || videos.length <= 0) return void M.reply(`⚓ No Matching videos found for the term *${term}*`)
         const lyrics = new Lyrics()
         const response = await lyrics.getLyrics(term)
         if (!((response as any).status === 200)) return
@@ -41,6 +41,6 @@ export default class Command extends BaseCommand {
                     }
                 }
             })
-            .catch((reason: any) => M.reply(`an error occupered, Reason: ${reason}`))
+            .catch((reason: any) => M.reply(`❌ an error occupered, Reason: ${reason}`))
     }
 }

@@ -19,18 +19,18 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        if (!joined) return void M.reply('Please provide a search term')
+        if (!joined) return void M.reply('🔎 Provide a search term')
         const term = joined.trim()
         const { videos } = await yts(term)
-        if (!videos || videos.length <= 0) return void M.reply(`No Matching videos found for the term *${term}*`)
+        if (!videos || videos.length <= 0) return void M.reply(`⚓ No Matching videos found for : *${term}*`)
         const length = videos.length < 10 ? videos.length : 10
         let text = `🔎 *Results for ${term}*\n`
         for (let i = 0; i < length; i++) {
-            text += `*#${i + 1}\n*📗 *Title:* ${videos[i].title}\n📕 *Channel:* ${
+            text += `*#${i + 1}*\n📗 *Title:* ${videos[i].title}\n📕 *Channel:* ${
                 videos[i].author.name
             }\n 📙 *Duration:* ${videos[i].duration}\n📘 *URL:* ${videos[i].url}\n\n`
         }
-        M.reply('searching...')
+        M.reply('👾 searching...')
         this.client
             .sendMessage(M.from, text, MessageType.extendedText, {
                 quoted: M.WAMessage,
@@ -44,6 +44,6 @@ export default class Command extends BaseCommand {
                     }
                 }
             })
-            .catch((reason: any) => M.reply(`an error occupered, Reason: ${reason}`))
+            .catch((reason: any) => M.reply(`❌ an error occupered, Reason: ${reason}`))
     }
 }

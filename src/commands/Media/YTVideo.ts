@@ -19,15 +19,15 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!M.urls.length) return void M.reply('Please provide the URL of the YT video you want too download')
+        if (!M.urls.length) return void M.reply('🔎 Provide the URL of the YT video you want to download')
         const video = new YT(M.urls[0], 'video')
-        if (!video.validateURL()) return void M.reply(`Please provide a Valid YT URL`)
+        if (!video.validateURL()) return void M.reply(`Provide a Valid YT URL`)
         const { videoDetails } = await video.getInfo()
         M.reply('👾 sending...')
-        if (Number(videoDetails.lengthSeconds) > 1500)
-            return void M.reply('Cannot Download videos longer than 25 Minutes')
+        if (Number(videoDetails.lengthSeconds) > 1800)
+            return void M.reply('⚓ Cannot Download videos longer than 30 Minutes')
         M.reply(await video.getBuffer(), MessageType.video).catch((reason: any) =>
-            M.reply(`an error occupered, Reason: ${reason}`)
+            M.reply(`❌ an error occupered, Reason: ${reason}`)
         )
     }
 }
