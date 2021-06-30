@@ -17,15 +17,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        // eslint-disable-next-line @typescript-eslint/no-var-requires
-        const image = `https://avatars.githubusercontent.com/u/46681482?v=4`
-        if (!image) return void null
-        return void M.reply(
-            image,
-            MessageType.image,
-            undefined,
-            undefined,
-            `🖤 *Kaoi* 🖤\n\n🍀 *Description: Maintained Fork of WhatsApp Botto Void\n\n🌐 *URL: https://github.com/PrajjwalDatir/Kaoi#readme\n\n📂 *Repository:* https://github.com/PrajjwalDatir/Kaoi`
+        return void M.reply(`👾 *kaoi* 👾\n\n🍀 *Description: Maintained Fork of WhatsApp Botto Void\n\n🌐 *URL: https://github.com/PrajjwalDatir/Kaoi#readme\n\n📂 *Repository:* https://github.com/PrajjwalDatir/Kaoi`
         )
     }
 }
