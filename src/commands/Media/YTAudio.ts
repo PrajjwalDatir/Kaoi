@@ -19,12 +19,12 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!M.urls.length) return void M.reply('Please provide the URL of the YT video you want too download')
+        if (!M.urls.length) return void M.reply('🔎 Provide the URL of the YT video you want to download')
         const audio = new YT(M.urls[0], 'audio')
-        if (!audio.validateURL()) return void M.reply(`Please provide a Valid YT URL`)
+        if (!audio.validateURL()) return void M.reply(`⚓ Provide a Valid YT URL`)
         M.reply('👾 sending...')
         M.reply(await audio.getBuffer(), MessageType.audio).catch((reason: any) =>
-            M.reply(`an error occupered, Reason: ${reason}`)
+            M.reply(`❌ an error occupered, Reason: ${reason}`)
         )
     }
 }
