@@ -184,6 +184,21 @@ export default class WAClient extends Base {
             }).save()
     }
 
+    modifyAllChats = async (
+        action: 'archive' | 'unarchive' | 'pin' | 'unpin' | 'mute' | 'unmute' | 'delete' | 'clear'
+    ): Promise<{ status: 200 | 500 }> => {
+        const chats = this.chats.all()
+        this.setMaxListeners(25)
+        try {
+            for (const chat of chats) {
+                await this.modifyChat(chat.jid, action)
+            }
+            return { status: 200 }
+        } catch (err) {
+            return { status: 500 }
+        }
+    }
+
     util = new Utils()
 
     getGroupData = async (jid: string): Promise<IGroupModel> =>
