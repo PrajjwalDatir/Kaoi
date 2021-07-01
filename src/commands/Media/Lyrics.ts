@@ -33,9 +33,8 @@ export default class Command extends BaseCommand {
                 quoted: M.WAMessage,
                 contextInfo: {
                     externalAdReply: {
-                        title: `Search Term: ${term}`,
                         body: `👾 Handcrafted for you by Kaoi 👾`,
-                        Term: `*Search Term:* ${term}`,
+                        title: `*Search Term:* ${term}`,
                         mediaType: 2,
                         thumbnailUrl: videos[0].thumbnail,
                         mediaUrl: videos[0].url
