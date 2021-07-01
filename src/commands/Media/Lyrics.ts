@@ -35,7 +35,7 @@ export default class Command extends BaseCommand {
                     externalAdReply: {
                         title: `Search Term: ${term}`,
                         body: `👾 Handcrafted for you by Kaoi 👾`,
-                        title: `*Search Term:* ${term}`,
+                        Term: `*Search Term:* ${term}`,
                         mediaType: 2,
                         thumbnailUrl: videos[0].thumbnail,
                         mediaUrl: videos[0].url
