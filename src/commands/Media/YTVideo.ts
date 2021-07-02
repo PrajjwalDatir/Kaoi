@@ -23,9 +23,9 @@ export default class Command extends BaseCommand {
         const video = new YT(M.urls[0], 'video')
         if (!video.validateURL()) return void M.reply(`Provide a Valid YT URL`)
         const { videoDetails } = await video.getInfo()
-        M.reply('Bringing your video oni chan.....')
+        M.reply('👾 sending...')
         if (Number(videoDetails.lengthSeconds) > 1800)
-            return void M.reply('⚓ Oni chan file is too big and I'm only 12..')
+            return void M.reply('⚓ Cannot Download videos longer than 30 Minutes')
         M.reply(await video.getBuffer(), MessageType.video).catch((reason: any) =>
             M.reply(`❌ an error occupered, Reason: ${reason}`)
         )
