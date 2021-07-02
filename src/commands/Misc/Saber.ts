@@ -17,7 +17,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        return void M.reply(`👾 *kaoi* 👾\n\n🍀 *Description:* Maintained Fork of WhatsApp Botto Void\n\n🌐 *URL:* https://github.com/PrajjwalDatir/Kaoi#readme\n\n📂 *Repository:* https://github.com/PrajjwalDatir/Kaoi`
+        return void M.reply(`🐦 *Saber* 🐦\n\n🍀 *Description:* Maintained Fork of WhatsApp Botto Void\n\n🌐 *URL:* https://github.com/AB1RZ9/Saber-Pendragon#readme\n\n📂 *Repository:* https://github.com/AB1RZ9/Saber-Pendragon`
         ).catch((reason: any) =>
             M.reply(`an error occupered, Reason: ${reason}`))
     }
