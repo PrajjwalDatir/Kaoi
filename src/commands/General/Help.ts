@@ -20,10 +20,6 @@ export default class Command extends BaseCommand {
             const commands = this.handler.commands.keys()
             const categories: { [key: string]: ICommand[] } = {}
             for (const command of commands) {
-             const image = this.client.assets.get('menu-image')
-               if (!image) return void M.reply MessageType.image, ;
-            undefined,
-                )
                 const info = this.handler.commands.get(command)
                 if (!command) continue
                 if (!info?.config?.category || info.config.category === 'dev') continue
