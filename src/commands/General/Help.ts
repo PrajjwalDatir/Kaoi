@@ -23,7 +23,7 @@ export default class Command extends BaseCommand {
              const image = this.client.assets.get('menu-image')
                if (!image) return void null
                   M.reply(
-                 image,
+                 MessageType.image,
                   MessageType.image,
                  undefined,
                 undefined,
