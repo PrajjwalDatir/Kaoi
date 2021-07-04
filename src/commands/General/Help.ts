@@ -22,9 +22,7 @@ export default class Command extends BaseCommand {
             for (const command of commands) {
              const image = this.client.assets.get('menu-image')
                if (!image) return void M.reply(
-            image,
             MessageType.image,
-            undefined,
             undefined,
                 )
                 const info = this.handler.commands.get(command)
