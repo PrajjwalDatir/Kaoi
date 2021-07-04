@@ -22,7 +22,7 @@ export default class Command extends BaseCommand {
             for (const command of commands) {
              const image = this.client.assets.get('menu-image')
                if (!image) return void null
-                 return void M.reply(
+                  M.reply(
                  image,
                   MessageType.image,
                  undefined,
@@ -65,5 +65,5 @@ export default class Command extends BaseCommand {
         )
     }
 
-    emojis = ['🌀', '🎴', '🔮', '👑', '🎈', '⚙️', '🍀']
+    emojis = ['🚀', '🎴', '🔮', '👑', '🎈', '⚙️', '🍀']
 }
