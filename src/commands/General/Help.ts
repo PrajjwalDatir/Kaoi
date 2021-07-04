@@ -27,6 +27,7 @@ export default class Command extends BaseCommand {
                   MessageType.image,
                  undefined,
                 undefined,
+                )
                 const info = this.handler.commands.get(command)
                 if (!command) continue
                 if (!info?.config?.category || info.config.category === 'dev') continue
