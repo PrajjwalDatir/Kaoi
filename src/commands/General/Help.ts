@@ -29,17 +29,78 @@ export default class Command extends BaseCommand {
                     categories[info.config.category].push(info)
                 }
             }
-            let text = `✨ *Saber's Command List* ✨\n\n`
-            const keys = Object.keys(categories)
-            for (const key of keys)
-                text += `${this.emojis[keys.indexOf(key)]} *${this.client.util.capitalize(key)}*\n❐ \`\`\`${categories[
-                    key
-                ]
-                    .map((command) => command.config?.command)
-                    .join(', ')}\`\`\`\n\n`
-            return void M.reply(
-                `${text} 🗃️ *Note: Use ${this.client.config.prefix}help <command_name> to view the command info*`
-            )
+         return `╭────┈ ↷
+┃□│✎┊ *「✨Saber Pendragon✨」*
+┃□│╭────────╯
+┃□││❏OWNER   : *@Console.log("gen0s")*
+┃□││❏OWNER # : *wa.me/919938533470*
+┃□││❏NAME    : *${client._config.name}* 
+┃□││❏PREFIX  : 「 ${client._config.prefix} 」
+╰─────────────────┈ ❁ཻུ۪۪⸙͎	
+─────────────────┈ ❁۪۪
+❏ *👑Support-Owner👑* 」
+─ ↷
+> Follow Creator Repo  : https://github.com/AB1RZ9/Saber-Pendragon
+> Official-Bot-Group   : 
+╰─────────────────┈ ❁ཻུུ۪۪۪۪
+─────────────────┈ ❁۪۪
+❏ *📌General-Commands📌* 」
+╰─❁۪۪
+> *${client._config.prefix}help*
+> *${client._config.prefix}xp*
+> *${client._config.prefix}mods*
+> *${client._config.prefix}everyone*
+> *${client._config.prefix}profile*
+> *${client._config.prefix}void*
+> *${client._config.prefix}delete*
+> *${client._config.prefix}profile*
+> *${client._config.prefix}group*
+> *${client._config.prefix}admins*
+╰─────────────────┈ ❁ཻཻུུ۪۪۪۪⸙͎
+─────────────────┈ ❁۪۪
+❏ *🎬Media-Commands🎬* 」
+╰─❁۪۪
+> *${client._config.prefix}spotify*
+> *${client._config.prefix}yts*
+> *${client._config.prefix}yta*
+> *${client._config.prefix}ytv*
+> *${client._config.prefix}sticker*
+> *${client._config.prefix}subred*
+> *${client._config.prefix}blur*
+╰─────────────────┈ ❁ཻུ۪۪⸙͎
+─────────────────┈ ❁۪۪
+❏ *👑Group-Admins👑* 」
+╰─❁۪۪
+> *${client._config.prefix}activate*
+> *${client._config.prefix}deactivate*
+> *${client._config.prefix}demote*
+> *${client._config.prefix}promote*
+> *${client._config.prefix}remove*
+> *${client._config.prefix}deactivate*
+> *${client._config.prefix}activate*
+> *${client._config.prefix}purge*
+> *${client._config.prefix}everyone*
+╰─────────────────┈ ❁ཻཻུུ۪۪۪۪⸙͎
+─────────────────┈ ❁۪۪
+❏ *🎭Fun🎭* 」
+╰─❁۪۪
+> *${client._config.prefix}triggered*
+> *${client._config.prefix}chess*
+╰─────────────────┈ ❁ཻཻུུ۪۪۪۪⸙͎
+─────────────────┈ ❁۪
+┃□│✎┊ *「👾Saber Pendragon Bot- Kaoi's unofficial sister👾」*
+┃□│╭────────╯   
+┃□││❏*AB1RZ9*
+╰─────────────────┈ ❁ཻུ۪۪⸙͎
+║█║▌║█║▌│║▌║▌█║
+║█║▌║█║▌│║▌║▌█║
+--GULABI SUPREMACY--
+\n📚 Use ${client._config.prefix}help <command_name> to view the full info. \n🔖 _Eg: ${client._config.prefix}help promote
+
+Hope you have a great day! \n
+
+🎩🐦✌....Peace`
+         
         }
         const key = parsedArgs.joined.toLowerCase()
         const command = this.handler.commands.get(key) || this.handler.aliases.get(key)
@@ -58,5 +119,5 @@ export default class Command extends BaseCommand {
         )
     }
 
-    emojis = ['🚀', '🎴', '🔮', '👑', '🎈', '⚙️', '🍀']
+    emojis = ['🌀', '🎴', '🔮', '👑', '🎈', '⚙️', '🍀']
 }
