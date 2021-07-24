@@ -27,7 +27,7 @@ export default class Command extends BaseCommand {
         if (!image) return void M.reply(`Couldn't fetch the required Image`)
         const level = joined.trim() || '5'
         const img = await jimp.read(image as string)
-        img.blur(isNaN(level as unknown as number) ? 5 : parseInt(level))
+        img.blur(isNaN((level as unknown) as number) ? 5 : parseInt(level))
         img.getBuffer(`image/png`, (err, buffer) => {
             M.reply(buffer, MessageType.image)
         })
