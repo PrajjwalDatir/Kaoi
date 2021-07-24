@@ -18,21 +18,6 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, parsedArgs: IParsedArgs): Promise<void> => {
-        let buffer
-        if (M.quoted?.message?.message?.imageMessage || M.quoted?.message?.message?.videoMessage)
-            buffer = await this.client.downloadMediaMessage(M.quoted.message)
-        if (M.WAMessage.message?.imageMessage || M.WAMessage.message?.videoMessage)
-            buffer = await this.client.downloadMediaMessage(M.WAMessage)
-        if (!buffer) return void M.reply(`You didn't provide any Image/Video to convert`)
-        parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
-        const pack = parsedArgs.joined.split('|')
-        const crop:boolean = parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
-        const sticker = new Sticker(buffer, {
-            pack: pack[1] || '👾',
-            author: pack[2] || '👾',
-            crop: crop
-        })
-        await sticker.build()
-        await M.reply(await sticker.get(), MessageType.sticker, Mimetype.webp)
+        return void M.reply("Command is under Development")
     }
 }
