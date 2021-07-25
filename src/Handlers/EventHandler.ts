@@ -23,7 +23,7 @@ export default class EventHandler {
                   .map((jid) => `@${jid.split('@')[0]}`)
                   .join(', ')}`
             : event.action === 'remove'
-            ? ` Goodbye @${event.participants[0].split('@')[0]} 👋`
+            ? `@${event.participants[0].split('@')[0]} has left the chat 👋`
             : `@${event.participants[0].split('@')[0]} got ${this.client.util.capitalize(event.action)}d${
                   event.actor ? ` by @${event.actor.split('@')[0]}` : ''
               }`
@@ -31,7 +31,7 @@ export default class EventHandler {
             mentionedJid: event.actor ? [...event.participants, event.actor] : event.participants
         }
         if (add) {
-            let image = (await this.client.getProfilePicture(event.jid)) || this.client.assets.get('404')
+            let image = (await this.client.getProfilePicture(event.jid)) || this.client.assets.get('404.png')
             if (typeof image === 'string') image = await request.buffer(image)
             if (image)
                 return void (await this.client.sendMessage(event.jid, image, MessageType.image, {
