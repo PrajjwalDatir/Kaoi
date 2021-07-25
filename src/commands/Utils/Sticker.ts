@@ -26,7 +26,7 @@ export default class Command extends BaseCommand {
         if (!buffer) return void M.reply(`You didn't provide any Image/Video to convert`)
         parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
         const pack = parsedArgs.joined.split('|')
-        let crop:Boolean = parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
+        const crop:boolean = parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
         const sticker = new Sticker(buffer, {
             pack: pack[1] || '👾 𝐇𝐚𝐧𝐝𝐜𝐫𝐚𝐟𝐭𝐞𝐝 𝐅𝐨𝐫 𝐘𝐨𝐮 ',
             author: pack[2] || '𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐁𝐨𝐭𝐭𝐨 𝐊𝐚𝐨𝐢 👾',
