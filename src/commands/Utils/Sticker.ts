@@ -26,7 +26,7 @@ export default class Command extends BaseCommand {
         if (!buffer) return void M.reply(`You didn't provide any Image/Video to convert`)
         parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
         const pack = parsedArgs.joined.split('|')
-        let crop:Boolean = parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
+        const crop:boolean = parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
         const sticker = new Sticker(buffer, {
             pack: pack[1] || 'Gulabi boss',
             author: pack[2] || 'Gulabi Bot Saber🐦🚀',
