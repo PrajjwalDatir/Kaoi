@@ -9,6 +9,7 @@ export interface IConfig {
     prefix: string
     session: string
     mods: string[]
+    gkey: string
 }
 
 export interface IParsedArgs {
