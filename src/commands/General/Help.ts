@@ -39,7 +39,7 @@ export default class Command extends BaseCommand {
                 ]
                     .map((command) => command.config?.command)
                     .join(', ')}\`\`\`\n\n`
-            return void M.reply ( await request.buffer( 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQix-YZrimsPF_cv5gtvrmNWDTuY2DEbtNpLg&usqp=CAU') MessageType.image, undefined,
+            return void M.reply ( await request.buffer( 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQix-YZrimsPF_cv5gtvrmNWDTuY2DEbtNpLg&usqp=CAU'), MessageType.image, undefined,
                 `${text} 🗃️ *Note: Use ${this.client.config.prefix}help <command_name> to view the command info*`
             )
         }
