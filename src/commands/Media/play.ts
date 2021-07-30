@@ -34,12 +34,12 @@ export default class Command extends BaseCommand {
                     externalAdReply: {
                         title: videos[0].title.substr(0, 30),
                         body: `Link: ${videos[0].url}`,
-                        mediaType: 1,
+                        mediaType: 2,
                         thumbnailUrl: `https://i.ytimg.com/vi/${audio.id}/hqdefault.jpg`,
                         mediaUrl: audio.url
                     }
                 }
             })
-            .catch((reason: any) => M.reply(`❌ an error occupered, Reason: ${reason}`))
+            .catch((reason: Error) => M.reply(`❌ an error occupered, Reason: ${reason}`))
     }
 }
