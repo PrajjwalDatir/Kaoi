@@ -32,6 +32,10 @@
       },
       "MONGO_URI": {
         "description": "A secret String for Mongodb Connection.(Required)"
+      },
+      "GOOGLE_API_KEY": {
+        "description": "Google API key for Google searches for MODS (Not Required)",
+        "required": false
       }
     },
     "buildpacks": [
