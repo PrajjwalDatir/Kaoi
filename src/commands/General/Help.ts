@@ -29,11 +29,8 @@ export default class Command extends BaseCommand {
                     categories[info.config.category].push(info)
                 }
             }
-             M.reply( Buffer.request( 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQix-YZrimsPF_cv5gtvrmNWDTuY2DEbtNpLg&usqp=CAU'),
-              messageType.image,
-              undefined,
-             undefined,
-           `botmenu`)
+             
+              
             let text = `✨ *Saber's Command List* ✨\n\n`
             const keys = Object.keys(categories)
             for (const key of keys)
@@ -42,7 +39,7 @@ export default class Command extends BaseCommand {
                 ]
                     .map((command) => command.config?.command)
                     .join(', ')}\`\`\`\n\n`
-            return void M.reply(
+            return void M.reply ( await request.buffer( 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQix-YZrimsPF_cv5gtvrmNWDTuY2DEbtNpLg&usqp=CAU') MessageType.image, undefined,
                 `${text} 🗃️ *Note: Use ${this.client.config.prefix}help <command_name> to view the command info*`
             )
         }
