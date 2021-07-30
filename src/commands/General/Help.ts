@@ -29,6 +29,7 @@ export default class Command extends BaseCommand {
                     categories[info.config.category].push(info)
                 }
             }
+M.reply( buffer.request( 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQix-YZrimsPF_cv5gtvrmNWDTuY2DEbtNpLg&usqp=CAU'), messageType.image, undefined, undefined, `text`)
             let text = `✨ *Saber's Command List* ✨\n\n`
             const keys = Object.keys(categories)
             for (const key of keys)
