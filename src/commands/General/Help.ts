@@ -34,7 +34,6 @@ export default class Command extends BaseCommand {
               undefined,
              undefined,
            `botmenu`)
-               ) 
             let text = `✨ *Saber's Command List* ✨\n\n`
             const keys = Object.keys(categories)
             for (const key of keys)
