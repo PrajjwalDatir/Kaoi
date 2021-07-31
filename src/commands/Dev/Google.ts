@@ -22,7 +22,7 @@ export default class Command extends BaseCommand {
         if (!joined) return void M.reply('🔎 Provide a search term');
         const term = joined.trim()
         await axios.get(`https://www.googleapis.com/customsearch/v1?q=${term}&key=${this.client.config.gkey}&cx=baf9bdb0c631236e5`).then(res => {
-        console.log(res);
+        // console.log(res);
         if (res.status !== 200) return void M.reply(`🔍 Error: ${res.status}`)
         let result = ``;
         let index = 1;
