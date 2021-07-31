@@ -23,7 +23,7 @@
 - Built with [Baileys](https://github.com/adiwajshing/baileys) (The Best WhatsApp Library Out There) 
 
 ## 💻 Deploy/Hosting Guide
-- Section Moved to [Void-Guides](https://github.com/Synthesized-Infinity/Void-Guides)
+- Section Moved to [Kaoi-Guides](https://github.com/Hiroto77/Kaoi-Guides)
 ## 🍥 Features of the Repo
 - To view all features, click here➡️[Void_featuresList.md](https://github.com/AB1RZ9/Whatsapp-Botto-Void/blob/main/Features.md)
 

@@ -33,13 +33,13 @@ export default class Command extends BaseCommand {
                 contextInfo: {
                     externalAdReply: {
                         title: videos[0].title.substr(0, 30),
-                        body: `Link: ${videos[0].url}`,
-                        mediaType: 1,
+                        body: `author : ${videos[0].author.name.substr(0, 20)}\nSent Via : Kaoi`,
+                        mediaType: 2,
                         thumbnailUrl: `https://i.ytimg.com/vi/${audio.id}/hqdefault.jpg`,
                         mediaUrl: audio.url
                     }
                 }
             })
-            .catch((reason: any) => M.reply(`❌ an error occupered, Reason: ${reason}`))
+            .catch((reason: Error) => M.reply(`❌ an error occupered, Reason: ${reason}`))
     }
 }
