@@ -18,8 +18,8 @@ export default class YT {
         filename = `${tmpdir()}/${Math.random().toString(36)}.${this.type === 'audio' ? 'mp3' : 'mp4'}`
     ): Promise<Buffer> => {
         const stream = createWriteStream(filename)
-        // ytdl(this.url, { quality: this.type === 'audio' ? 'highestaudio' : 'highest' }).pipe(stream)
-        ytdl(this.url, { quality: this.type === 'audio' ? '140' : 'highest' }).pipe(stream)
+        ytdl(this.url, { quality: this.type === 'audio' ? 'highestaudio' : 'highest' }).pipe(stream)
+        // ytdl(this.url, { quality: this.type === 'audio' ? '140' : 'highest' }).pipe(stream)
         // ytdl(this.url, { quality: this.type === 'audio' ? '134' : 'highest' }).pipe(stream)
         filename = await new Promise((resolve, reject) => {
             stream.on('finish', () => resolve(filename))
