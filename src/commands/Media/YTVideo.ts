@@ -26,7 +26,7 @@ export default class Command extends BaseCommand {
         M.reply('👾 sending...')
         if (Number(videoDetails.lengthSeconds) > 1800)
             return void M.reply('⚓ Cannot Download videos longer than 30 Minutes')
-        M.reply(await video.getBuffer(), MessageType.video).catch((reason: any) =>
+        M.reply(await video.getBuffer(), MessageType.video).catch((reason: Error) =>
             M.reply(`❌ an error occupered, Reason: ${reason}`)
         )
     }
