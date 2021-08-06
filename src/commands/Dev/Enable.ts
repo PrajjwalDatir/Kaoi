@@ -9,6 +9,7 @@ export default class Command extends BaseCommand {
             command: 'enable',
             description: 'Enables the given command',
             category: 'dev',
+            dm: true,
             usage: `${client.config.prefix}enable [command]`
         })
     }

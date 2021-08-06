@@ -13,7 +13,6 @@ export default class Command extends BaseCommand {
             category: 'media',
             aliases: ['sing'],
             usage: `${client.config.prefix}karaoke [term]`,
-            dm: true,
             baseXp: 20
         })
     }
@@ -23,7 +22,7 @@ export default class Command extends BaseCommand {
         const term = joined.trim()
         const { videos } = await yts(term + ' karaoke song')
         if (!videos || videos.length <= 0) return void M.reply(`No Matching videos found for the term *${term}*`)
-        let text = `Via Kaoi👾 && Void`
+        const text = `Via Kaoi👾 && Void`
 
         this.client
             .sendMessage(M.from, text, MessageType.extendedText, {

@@ -12,7 +12,6 @@ export default class Command extends BaseCommand {
             description: 'Displays the info',
             category: 'misc',
             usage: `${client.config.prefix}void`,
-            dm: true
         })
     }
 
