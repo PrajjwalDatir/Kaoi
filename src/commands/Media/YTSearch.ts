@@ -13,7 +13,6 @@ export default class Command extends BaseCommand {
             category: 'media',
             aliases: ['ytsearch'],
             usage: `${client.config.prefix}yts [term]`,
-            dm: true,
             baseXp: 20
         })
     }

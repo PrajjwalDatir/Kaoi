@@ -12,7 +12,6 @@ export default class Command extends BaseCommand {
             description: 'Steals stickers',
             category: 'utils',
             usage: `${client.config.prefix}steal [(as caption | tag)[video | image]]`,
-            dm: true,
             baseXp: 30
         })
     }

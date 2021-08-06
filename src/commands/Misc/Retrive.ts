@@ -9,17 +9,17 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'retrieve',
-            description: 'Well....',
+            description: 'retrieve viewOnceMessage WhatsApp Message',
             adminOnly: true,
             category: 'misc',
-            usage: `${client.config.prefix}retrieve`
+            usage: `${client.config.prefix}retrieve [Tag the viewOnceMessage]`
         })
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         if (!M.quoted) return void (await M.reply(`🔖 Quote the message you want to retrive`))
         if (!(M?.quoted?.message?.message as any)?.viewOnceMessage?.message?.imageMessage)
-            return void M.reply('Tag the "viewOnceMessage" that you want to retrive')
+            return void M.reply(`Tag the "viewOnceMessage" that you want to retrive\nIf you're already tagging it, try updating Bot's WhatsApp`)
         return void M.reply(
             await this.client.downloadMediaMessage((M.quoted.message?.message as any).viewOnceMessage),
             MessageType.image,

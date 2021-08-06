@@ -9,6 +9,7 @@ export default class Command extends BaseCommand {
             command: 'disable',
             description: 'Disables the given command from being used',
             category: 'dev',
+            dm: true,
             usage: `${client.config.prefix}disable [command] | (reason)`
         })
     }
