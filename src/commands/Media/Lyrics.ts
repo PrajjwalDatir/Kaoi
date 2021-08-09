@@ -33,13 +33,13 @@ export default class Command extends BaseCommand {
         const song = await getSong(term)
         if (song.error || !song.data) return void M.reply(`❌ Could Not find any Matching songs: *${term}*`)
         const { error, data } = await getLyrics(song.data)
-        if (error || !data) return void M.reply(`❌ Could Not find any Matching Lyrics: *${song.data.title}*`)
+        if (error || !data) return void M.reply(`❌ Could Not find any Matching Lyrics: *${song.data}*`)
         this.client.sendMessage(M.from, `*Lyrics of: ${term}*\n\n ${data}`, MessageType.text, {
             contextInfo: {
                 externalAdReply: {
-                    title: `${song.data.artist} - ${song.data.title}`,
+                    title: `${song.data.artist.name} - ${song.data.title}`,
                     body: video.url,
-                    mediaType: 1,
+                    mediaType: 2,
                     thumbnailUrl: video.thumbnail,
                     mediaUrl: video.url
                 },
