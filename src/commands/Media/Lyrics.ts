@@ -6,7 +6,9 @@ import { IParsedArgs, ISimplifiedMessage } from '../../typings'
 import yts from 'yt-search'
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
-import Lyrics from 'lyrics-monarch-api'
+// import Lyrics from 'lyrics-monarch-api'
+import { getSong, getLyrics } from 'ultra-lyrics'
+
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -20,28 +22,29 @@ export default class Command extends BaseCommand {
             baseXp: 20
         })
     }
-
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         if (!joined) return void M.reply('🔎 Provide a search term')
-        const term = joined.trim()
+        const term = joined.trim()       
+        // get song from yts
         const { videos } = await yts(term + ' lyrics song')
         if (!videos || videos.length <= 0) return void M.reply(`⚓ No Matching videos found for the term *${term}*`)
-        const lyrics = new Lyrics()
-        const response = await lyrics.getLyrics(term)
-        if (!((response as any).status === 200)) return
-        this.client
-            .sendMessage(M.from, (response as any)?.data?.result?.lirik, MessageType.extendedText, {
-                quoted: M.WAMessage,
-                contextInfo: {
-                    externalAdReply: {
-                        title: `Search Term: ${term}`,
-                        body: `👾 Handcrafted for you by Kaoi 👾`,
-                        mediaType: 2,
-                        thumbnailUrl: videos[0].thumbnail,
-                        mediaUrl: videos[0].url
-                    }
-                }
-            })
-            .catch((reason: any) => M.reply(`❌ an error occupered, Reason: ${reason}`))
+
+        const video = videos[0]
+        const song = await getSong(term)
+        if (song.error || !song.data) return void M.reply(`❌ Could Not find any Matching songs: *${term}*`)
+        const { error, data } = await getLyrics(song.data)
+        if (error || !data) return void M.reply(`❌ Could Not find any Matching Lyrics: *${song.data.title}*`)
+        this.client.sendMessage(M.from, `*Lyrics of: ${term}*\n\n ${data}`, MessageType.text, {
+            contextInfo: {
+                externalAdReply: {
+                    title: `${song.data.artist} - ${song.data.title}`,
+                    body: video.url,
+                    mediaType: 1,
+                    thumbnailUrl: video.thumbnail,
+                    mediaUrl: video.url
+                },
+                mentionedJid: [M.sender.jid]
+            }
+        }).catch((reason: Error) => M.reply(`❌ an error occupered, Reason: ${reason}`))
     }
 }
