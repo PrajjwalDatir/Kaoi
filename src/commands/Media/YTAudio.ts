@@ -23,7 +23,7 @@ export default class Command extends BaseCommand {
         if (!audio.validateURL()) return void M.reply(`⚓ Provide a Valid YT URL`)
         M.reply('👾 sending...')
         M.reply(await audio.getBuffer(), MessageType.audio).catch((reason: Error) =>
-            M.reply(`❌ an error occupered, Reason: ${reason}`)
+            M.reply(`❌ an error occurred, Reason: ${reason}`)
         )
     }
 }
