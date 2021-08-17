@@ -45,6 +45,6 @@ export default class Command extends BaseCommand {
                 },
                 mentionedJid: [M.sender.jid]
             }
-        }).catch((reason: Error) => M.reply(`❌ an error occupered, Reason: ${reason}`))
+        }).catch((reason: Error) => M.reply(`❌ an error occurred, Reason: ${reason}`))
     }
 }
