@@ -1,5 +1,5 @@
 import { MessageType, Mimetype } from '@adiwajshing/baileys'
-import { Sticker } from 'wa-sticker-formatter'
+import { Sticker, Categories } from 'wa-sticker-formatter'
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
@@ -22,11 +22,12 @@ export default class Command extends BaseCommand {
             buffer = await this.client.downloadMediaMessage(M.quoted.message)
         if (M.WAMessage.message?.imageMessage || M.WAMessage.message?.videoMessage)
             buffer = await this.client.downloadMediaMessage(M.WAMessage)
-        if (!buffer) return void M.reply(this.client.responses.get('invalid-sticker-param', M.response))
-        flags.forEach((flag) => (joined = joined.replace(flag, '')))
-        const pack = joined.split('|')
+        if (!buffer) return void M.reply(`You didn't provide any Image/Video to convert`)
+        // flags.forEach((flag) => (joined = joined.replace(flag, '')))
+        parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
+        const pack = parsedArgs.joined.split('|')
         const categories = (() => {
-            const categories = flags.reduce((categories, flag) => {
+            const categories = parsedArgs.flags.reduce((categories, flag) => {
                 switch (flag) {
                     case '--angry':
                         categories.push('💢')
@@ -57,7 +58,7 @@ export default class Command extends BaseCommand {
             categories,
             pack: pack[1] || '👾 𝐇𝐚𝐧𝐝𝐜𝐫𝐚𝐟𝐭𝐞𝐝 𝐅𝐨𝐫 𝐘𝐨𝐮 ',
             author: pack[2] || '𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐁𝐨𝐭𝐭𝐨 𝐊𝐚𝐨𝐢 👾',
-            type: flags.includes('--crop') || flags.includes('--c') ? 'crop' : flags.includes('--stretch') || flags.includes('--s') ? 'default' : 'full'
+            type: parsedArgs.flags.includes('--crop') || parsedArgs.flags.includes('--c') ? 'crop' : parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s') ? 'default' : 'full'
         })
         await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp)
     }
