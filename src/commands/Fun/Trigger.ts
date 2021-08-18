@@ -4,7 +4,7 @@ import WAClient from '../../lib/WAClient'
 import { ISimplifiedMessage } from '../../typings'
 import Canvas from 'canvas'
 import GIFEncoder from 'gifencoder'
-import { Sticker } from 'wa-sticker-formatter/lib'
+import { Sticker } from 'wa-sticker-formatter'
 import { MessageType } from '@adiwajshing/baileys'
 
 export default class Command extends BaseCommand {
@@ -63,7 +63,7 @@ export default class Command extends BaseCommand {
             const sticker = new Sticker(await getImage(image), {
                 pack: `Triggered`,
                 author: M.sender.username || `Kaoi`,
-                crop: false
+                type: 'default'
             })
             await sticker.build()
             return void (await M.reply(await sticker.get(), MessageType.sticker))
