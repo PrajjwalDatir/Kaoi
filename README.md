@@ -36,6 +36,8 @@
   <img src="https://contrib.rocks/image?repo=PrajjwalDatir/Kaoi" />
 </a>
 
+## 📑 License
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2FPrajjwalDatir%2FKaoi.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2FPrajjwalDatir%2FKaoi?ref=badge_shield)
 
 ### 🔵 Discord Server
 [![DISCORD](https://invidget.switchblade.xyz/Nzsb5weQFg)](https://discord.gg/Nzsb5weQFg)
