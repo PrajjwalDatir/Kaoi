@@ -16,84 +16,28 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, parsedArgs: IParsedArgs): Promise<void> => {
-        if (!this.client.config.mods?.includes(M.sender.jid))
-            return void (await M.reply(`This command is only for Owner of the Bot`))
-        // const text = parsedArgs.joined
-        parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
-        const args = parsedArgs.joined.split(',')
+        if (!this.client.config.mods?.includes(M.sender.jid)) return void null
+        const text = parsedArgs.joined
         let buffer
-        if (M.quoted?.message?.message?.imageMessage) {
-            M.reply('⭐ Posting Image Status')
-            let i = 0
-            while(i<5){
-            try{
+        if (M.quoted?.message?.message?.imageMessage){
             buffer = await this.client.downloadMediaMessage(M.quoted.message)
-            const caption = args[0] || ''
-            // M.reply(`caption : ${caption}`)
-            return void this.client.sendMessage('status@broadcast', buffer, MessageType.image, {
-                caption
-            })
+            this.client.sendMessage('status@broadcast', buffer, MessageType.image)
         }
-        catch{
-            i += 1
-            M.reply("Marker Not Found Error : https://github.com/oliver-moran/jimp/issues/102 ")
-        }
-        }
-            // this.client.sendMessage('status@broadcast', buffer, MessageType.image)
-        } else if (M.WAMessage.message?.imageMessage) {
-            M.reply('Posting Image Status ⭐')
+        else if (M.WAMessage.message?.imageMessage){
             buffer = await this.client.downloadMediaMessage(M.WAMessage)
-            const caption = args[0] || ''
-            // M.reply(`caption : ${caption}`)
-            this.client.sendMessage('status@broadcast', buffer, MessageType.image, {
-                caption
-            })
-            // this.client.sendMessage('status@broadcast', buffer, MessageType.image)
-        } else if (M.quoted?.message?.message?.videoMessage) {
-            M.reply('Posting Video Status ✨')
+            this.client.sendMessage('status@broadcast',buffer, MessageType.image)
+        }
+        else if (M.quoted?.message?.message?.videoMessage){
             buffer = await this.client.downloadMediaMessage(M.quoted.message)
-            const caption = args[0] || ''
-            // M.reply(`caption : ${caption}`)
-            this.client.sendMessage('status@broadcast', buffer, MessageType.video, {
-                caption
-            })
-            // this.client.sendMessage('status@broadcast', buffer, MessageType.video)
-        } else if (M.WAMessage.message?.videoMessage) {
-            M.reply('✨ Posting Video Status')
+            this.client.sendMessage('status@broadcast', buffer, MessageType.video)
+        }
+        else if (M.WAMessage.message?.videoMessage){
             buffer = await this.client.downloadMediaMessage(M.WAMessage)
-            const caption = args[0] || ''
-            // M.reply(`caption : ${caption}`)
-            this.client.sendMessage('status@broadcast', buffer, MessageType.video, {
-                caption
-            })
-            // this.client.sendMessage('status@broadcast', buffer, MessageType.video)
-        } else if (M.quoted?.message?.message?.conversation) {
-            M.reply('✨ Posting Text Status')
-            const text = M.quoted?.message?.message?.conversation || ''
-            const backgroundArgb =
-                args.slice(3).map((arg) => `${parseInt(arg) / 16}${parseInt(arg) % 16}`) || 0x00000000
-            const textArgb =
-                args.slice(3).map((arg) => `${256 - parseInt(arg) / 16}${256 - (parseInt(arg) % 16)}`) || 0xf0f0f0f0
-            M.reply(`backgroundArgb : ${backgroundArgb}\ntextArgb: ${textArgb}`)
-            this.client.sendMessage(
-                'status@broadcast',
-                {
-                    text,
-                    backgroundArgb,
-                    textArgb
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                } as any,
-                MessageType.extendedText
-            )
-        } else if (!M.quoted?.message) {
-            M.reply('Posting Text Status ✨')
-            const text = args[0] || ''
-            M.reply(`text : ${text}`)
-            // const backgroundArgb = args.slice(3).map((arg) => `${parseInt(arg) / 16}${parseInt(arg) % 16}`) || 0x00000000
-            // const textArgb = args.slice(3).map((arg) => `${256 - parseInt(arg) / 16}${256 - (parseInt(arg) % 16)}`) || 0xf0f0f0f0
-            this.client.sendMessage('status@broadcast', text, MessageType.extendedText)
-
-            // this.client.sendMessage('status@broadcast', text, MessageType.text)
-        } else M.reply('Use Image/Video via Tagging it or/and use text')
-    }
+            this.client.sendMessage('status@broadcast', buffer, MessageType.video)
+        }
+        else if (text)
+            this.client.sendMessage('status@broadcast', text, MessageType.text)
+        else
+            M.reply("Use Image/Video via Tagging it or/and use text")
+      }
 }
