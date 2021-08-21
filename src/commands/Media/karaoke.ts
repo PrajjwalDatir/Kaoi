@@ -37,6 +37,6 @@ export default class Command extends BaseCommand {
                     }
                 }
             })
-            .catch((reason: Error) => M.reply(`an error occurred, Reason: ${reason}`))
+            .catch((reason: any) => M.reply(`an error occupered, Reason: ${reason}`))
     }
 }

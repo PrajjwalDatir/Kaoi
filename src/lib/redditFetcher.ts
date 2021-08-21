@@ -15,9 +15,9 @@ export interface IRedditResponse {
 export default async (subreddit: string): Promise<IRedditResponse | { error: string }> => {
     try {
         const response = await request.json<IRedditResponse>(`https://meme-api.herokuapp.com/gimme/${subreddit}`)
-        if (!response.url) return { error: 'Invalid Subreddit' }
+        if (!response.url) return { error: 'Invalid Subreddits' }
         return response
     } catch (err) {
-        return { error: 'Invalid Subreddit' }
+        return { error: 'Invalid Subreddits' }
     }
 }
