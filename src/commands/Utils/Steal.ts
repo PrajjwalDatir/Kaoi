@@ -17,8 +17,6 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, parsedArgs: IParsedArgs): Promise<void> => {
-        const args = parsedArgs.joined
-        M.reply(args)
         return void M.reply("Command is under Development")
     }
 }

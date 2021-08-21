@@ -7,7 +7,7 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'unban',
-            description: 'Unban the tagged users',
+            description: 'Unbans the tagged users',
             category: 'dev',
             usage: `${client.config.prefix}unban [@tag]`
         })
