@@ -2,9 +2,9 @@ name: Build Testing
 
 on:
   push:
-    branches: [ main, kaoi-beta ]
+    branches: [ main, beta ]
   pull_request:
-    branches: [ main ]
+    branches: [ main, beta ]
 
 jobs:
   build:
@@ -21,5 +21,5 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build
+      - run: rm -rf node_modules && yarn install --frozen-lockfile
+      - run: yarn run build
