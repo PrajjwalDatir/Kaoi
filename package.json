@@ -54,6 +54,7 @@
     "gifencoder": "^2.0.1",
     "i": "^0.3.6",
     "jimp": "^0.16.1",
+    "jpeg-js": "^0.4.3",
     "lyrics-monarch-api": "^2.1.0",
     "moment": "^2.29.1",
     "mongoose": "^5.12.12",
