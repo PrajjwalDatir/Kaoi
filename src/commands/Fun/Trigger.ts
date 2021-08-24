@@ -60,13 +60,18 @@ export default class Command extends BaseCommand {
                 : M.quoted?.sender
                 ? this.client.getProfilePicture(M.quoted.sender)
                 : this.client.getProfilePicture(M.sender.jid))
+            console.log("here")
+            console.log(image)
             const sticker = new Sticker(await getImage(image), {
                 pack: `Triggered`,
                 author: M.sender.username || `Kaoi`,
                 type: 'full',
                 categories: ['💢']
             })
+            console.log(sticker)
+            console.log("there")
             if (!sticker) return void M.reply(`I couldn't find an image to trigger.`)
+            console.log("where?")
             return void (await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp))
         } catch (err) {
             console.log(err)
