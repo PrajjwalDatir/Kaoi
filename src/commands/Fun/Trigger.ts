@@ -66,6 +66,7 @@ export default class Command extends BaseCommand {
                 type: 'full',
                 categories: ['💢']
             })
+            if (!sticker) return void M.reply(`I couldn't find an image to trigger.`)
             return void (await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp))
         } catch (err) {
             console.log(err)
