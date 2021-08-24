@@ -5,7 +5,7 @@ import { ISimplifiedMessage } from '../../typings'
 import Canvas from 'canvas'
 import GIFEncoder from 'gifencoder'
 import { Sticker } from 'wa-sticker-formatter'
-import { MessageType } from '@adiwajshing/baileys'
+import { MessageType, Mimetype } from '@adiwajshing/baileys'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -63,10 +63,10 @@ export default class Command extends BaseCommand {
             const sticker = new Sticker(await getImage(image), {
                 pack: `Triggered`,
                 author: M.sender.username || `Kaoi`,
-                type: 'default'
+                type: 'full',
+                categories: ['💢']
             })
-            await sticker.build()
-            return void (await M.reply(await sticker.get(), MessageType.sticker))
+            return void (await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp))
         } catch (err) {
             console.log(err)
             M.reply(`Couldn't fetch the required Image`)
