@@ -28,6 +28,7 @@ export default class Command extends BaseCommand {
         const img = await jimp.read(image as string)
         img.blur(isNaN((level as unknown) as number) ? 5 : parseInt(level))
         img.getBuffer(`image/png`, (err, buffer) => {
+            if (err) return void M.reply(err?.message || `Couldn't blur the image`)
             M.reply(buffer, MessageType.image)
         })
     }
