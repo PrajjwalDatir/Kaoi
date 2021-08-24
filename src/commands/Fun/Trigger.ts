@@ -57,9 +57,9 @@ export default class Command extends BaseCommand {
                 ? this.client.downloadMediaMessage(M.WAMessage)
                 : M.quoted?.message?.message?.imageMessage
                 ? this.client.downloadMediaMessage(M.quoted.message)
-                : M.mentioned[0]
-                ? this.client.getProfilePicture(M.mentioned[0])
-                : this.client.getProfilePicture(M.quoted?.sender || M.sender.jid))
+                : M.quoted?.sender
+                ? this.client.getProfilePicture(M.quoted.sender)
+                : this.client.getProfilePicture(M.sender.jid))
             const sticker = new Sticker(await getImage(image), {
                 pack: `Triggered`,
                 author: M.sender.username || `Kaoi`,
@@ -69,7 +69,7 @@ export default class Command extends BaseCommand {
             return void (await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp))
         } catch (err) {
             console.log(err)
-            M.reply(`Couldn't fetch the required Image`)
+            M.reply(`Couldn't fetch the required Image.\n*Error* : ${err}`)
         }
     }
 }
