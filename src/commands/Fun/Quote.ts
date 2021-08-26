@@ -19,7 +19,7 @@ export default class Command extends BaseCommand {
         await axios.get(`https://api.quotable.io/random`)
         .then((response) => {
                 // console.log(response);
-                const text = `📝 *Content:* ${response.data.content}\n*✍️ Author:* ${response.data.author}`
+                const text = `📝 *Content:* ${response.data.content}\n\n*✍️ Author:* ${response.data.author}`
                 M.reply(text);
             }).catch(err => {
                 M.reply(`🔍 Error: ${err}`)
