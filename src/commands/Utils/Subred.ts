@@ -28,13 +28,34 @@ export default class Command extends BaseCommand {
                 `Cannot Display NSFW content before enabling. Use ${this.client.config.prefix}activate nsfw to activate nsfw`
             )
         const thumbnail = this.client.assets.get('spoiler')
-        return void M.reply(
-            await request.buffer(res.url),
+        const buffer = await request.buffer(res.url)
+        .catch((e) => {
+            if (e.message.includes('marker not found')){
+                this.run(this.run.arguments[0], this.run.arguments[1])
+            }
+            if (e.message.includes('filter type')){
+                this.run(this.run.arguments[0], this.run.arguments[1])
+            }
+            return void M.reply(e.message)
+        }
+        )
+        M.reply(
+            buffer || `Could not fetch image. Please try again later`,
             MessageType.image,
             undefined,
             undefined,
             `🖌️ *Title: ${res.title}*\n👨‍🎨 *Author: ${res.author}*\n🎏 *Subreddit: ${res.subreddit}*\n🌐 *Post: ${res.postLink}*`,
             thumbnail && res.spoiler ? thumbnail : undefined
-        )
+        ).catch(e => {
+
+            if (e.message.toLowerCase().includes('marker')){
+                this.run(this.run.arguments[0], this.run.arguments[1])
+            }
+            if (e.message.toLowerCase().includes('filter type')){
+                this.run(this.run.arguments[0], this.run.arguments[1])
+            }
+            return void M.reply(`Failed To Fetch Image: ${e.message}`)
+        })
+        return void null
     }
 }
