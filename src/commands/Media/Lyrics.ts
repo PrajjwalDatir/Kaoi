@@ -31,9 +31,8 @@ export default class Command extends BaseCommand {
 
         const video = videos[0]
         const song = await getSong(term)
-        if (song) M.reply(`*Song* : \n${song}\n`)
         if (song.error || !song.data) return void M.reply(`❌ Could Not find any Matching songs: *${term}*`)
-        if (song.data) M.reply(`*song.data* : \n${song.data}\n`)
+        if (song.data) M.reply(`*song.data* : \n${song.data.artist}\n${song.data.id}\n${song.data.image}\n${song.data.title}\n${song.data.url}`)
         if (song.error) M.reply(`*song.error* : \n${song.error}\n`)
         const { error, data } = await getLyrics(song.data)
         if (error) M.reply(`*Error* : \n${error}\n`)
