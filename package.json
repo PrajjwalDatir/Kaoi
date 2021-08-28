@@ -7,8 +7,7 @@
     "build": "tsc -p .",
     "start": "node dist/void.js",
     "lint": "eslint \"src/**/*.ts\"",
-    "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
-    "postinstall": "yarn run build"
+    "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write"
   },
   "repository": {
     "type": "git",
