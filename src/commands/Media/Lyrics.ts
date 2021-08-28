@@ -31,10 +31,13 @@ export default class Command extends BaseCommand {
 
         const video = videos[0]
         const song = await getSong(term)
+        if (song) M.reply(`*Song* : \n${song}\n`)
         if (song.error || !song.data) return void M.reply(`❌ Could Not find any Matching songs: *${term}*`)
+        if (song.data) M.reply(`*song.data* : \n${song.data}\n`)
+        if (song.error) M.reply(`*song.error* : \n${song.error}\n`)
         const { error, data } = await getLyrics(song.data)
-        if (error) M.reply(`Error : \n${error}\n`)
-        if (data) M.reply(`Data: \n${data}\n`)
+        if (error) M.reply(`*Error* : \n${error}\n`)
+        if (data) M.reply(`*Data* : \n${data}\n`)
         if (error || !data) return void M.reply(`❌ Could Not find any Matching Lyrics: *${song.data.title}*`)
         this.client.sendMessage(M.from, `*Lyrics of: ${term}*\n\n ${data}`, MessageType.text, {
             contextInfo: {
