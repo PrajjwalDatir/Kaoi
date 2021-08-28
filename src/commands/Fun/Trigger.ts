@@ -19,6 +19,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
+        return void M.reply(`Animated sticker feature is currently unavailable.`)
         const getImage = async (image: string | Buffer, timeout = 15) => {
             const img = await Canvas.loadImage(image)
             const GIF = new GIFEncoder(256, 310)
