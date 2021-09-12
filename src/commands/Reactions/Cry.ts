@@ -33,6 +33,9 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage): Promise<void> => {
         if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
         if (!M.mentioned.length) M.mentioned.push(M.sender.jid)
+        
+        // if M.mentioned is empty, then assign noun to 'by' else assign noun to 'with'
+        const noun = M.mentioned.length ? 'with' : 'by'
         M.reply(
             await this.GIFBufferToVideoBuffer(
                 await this.client.getBuffer(
@@ -46,7 +49,7 @@ export default class Command extends BaseCommand {
             MessageType.video,
             Mimetype.gif,
             [M.sender.jid, ...M.mentioned],
-            `*@${M.sender.jid.split('@')[0]} is Crying with ${M.mentioned
+            `*@${M.sender.jid.split('@')[0]} is Crying ${noun} ${M.mentioned
                 .map((user) => (user === M.sender.jid ? 'Themselves' : `@${user.split('@')[0]}`))
                 .join(', ')}*`
         )
