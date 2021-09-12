@@ -7,6 +7,7 @@ import { join } from 'path'
 import { IConfig, IExtendedGroupMetadata, IGroupModel, ISession, ISimplifiedMessage, IUserModel } from '../typings'
 import Utils from './Utils'
 import DatabaseHandler from '../Handlers/DatabaseHandler'
+import axios from 'axios'
 
 export default class WAClient extends Base {
     assets = new Map<string, Buffer>()
@@ -155,6 +156,11 @@ export default class WAClient extends Base {
             }).save()
         return user
     }
+    
+    getBuffer = async (url: string): Promise<Buffer> =>
+    (await axios.get<Buffer>(url, { responseType: 'arraybuffer' })).data
+
+    fetch = async <T>(url: string): Promise<T> => (await axios.get<T>(url)).data
 
     banUser = async (jid: string): Promise<void> => {
         const result = await this.DB.user.updateOne({ jid }, { $set: { ban: true } })
