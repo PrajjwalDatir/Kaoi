@@ -33,9 +33,12 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage): Promise<void> => {
         if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
         if (!M.mentioned.length) M.mentioned.push(M.sender.jid)
+        let noun = 'with'
+        if (M.mentioned[0] === M.sender.jid) noun = 'by'
+        // console.log(M.mentioned)
+
         
         // if M.mentioned is empty, then assign noun to 'by' else assign noun to 'with'
-        const noun = M.mentioned.length ? 'with' : 'by'
         M.reply(
             await this.GIFBufferToVideoBuffer(
                 await this.client.getBuffer(
