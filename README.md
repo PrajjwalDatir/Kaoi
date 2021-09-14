@@ -7,8 +7,19 @@
 
 > A Fully Modular and Efficient Bot <br>
 
-[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/PrajjwalDatir/Kaoi/blob/main)
+  Button 1
 
+  
+  [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/PrajjwalDatir/Kaoi/blob/main)
+
+  Button 2
+  
+  
+ [![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+
+  
+ Use any one of the above to deploy
+  
 </div><br/>
 <br/>
 
