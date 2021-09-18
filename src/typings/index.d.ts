@@ -10,6 +10,7 @@ export interface IConfig {
     session: string
     mods: string[]
     gkey: string
+    chatBotUrl: string
 }
 
 export interface IParsedArgs {
