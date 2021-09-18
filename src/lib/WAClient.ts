@@ -156,9 +156,9 @@ export default class WAClient extends Base {
             }).save()
         return user
     }
-    
+
     getBuffer = async (url: string): Promise<Buffer> =>
-    (await axios.get<Buffer>(url, { responseType: 'arraybuffer' })).data
+        (await axios.get<Buffer>(url, { responseType: 'arraybuffer' })).data
 
     fetch = async <T>(url: string): Promise<T> => (await axios.get<T>(url)).data
 
