@@ -18,7 +18,8 @@ const client = new WAClient({
     session: process.env.SESSION || 'Kaoi',
     prefix: process.env.PREFIX || '!',
     mods: (process.env.MODS || '').split(',').map((number) => `${number}@s.whatsapp.net`),
-    gkey: process.env.GOOGLE_API_KEY || ''
+    gkey: process.env.GOOGLE_API_KEY || '',
+    chatBotUrl : process.env.CHAT_BOT_URL || ''
 })
 client.log('Starting...')
 
