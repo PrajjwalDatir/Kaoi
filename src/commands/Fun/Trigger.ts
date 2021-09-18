@@ -5,6 +5,7 @@ import { ISimplifiedMessage } from '../../typings'
 import Canvas from 'canvas'
 import GIFEncoder from 'gifencoder'
 import { Sticker } from 'wa-sticker-formatter'
+import { MessageType, Mimetype } from '@adiwajshing/baileys'
 // import { MessageType, Mimetype } from '@adiwajshing/baileys'
 
 export default class Command extends BaseCommand {
@@ -72,8 +73,8 @@ export default class Command extends BaseCommand {
             // console.log("there")
             if (!sticker) return void M.reply(`I couldn't find an image to trigger.`)
             // console.log("where?")
-            return void M.reply(`*Trigger* feature is currently unavailable.`)
-            // return void (await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp))
+            // return void M.reply(`*Trigger* feature is currently unavailable.`)
+            return void (await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp))
         } catch (err) {
             console.log(err)
             M.reply(`Couldn't fetch the required Image.\n*Error* : ${err}`)
