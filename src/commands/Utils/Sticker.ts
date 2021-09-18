@@ -41,9 +41,11 @@ export default class Command extends BaseCommand {
                 ? 100
                 : 50
         }
-
+        
+        let quality = getQuality()
+        if (quality > 100 || quality < 1) quality = 50
+        
         parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
-
         const getOptions = () => {
             const pack = parsedArgs.joined.split('|')
             const categories = (() => {
@@ -78,7 +80,7 @@ export default class Command extends BaseCommand {
                 categories,
                 pack: pack[1] || '👾 𝐇𝐚𝐧𝐝𝐜𝐫𝐚𝐟𝐭𝐞𝐝 𝐅𝐨𝐫 𝐘𝐨𝐮 ',
                 author: pack[2] || '𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐁𝐨𝐭𝐭𝐨 𝐊𝐚𝐨𝐢 👾',
-                quality: getQuality(),
+                quality,
                 type: StickerTypes[
                     parsedArgs.flags.includes('--crop') || parsedArgs.flags.includes('--c')
                         ? 'CROPPED'
