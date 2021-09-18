@@ -28,55 +28,65 @@ export default class Command extends BaseCommand {
             // return void M.reply(`*Gif/Video to Sticker* feature is currently unavailable.\nYou can still use Image to Sticker though!!`)
             buffer = await this.client.downloadMediaMessage(M.WAMessage)
         if (!buffer) return void M.reply(`You didn't provide any Image/Video to convert`)
-        // flags.forEach((flag) => (joined = joined.replace(flag, '')))
-        parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
-        const getOptions = () => {
-        const pack = parsedArgs.joined.split('|')
-        const categories = (() => {
-            const categories = parsedArgs.flags.reduce((categories, flag) => {
-                switch (flag) {
-                    case '--angry':
-                        categories.push('💢')
-                        break
-                    case '--love':
-                        categories.push('💕')
-                        break
-                    case '--sad':
-                        categories.push('😭')
-                        break
-                    case '--happy':
-                        categories.push('😂')
-                        break
-                    case '--greet':
-                        categories.push('👋')
-                        break
-                    case '--celebrate':
-                        categories.push('🎊')
-                        break
-                }
-                return categories
-            }, new Array<Categories>())
-            categories.length = 2
-            if (!categories[0]) categories.push('❤', '🌹')
-            return categories
-        })()
-        return {
-            categories,
-            pack: pack[1] || '👾 𝐇𝐚𝐧𝐝𝐜𝐫𝐚𝐟𝐭𝐞𝐝 𝐅𝐨𝐫 𝐘𝐨𝐮 ',
-            author : pack[2] || '𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐁𝐨𝐭𝐭𝐨 𝐊𝐚𝐨𝐢 👾',
-            quality : parsedArgs.flags.includes('--low') 
-            ? 10
-            : parsedArgs.flags.includes('--high')
-            ? 100
-            : 50,
-            type : StickerTypes[
-                parsedArgs.flags.includes('--crop') || parsedArgs.flags.includes('--c')
-                ? 'CROPPED'
-                : parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
-                ? 'DEFAULT'
-                : 'FULL'
-            ]
+
+        const getQuality = (): number => {
+            const qualityFlag = parsedArgs.joined.match(/--(\d+)/g) || ''
+            return qualityFlag.length
+                ? parseInt(qualityFlag[0].split('--')[1], 10)
+                : parsedArgs.flags.includes('--broke')
+                ? 1
+                : parsedArgs.flags.includes('--low')
+                ? 10
+                : parsedArgs.flags.includes('--high')
+                ? 100
+                : 50
         }
+
+        parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
+
+        const getOptions = () => {
+            const pack = parsedArgs.joined.split('|')
+            const categories = (() => {
+                const categories = parsedArgs.flags.reduce((categories, flag) => {
+                    switch (flag) {
+                        case '--angry':
+                            categories.push('💢')
+                            break
+                        case '--love':
+                            categories.push('💕')
+                            break
+                        case '--sad':
+                            categories.push('😭')
+                            break
+                        case '--happy':
+                            categories.push('😂')
+                            break
+                        case '--greet':
+                            categories.push('👋')
+                            break
+                        case '--celebrate':
+                            categories.push('🎊')
+                            break
+                    }
+                    return categories
+                }, new Array<Categories>())
+                categories.length = 2
+                if (!categories[0]) categories.push('❤', '🌹')
+                return categories
+            })()
+            return {
+                categories,
+                pack: pack[1] || '👾 𝐇𝐚𝐧𝐝𝐜𝐫𝐚𝐟𝐭𝐞𝐝 𝐅𝐨𝐫 𝐘𝐨𝐮 ',
+                author: pack[2] || '𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐁𝐨𝐭𝐭𝐨 𝐊𝐚𝐨𝐢 👾',
+                quality: getQuality(),
+                type: StickerTypes[
+                    parsedArgs.flags.includes('--crop') || parsedArgs.flags.includes('--c')
+                        ? 'CROPPED'
+                        : parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
+                        ? 'DEFAULT'
+                        : 'FULL'
+                ]
+            }
         }
         parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
         if (!buffer) return void M.reply(`You didn't provide any Image/Video to convert`)
