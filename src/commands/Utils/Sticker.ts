@@ -1,5 +1,5 @@
 import { MessageType, Mimetype } from '@adiwajshing/baileys'
-import { Sticker, Categories } from 'wa-sticker-formatter'
+import { Sticker, Categories, StickerTypes } from 'wa-sticker-formatter'
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
@@ -9,6 +9,7 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'sticker',
+            aliases: ['s'],
             description: 'Converts images/videos into stickers',
             category: 'utils',
             usage: `${client.config.prefix}sticker [(as caption | tag)[video | image]]`,
@@ -29,6 +30,7 @@ export default class Command extends BaseCommand {
         if (!buffer) return void M.reply(`You didn't provide any Image/Video to convert`)
         // flags.forEach((flag) => (joined = joined.replace(flag, '')))
         parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
+        const getOptions = () => {
         const pack = parsedArgs.joined.split('|')
         const categories = (() => {
             const categories = parsedArgs.flags.reduce((categories, flag) => {
@@ -58,17 +60,28 @@ export default class Command extends BaseCommand {
             if (!categories[0]) categories.push('❤', '🌹')
             return categories
         })()
-        const sticker = new Sticker(buffer, {
+        return {
             categories,
             pack: pack[1] || '👾 𝐇𝐚𝐧𝐝𝐜𝐫𝐚𝐟𝐭𝐞𝐝 𝐅𝐨𝐫 𝐘𝐨𝐮 ',
-            author: pack[2] || '𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐁𝐨𝐭𝐭𝐨 𝐊𝐚𝐨𝐢 👾',
-            type:
+            author : pack[2] || '𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐁𝐨𝐭𝐭𝐨 𝐊𝐚𝐨𝐢 👾',
+            quality : parsedArgs.flags.includes('--low') 
+            ? 10
+            : parsedArgs.flags.includes('--high')
+            ? 100
+            : 50,
+            type : StickerTypes[
                 parsedArgs.flags.includes('--crop') || parsedArgs.flags.includes('--c')
-                    ? 'crop'
-                    : parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
-                    ? 'default'
-                    : 'full'
-        })
-        await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp)
+                ? 'CROPPED'
+                : parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
+                ? 'DEFAULT'
+                : 'FULL'
+            ]
+        }
+        }
+        parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
+        if (!buffer) return void M.reply(`You didn't provide any Image/Video to convert`)
+        const sticker = await new Sticker(buffer, getOptions()).build().catch(() => null)
+        if (!sticker) return void M.reply(`An Error Occurred While Converting`)
+        await M.reply(sticker, MessageType.sticker, Mimetype.webp)
     }
 }
