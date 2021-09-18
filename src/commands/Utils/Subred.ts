@@ -29,28 +29,31 @@ export default class Command extends BaseCommand {
             )
         const thumbnail = this.client.assets.get('spoiler')
         const notFound = this.client.assets.get('404')
-        const buffer = await request.buffer(res.url)
-        .catch((e) => {
-            if (e.message.includes('marker not found')){
+        const buffer = await request.buffer(res.url).catch((e) => {
+            if (e.message.includes('marker not found')) {
                 this.run(this.run.arguments[0], this.run.arguments[1])
             }
-            if (e.message.includes('filter type')){
+            if (e.message.includes('filter type')) {
                 this.run(this.run.arguments[0], this.run.arguments[1])
             }
             return void M.reply(e.message)
-        }
-        )
-        M.reply(
-            buffer || notFound || `Could not fetch image. Please try again later`,
-            MessageType.image,
-            undefined,
-            undefined,
-            `🖌️ *Title: ${res.title}*\n*👨‍🎨 Author: ${res.author}*\n*🎏 Subreddit: ${res.subreddit}*\n🌐 *Post: ${res.postLink}*`,
-            // thumbnail && res.spoiler ? thumbnail : undefined
-            undefined
-        ).catch(e => {
-            return void M.reply(`Try the Command Again. Error : ${e.message}`)
         })
+        while (true) {
+            try {
+                M.reply(
+                    buffer || notFound || `Could not fetch image. Please try again later`,
+                    MessageType.image,
+                    undefined,
+                    undefined,
+                    `🖌️ *Title: ${res.title}*\n*👨‍🎨 Author: ${res.author}*\n*🎏 Subreddit: ${res.subreddit}*\n🌐 *Post: ${res.postLink}*`,
+                    // thumbnail && res.spoiler ? thumbnail : undefined
+                    undefined
+                )
+                break
+            } catch (e) {
+                console.log(e)
+            }
+        }
         return void null
     }
 }
