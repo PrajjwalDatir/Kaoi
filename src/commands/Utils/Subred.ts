@@ -27,7 +27,6 @@ export default class Command extends BaseCommand {
             return void M.reply(
                 `Cannot Display NSFW content before enabling. Use ${this.client.config.prefix}activate nsfw to activate nsfw`
             )
-        const thumbnail = this.client.assets.get('spoiler')
         const notFound = this.client.assets.get('404')
         const buffer = await request.buffer(res.url).catch((e) => {
             if (e.message.includes('marker not found')) {
