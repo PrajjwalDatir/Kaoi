@@ -12,8 +12,9 @@ export default class MessageHandler {
     handleMessage = async (M: ISimplifiedMessage): Promise<void> => {
         if (M.WAMessage.key.fromMe || M.from.includes('status')) return void null
         const { args, groupMetadata, sender } = M
-        if (!M.groupMetadata && M.chat === 'dm') return void null;
-        if ((await this.client.getGroupData(M.from)).mod && M.groupMetadata?.admins?.includes(this.client.user.jid)) this.moderate(M)
+        if (!M.groupMetadata && M.chat === 'dm') return void null
+        if ((await this.client.getGroupData(M.from)).mod && M.groupMetadata?.admins?.includes(this.client.user.jid))
+            this.moderate(M)
         if (!args[0] || !args[0].startsWith(this.client.config.prefix))
             return void this.client.log(
                 `${chalk.blueBright('MSG')} from ${chalk.green(sender.username)} in ${chalk.cyanBright(

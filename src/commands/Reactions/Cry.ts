@@ -8,14 +8,13 @@ import { exec } from 'child_process'
 import { readFile, unlink, writeFile } from 'fs/promises'
 import { promisify } from 'util'
 
-
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'cry',
             description: 'Crying makes you cry',
             category: 'reactions',
-            usage: `${client.config.prefix}cry [tag/quote users]`,
+            usage: `${client.config.prefix}cry [tag/quote users]`
         })
     }
     exec = promisify(exec)
@@ -37,15 +36,12 @@ export default class Command extends BaseCommand {
         if (M.mentioned[0] === M.sender.jid) noun = 'by'
         // console.log(M.mentioned)
 
-        
         // if M.mentioned is empty, then assign noun to 'by' else assign noun to 'with'
         M.reply(
             await this.GIFBufferToVideoBuffer(
                 await this.client.getBuffer(
                     (
-                        await this.client.fetch<{ url: string }>(
-                            `https://api.waifu.pics/sfw/cry`
-                        )
+                        await this.client.fetch<{ url: string }>(`https://api.waifu.pics/sfw/cry`)
                     ).url
                 )
             ),

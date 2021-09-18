@@ -8,14 +8,13 @@ import { exec } from 'child_process'
 import { readFile, unlink, writeFile } from 'fs/promises'
 import { promisify } from 'util'
 
-
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'bonk',
             description: 'Send people to horny jail',
             category: 'reactions',
-            usage: `${client.config.prefix}bonk [tag/quote users]`,
+            usage: `${client.config.prefix}bonk [tag/quote users]`
         })
     }
     exec = promisify(exec)
@@ -37,9 +36,7 @@ export default class Command extends BaseCommand {
             await this.GIFBufferToVideoBuffer(
                 await this.client.getBuffer(
                     (
-                        await this.client.fetch<{ url: string }>(
-                            `https://api.waifu.pics/sfw/bonk`
-                        )
+                        await this.client.fetch<{ url: string }>(`https://api.waifu.pics/sfw/bonk`)
                     ).url
                 )
             ),
