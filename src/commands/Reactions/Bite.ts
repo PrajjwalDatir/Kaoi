@@ -43,7 +43,7 @@ export default class Command extends BaseCommand {
             MessageType.video,
             Mimetype.gif,
             [M.sender.jid, ...M.mentioned],
-            `*@${M.sender.jid.split('@')[0]} Bit ${M.mentioned
+            `*@${M.sender.jid.split('@')[0]} Bite ${M.mentioned
                 .map((user) => (user === M.sender.jid ? 'Themselves' : `@${user.split('@')[0]}`))
                 .join(', ')}*`
         )
