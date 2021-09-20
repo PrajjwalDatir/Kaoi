@@ -30,7 +30,9 @@ export default class MessageHandler {
                 await axios
                     .get(
                         `${encodeURI(
-                            `http://api.brainshop.ai/get?bid=${params.get('bid')}&key=${params.get('key')}&uid=${M.sender.jid}&msg=${M.args}`
+                            `http://api.brainshop.ai/get?bid=${params.get('bid')}&key=${params.get('key')}&uid=${
+                                M.sender.jid
+                            }&msg=${M.args}`
                         )}`
                     )
                     .then((res) => {
