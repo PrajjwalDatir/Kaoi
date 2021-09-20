@@ -16,14 +16,15 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        await axios.get(`https://api.quotable.io/random?tags=technology,famous-quotes`)
-        .then((response) => {
+        await axios
+            .get(`https://api.quotable.io/random?tags=technology,famous-quotes`)
+            .then((response) => {
                 // console.log(response);
                 const text = `📝 *Content:* ${response.data.content}\n\n*✍️ Author:* ${response.data.author}`
-                M.reply(text);
-            }).catch(err => {
+                M.reply(text)
+            })
+            .catch((err) => {
                 M.reply(`🔍 Error: ${err}`)
-            }
-            )
-    };
+            })
+    }
 }
