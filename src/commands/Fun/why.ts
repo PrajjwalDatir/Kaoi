@@ -16,14 +16,15 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        await axios.get(`https://nekos.life/api/v2/why`)
-        .then((response) => {
+        await axios
+            .get(`https://nekos.life/api/v2/why`)
+            .then((response) => {
                 // console.log(response);
                 const text = `📝 *Question:* ${response.data.why}`
-                M.reply(text);
-            }).catch(err => {
+                M.reply(text)
+            })
+            .catch((err) => {
                 M.reply(`🔍 Error: ${err}`)
-            }
-            )
-    };
+            })
+    }
 }
