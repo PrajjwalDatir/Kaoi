@@ -39,7 +39,7 @@
 ## 💪 Contribution
 
 + Feel free to open issues regarding any problems or if you have any feature requests
-+ Make sure to follow the ESLint Rules while editing the code and run `npm run prettier-format` before opening PRs
++ Make sure to follow the ESLint Rules while editing the code and run `yarn run prettier-format` before opening PRs
 
 ## 🤝 Contributers
 
