@@ -9,7 +9,7 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'fact',
             description: 'random fact.',
-            aliases: ['f'],
+            aliases: ['facts'],
             category: 'fun',
             usage: `${client.config.prefix}fact`
         })
