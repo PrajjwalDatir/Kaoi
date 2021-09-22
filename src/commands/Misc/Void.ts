@@ -25,7 +25,7 @@ export default class Command extends BaseCommand {
             MessageType.image,
             undefined,
             undefined,
-            `🖤 *Void* 🖤\n\n🍀 *Description: ${pkg.description}*\n\n🌐 *URL: ${pkg.homepage}*\n\n📂 *Repository: ${pkg.repository.url}*`
+            `🖤 *Void* 🖤\n\n🍀 *Description: ${pkg.description}*\n\n🌐 *URL: ${pkg.homepage}*\n`
         )
     }
 }
