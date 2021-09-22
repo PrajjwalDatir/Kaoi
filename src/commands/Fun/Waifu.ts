@@ -33,10 +33,16 @@ export default class Command extends BaseCommand {
                     undefined,
                     `More than one waifu, will ruin your laifu.\n`,
                     undefined
-                )
+                ).catch((e) => {
+                    console.log(`This Error occurs when an image is sent via M.reply()\n Child Catch Block : \n${e}`)
+                    // console.log('Failed')
+                    M.reply(`Could not fetch image. Here's the URL: ${data.url}`)
+                })
                 break
             } catch (e) {
-                console.log(e)
+                // console.log('Failed2')
+                M.reply(`Could not fetch image. Here's the URL : ${data.url}`)
+                console.log(`This Error occurs when an image is sent via M.reply()\n Parent Catch Block : \n${e}`)
             }
         }
         return void null
