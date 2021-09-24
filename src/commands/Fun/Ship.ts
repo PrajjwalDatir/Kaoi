@@ -45,7 +45,7 @@ export default class Command extends BaseCommand {
             sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\tYou two are fated to be together 💙`
         }
 
-        if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
+        if (M.quoted?.sender && !M.mentioned.includes(M.quoted.sender)) M.mentioned.push(M.quoted.sender)
         while (M.mentioned.length < 2) M.mentioned.push(M.sender.jid)
         const user1 = M.mentioned[0]
         const user2 = M.mentioned[1]
