@@ -17,16 +17,16 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage): Promise<void> => {
         const per = Math.floor(Math.random() * 100)
 
-if (per < 25) { 
+if (per < 25) {
 var sentence = `${per}% Worse than average 😔`
 } else if (per < 50) {
-var sentence = `${per}% I don't know about this 😬` 
+var sentence = `${per}% I don't know about this 😬`
 } else if (per < 75) {
-var sentence = `${per}% Good, I guess ⭐️` 
+var sentence = `${per}% Good, I guess ⭐️`
 } else if (per < 90) {
-var sentence = `${per}% Amazing! You two will be a good couple 💖 ` 
+var sentence = `${per}% Amazing! You two will be a good couple 💖 `
 } else {
-var sentence = `${per}% You two are fated to be together 💙` 
+var sentence = `${per}% You two are fated to be together 💙`
 }
         const user1 = M.sender.jid
         const user2 = M.mentioned[0]
