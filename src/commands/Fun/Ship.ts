@@ -2,45 +2,29 @@ import { MessageType, Mimetype } from '@adiwajshing/baileys'
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
-import { exec } from 'child_process'
-import { readFile, unlink, writeFile } from 'fs/promises'
-import { tmpdir } from 'os'
 import { ISimplifiedMessage } from '../../typings'
-import { promisify } from 'util'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'ship',
-            description: 'Ship with the person you like.',
+            description: `Let's ship people.`,
             category: 'fun',
             usage: `${client.config.prefix}ship [tag user]`
         })
-    }
-    exec = promisify(exec)
-
-    GIFBufferToVideoBuffer = async (image: Buffer): Promise<Buffer> => {
-        const filename = `${tmpdir()}/${Math.random().toString(36)}`
-        await writeFile(`${filename}.gif`, image)
-        await this.exec(
-            `ffmpeg -f gif -i ${filename}.gif -movflags faststart -pix_fmt yuv420p -vf "scale=trunc(iw/2)*2:trunc(ih/2)*2" ${filename}.mp4`
-        )
-        const buffer = await readFile(`${filename}.mp4`)
-        Promise.all([unlink(`${filename}.mp4`), unlink(`${filename}.gif`)])
-        return buffer
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         const percentage = Math.floor(Math.random() * 100)
         let sentence
         if (percentage < 25) {
-            sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\t\tWorse than average 😔`
+            sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\t\tThere's still time to reconsider your choices`
         } else if (percentage < 50) {
-            sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\t\tI don't know about this 😬`
+            sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\t\t Good enough, I guess! 💫`
         } else if (percentage < 75) {
-            sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\t\t\tGood, I guess ⭐️`
+            sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\t\t\tStay together and you'll find a way ⭐️`
         } else if (percentage < 90) {
-            sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \nAmazing! You two will be a good couple 💖 `
+            sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\tAmazing! You two will be a good couple 💖 `
         } else {
             sentence = `\t\t\t\t\t*ShipCent : ${percentage}%* \n\tYou two are fated to be together 💙`
         }
@@ -70,7 +54,7 @@ export default class Command extends BaseCommand {
         caption += `${sentence}`
 
         return void M.reply(
-            await this.GIFBufferToVideoBuffer(await this.client.getBuffer(gifLink)),
+            await this.client.util.GIFBufferToVideoBuffer(await this.client.getBuffer(gifLink)),
             MessageType.video,
             Mimetype.gif,
             [user1, user2],
