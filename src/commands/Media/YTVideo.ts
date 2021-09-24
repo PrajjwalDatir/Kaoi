@@ -24,7 +24,7 @@ export default class Command extends BaseCommand {
         const { videoDetails } = await video.getInfo()
         M.reply('👾 sending...')
         if (Number(videoDetails.lengthSeconds) > 1800)
-            return void M.reply('⚓ Cannot Download videos longer than 30 Minutes')
+            return void M.reply('⚓ Cannot download videos longer than 30 minutes')
         M.reply(await video.getBuffer(), MessageType.video).catch((reason: Error) =>
             M.reply(`❌ an error occurred, Reason: ${reason}`)
         )
