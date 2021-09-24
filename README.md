@@ -27,7 +27,7 @@
 - Fully Modular Design
 - Object Oriented
 - Written in [TypeScript](https://www.typescriptlang.org/)
-- Self-Resoting Auth
+- Self-Restoring Auth
 - Built with [Baileys](https://github.com/adiwajshing/baileys) (The Best WhatsApp Library Out There) 
 
 ## 💻 Deploy/Hosting Guide
