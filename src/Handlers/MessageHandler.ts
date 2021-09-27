@@ -12,7 +12,7 @@ export default class MessageHandler {
 
     handleMessage = async (M: ISimplifiedMessage): Promise<void> => {
         if (!(M.chat === 'dm') && M.WAMessage.key.fromMe && M.WAMessage.status.toString() === '2') {
-            /* 
+            /*
             BUG : It receives message 2 times and processes it twice.
             https://github.com/adiwajshing/Baileys/blob/8ce486d/WAMessage/WAMessage.d.ts#L18529
             https://adiwajshing.github.io/Baileys/enums/proto.webmessageinfo.webmessageinfostatus.html#server_ack
