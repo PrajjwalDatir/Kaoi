@@ -7,7 +7,7 @@ import { tmpdir } from 'os'
 import { promisify } from 'util'
 
 export default class {
-    
+
     exec = promisify(exec)
     GIFBufferToVideoBuffer = async (image: Buffer): Promise<Buffer> => {
         const filename = `${tmpdir()}/${Math.random().toString(36)}`
