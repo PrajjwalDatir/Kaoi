@@ -59,4 +59,5 @@ Use any one of the above to deploy
 
 ## 📄 License
 
-Distributed under the GNU AFFERO GENERAL PUBLIC License. See [LICENSE](/LICENSE) for more information.
+Distributed under the GNU AFFERO GENERAL PUBLIC License. See [LICENSE](/LICENSE)
+for more information.
