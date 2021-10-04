@@ -24,8 +24,7 @@ export default class Command extends BaseCommand {
         const kaoi = joined.trim()
         console.log(kaoi)
         const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${kaoi}`)
-        const buffer = await request.buffer(data.sprites.frontdefault).catch((e) => {
-            return void M.reply(e.message)
+        
         })
         while (true) {
             try {
