@@ -14,13 +14,13 @@ export default class Command extends BaseCommand {
             aliases: ['pkmn'],
             description: 'Gives you the data of the given pokemon. ',
             category: 'fun',
-            
+
             usage: `${client.config.prefix}pokemon [name]`
         })
     }
     // static count = 0
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        
+
         if (!joined) return void M.reply('Do you want me to give you the data of an unknown pokemon, Baka!')
         const chitoge = joined.trim()
         console.log(kaoi)
