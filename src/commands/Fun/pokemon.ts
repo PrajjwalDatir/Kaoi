@@ -1,3 +1,4 @@
+
 import { MessageType } from '@adiwajshing/baileys'
 import request from '../../lib/request'
 import MessageHandler from '../../Handlers/MessageHandler'
@@ -21,10 +22,11 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         
         if (!joined) return void M.reply('Do you want me to give you the data of an unknown pokemon, Baka!')
-        const kaoi = joined.trim()
+        const chitoge = joined.trim()
         console.log(kaoi)
         const { data } = await axios.get(`https://pokeapi.co/api/v2/pokemon/${kaoi}`)
-        
+        const buffer = await request.buffer(data.sprites.frontdefault).catch((e) => {
+            return void M.reply(e.message)
         })
         while (true) {
             try {
