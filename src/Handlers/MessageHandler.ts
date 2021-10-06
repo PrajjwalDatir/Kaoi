@@ -75,6 +75,7 @@ export default class MessageHandler {
             if (command.config.baseXp) {
                 await this.client.setXp(M.sender.jid, command.config.baseXp || 10, 50)
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (err :any) {
             return void this.client.log(err.message, true)
         }
