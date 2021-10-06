@@ -17,6 +17,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
+        let text = '*Action*\n\n'
         if (!M.groupMetadata?.admins?.includes(this.client.user.jid))
             return void M.reply(`❌ Failed to ${this.config.command} as I'm not an admin`)
         if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
@@ -24,11 +25,23 @@ export default class Command extends BaseCommand {
         M.mentioned.forEach(async (user) => {
             // const usr = this.client.contacts[user]
             // const username = usr.notify || usr.vname || usr.name || user.split('@')[0]
-            if (M.groupMetadata?.admins?.includes(user)) M.reply(`❌ Skipped *@${user.split('@')[0]}* as they're an admin`)
+            if (M.groupMetadata?.owner.split('@')[0] === user.split('@')[0]) {
+                text += `❌ Skipped *@${user.split('@')[0]}* as they're owner.\n`
+            }
+            // check if user is Bot
+            else if (this.client.user.jid === user) {
+                text += `❌ Skipped *@${user.split('@')[0]}* as they're me.\n`
+            }
             else {
+                text += `🟥 Removed *@${user.split('@')[0]}*\n`
                 await this.client.groupRemove(M.from, [user])
-                M.reply(`🏌️‍♂️Successfully Removed *${user.split('@')[0]}*`)
             }
         })
+        await M.reply(
+            `${text}`,
+            undefined,
+            undefined,
+            [...M.mentioned, M.sender.jid]
+        )
     }
 }
