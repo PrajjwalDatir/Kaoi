@@ -22,12 +22,12 @@ export default class Command extends BaseCommand {
         if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
         if (!M.mentioned.length) return void M.reply(`Please tag the users you want to ${this.config.command}`)
         M.mentioned.forEach(async (user) => {
-            const usr = this.client.contacts[user]
-            const username = usr.notify || usr.vname || usr.name || user.split('@')[0]
-            if (M.groupMetadata?.admins?.includes(user)) M.reply(`❌ Skipped *${username}* as they're an admin`)
+            // const usr = this.client.contacts[user]
+            // const username = usr.notify || usr.vname || usr.name || user.split('@')[0]
+            if (M.groupMetadata?.admins?.includes(user)) M.reply(`❌ Skipped *@${user.split('@')[0]}* as they're an admin`)
             else {
                 await this.client.groupRemove(M.from, [user])
-                M.reply(`🏌️‍♂️Successfully Removed *${username}*`)
+                M.reply(`🏌️‍♂️Successfully Removed *${user.split('@')[0]}*`)
             }
         })
     }
