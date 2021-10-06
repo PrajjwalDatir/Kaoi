@@ -10,12 +10,12 @@ export default class Command extends BaseCommand {
             description: 'Disables the given command from being used',
             category: 'dev',
             dm: true,
-            usage: `${client.config.prefix}disable [command] | (reason)`
+            usage: `${client.config.prefix}disable [command] | (reason)`,
+            modsOnly : true
         })
     }
 
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        if (!this.client.config.mods?.includes(M.sender.jid)) return void null
         const split = joined.split('|')
         const key = split[0].toLowerCase().trim()
         if (!key) return void (await M.reply(`Provide the command you want to disable`))

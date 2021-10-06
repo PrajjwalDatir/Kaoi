@@ -7,14 +7,14 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'unban',
-            description: 'Unbans the tagged users',
+            description: 'Unban the tagged users',
             category: 'dev',
-            usage: `${client.config.prefix}unban [@tag]`
+            usage: `${client.config.prefix}unban [@tag]`,
+            modsOnly : true
         })
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!this.client.config.mods?.includes(M.sender.jid)) return void M.reply('❌ Only available to MODS')
         if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
         if (!M.mentioned.length || !M.mentioned[0])
             return void M.reply('Please mention the user whom you want to unban')
