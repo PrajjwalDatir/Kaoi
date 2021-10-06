@@ -35,4 +35,4 @@ export default class Command extends BaseCommand {
             'Hippity Hoppity, this message is now public property...'
         )
     }
-    }
+}

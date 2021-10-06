@@ -10,7 +10,7 @@ export default class Command extends BaseCommand {
             description: 'Unban the tagged users',
             category: 'dev',
             usage: `${client.config.prefix}unban [@tag]`,
-            modsOnly : true
+            modsOnly: true
         })
     }
 
@@ -37,7 +37,7 @@ export default class Command extends BaseCommand {
             undefined,
             undefined,
             // undefined
-            [...M.mentioned, M.sender.jid],
+            [...M.mentioned, M.sender.jid]
         )
     }
 }

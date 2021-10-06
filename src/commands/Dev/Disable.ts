@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             category: 'dev',
             dm: true,
             usage: `${client.config.prefix}disable [command] | (reason)`,
-            modsOnly : true
+            modsOnly: true
         })
     }
 

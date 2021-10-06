@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             category: 'dev',
             dm: true,
             usage: `${client.config.prefix}eval [JS CODE]`,
-            modsOnly : true
+            modsOnly: true
         })
     }
 
@@ -21,8 +21,8 @@ export default class Command extends BaseCommand {
             const output = eval(parsedArgs.joined) || 'Executed JS Successfully!'
             console.log(output)
             out = JSON.stringify(output)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err : any) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
             out = err.message
         }
         return void (await M.reply(out))
