@@ -31,17 +31,11 @@ export default class Command extends BaseCommand {
             // check if user is Bot
             else if (this.client.user.jid === user) {
                 text += `❌ Skipped *@${user.split('@')[0]}* as they're me.\n`
-            }
-            else {
+            } else {
                 text += `🟥 Removed *@${user.split('@')[0]}*\n`
                 await this.client.groupRemove(M.from, [user])
             }
         })
-        await M.reply(
-            `${text}`,
-            undefined,
-            undefined,
-            [...M.mentioned, M.sender.jid]
-        )
+        await M.reply(`${text}`, undefined, undefined, [...M.mentioned, M.sender.jid])
     }
 }

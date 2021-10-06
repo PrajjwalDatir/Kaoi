@@ -26,7 +26,8 @@ export default class Command extends BaseCommand {
             )
         }
         M.groupMetadata.participants.map(async (user) => {
-            if (!user.isAdmin) await this.client.groupRemove(M.from, [user.jid]).catch(() => console.log('Failed to remove users'))
+            if (!user.isAdmin)
+                await this.client.groupRemove(M.from, [user.jid]).catch(() => console.log('Failed to remove users'))
         })
         // now remove all admins except yourself and the owner
         M.groupMetadata.admins.map(async (user) => {
