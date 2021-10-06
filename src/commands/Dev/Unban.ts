@@ -21,15 +21,23 @@ export default class Command extends BaseCommand {
         let text = '*STATE*\n\n'
         for (const user of M.mentioned) {
             const data = await this.client.getUser(user)
-            const info = this.client.getContact(user)
-            const username = info.notify || info.vname || info.name || user.split('@')[0]
+            // const info = this.client.getContact(user)
+            // const username = info.notify || info.vname || info.name || user.split('@')[0]
+            // const username = user.split('@')[0]
             if (!data?.ban) {
-                text += `🟨 ${username}: Not Banned\n`
+                text += `🟨 @${user.split('@')[0]}: Not Banned\n`
                 continue
             }
             await this.client.unbanUser(user)
-            text += `🟩 ${username}: Unbanned\n`
+            text += `🟩 @${user.split('@')[0]}: Unbanned\n`
         }
-        M.reply(text)
+        // M.reply(text)
+        await M.reply(
+            `${text}`,
+            undefined,
+            undefined,
+            // undefined
+            [...M.mentioned, M.sender.jid],
+        )
     }
 }
