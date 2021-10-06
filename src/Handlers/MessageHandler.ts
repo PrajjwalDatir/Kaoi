@@ -68,6 +68,9 @@ export default class MessageHandler {
         const state = await this.client.DB.disabledcommands.findOne({ command: command.config.command })
         if (state) return void M.reply(`❌ This command is disabled${state.reason ? ` for ${state.reason}` : ''}`)
         if (!command.config?.dm && M.chat === 'dm') return void M.reply('This command can only be used in groups')
+        if (command.config?.modsOnly && !this.client.config.mods?.includes(M.sender.jid)) {
+            return void M.reply(`Only MODS are allowed to use this command`)
+        }
         if (command.config?.adminOnly && !M.sender.isAdmin)
             return void M.reply(`Only admins are allowed to use this command`)
         try {
@@ -75,8 +78,8 @@ export default class MessageHandler {
             if (command.config.baseXp) {
                 await this.client.setXp(M.sender.jid, command.config.baseXp || 10, 50)
             }
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err :any) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
             return void this.client.log(err.message, true)
         }
     }
