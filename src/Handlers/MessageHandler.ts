@@ -52,7 +52,7 @@ export default class MessageHandler {
         if (!args[0] || !args[0].startsWith(this.client.config.prefix))
             return void this.client.log(
                 `${chalk.blueBright('MSG')} from ${chalk.green(sender.username)} in ${chalk.cyanBright(
-                    groupMetadata?.subject
+                    groupMetadata?.subject || ''
                 )}`
             )
         const cmd = args[0].slice(this.client.config.prefix.length).toLowerCase()
@@ -75,7 +75,7 @@ export default class MessageHandler {
             if (command.config.baseXp) {
                 await this.client.setXp(M.sender.jid, command.config.baseXp || 10, 50)
             }
-        } catch (err) {
+        } catch (err :any) {
             return void this.client.log(err.message, true)
         }
     }
@@ -92,7 +92,7 @@ export default class MessageHandler {
                         this.client.log(
                             `${chalk.blueBright('MOD')} ${chalk.green('Group Invite')} by ${chalk.yellow(
                                 M.sender.username
-                            )} in ${M.groupMetadata?.subject}`
+                            )} in ${M.groupMetadata?.subject || ''}`
                         )
                         return void (await this.client.groupRemove(M.from, [M.sender.jid]))
                     }
