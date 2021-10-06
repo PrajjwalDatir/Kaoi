@@ -11,14 +11,12 @@ export default class Command extends BaseCommand {
             description: 'Puts the text as status ',
             category: 'dev',
             dm: true,
-            usage: `${client.config.prefix}status [text] [tag Image/Video]`
+            usage: `${client.config.prefix}status [text] [tag Image/Video]`,
+            modsOnly: true
         })
     }
 
     run = async (M: ISimplifiedMessage, parsedArgs: IParsedArgs): Promise<void> => {
-        if (!this.client.config.mods?.includes(M.sender.jid))
-            return void (await M.reply(`This command is only for Owner of the Bot`))
-        // const text = parsedArgs.joined
         parsedArgs.flags.forEach((flag) => (parsedArgs.joined = parsedArgs.joined.replace(flag, '')))
         const args = parsedArgs.joined.split(',')
         let buffer
