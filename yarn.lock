@@ -4723,17 +4723,17 @@ spotify-web-api-node@^5.0.2:
   dependencies:
     superagent "^6.1.0"
 
-spotifydl-core@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/spotifydl-core/-/spotifydl-core-0.1.2.tgz#b8f285e5a8deefdfe2dc882ceccbb2b8255b636a"
-  integrity sha512-WBHqk1XQrgohzURVwMPMsYUX9mT8fzsg+lztt2dp3d/RZdo4hPfhMuZiiwBWYc28X80tqKSk6MCtNWIKdRjmXA==
+spotifydl-core@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/spotifydl-core/-/spotifydl-core-0.2.0.tgz#7b83d1d04a33afb5751e3ed247606df1e8796f37"
+  integrity sha512-uLXRvkN6UmhFPLRMtw9AuoK6AN+1Ov64Iza7kbJwsa0gd1QNQwkLfwg+SZLFomLnHzbSllJaJMJnzZVGCcmiMQ==
   dependencies:
     axios "^0.21.1"
     fluent-ffmpeg "^2.1.2"
     fs-extra "^10.0.0"
     spotify-web-api-node "^5.0.2"
     yt-search "^2.8.0"
-    ytdl-core "^4.8.0"
+    ytdl-core "^4.8.3"
 
 sprintf-js@~1.0.2:
   version "1.0.3"
@@ -5302,7 +5302,7 @@ yt-search@^2.8.0, yt-search@^2.9.0:
     minimist "~1.2.5"
     node-fzf "~0.5.1"
 
-ytdl-core@^4.8.0, ytdl-core@^4.9.1:
+ytdl-core@^4.8.3, ytdl-core@^4.9.1:
   version "4.9.1"
   resolved "https://registry.yarnpkg.com/ytdl-core/-/ytdl-core-4.9.1.tgz#f587e2bd8329b5133c0bac4ce5ee1f3c7a1175a9"
   integrity sha512-6Jbp5RDhUEozlaJQAR+l8oV8AHsx3WUXxSyPxzE6wOIAaLql7Hjiy0ZM58wZoyj1YEenlEPjEqcJIjKYKxvHtQ==
