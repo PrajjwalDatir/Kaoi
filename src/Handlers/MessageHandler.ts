@@ -44,7 +44,6 @@ export default class MessageHandler {
                     })
             }
         }
-
         if (!M.groupMetadata && !(M.chat === 'dm')) return void null
 
         if ((await this.client.getGroupData(M.from)).mod && M.groupMetadata?.admins?.includes(this.client.user.jid))
@@ -56,6 +55,14 @@ export default class MessageHandler {
                 )}`
             )
         const cmd = args[0].slice(this.client.config.prefix.length).toLowerCase()
+        // If the group is set to muted, don't do anything
+        const allowedCommands = ['activate', 'deactivate', 'act', 'deact']
+        if (!(allowedCommands.includes(cmd) || (await this.client.getGroupData(M.from)).cmd))
+            return void this.client.log(
+                `${chalk.green('CMD')} ${chalk.yellow(`${args[0]}[${args.length - 1}]`)} from ${chalk.green(
+                    sender.username
+                )} in ${chalk.cyanBright(groupMetadata?.subject || 'DM')}`
+            )
         const command = this.commands.get(cmd) || this.aliases.get(cmd)
         this.client.log(
             `${chalk.green('CMD')} ${chalk.yellow(`${args[0]}[${args.length - 1}]`)} from ${chalk.green(
