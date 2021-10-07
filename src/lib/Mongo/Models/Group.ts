@@ -33,10 +33,10 @@ const GroupSchema = new Schema({
         default: false
     },
     // Are commands enabled for this group.
-    isMuted: {
+    cmd: {
         type: Boolean,
         required: false,
-        default: true
+        default: false
     }
 })
 
