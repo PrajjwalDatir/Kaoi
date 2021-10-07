@@ -215,5 +215,6 @@ export enum toggleableGroupActions {
     events = 'events',
     NSFW = 'nsfw',
     safe = 'safe',
-    mod = 'mod'
+    mod = 'mod',
+    isMuted = 'isMuted',
 }
