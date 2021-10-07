@@ -37,6 +37,7 @@ export interface IGroup {
     nsfw: boolean
     safe: boolean
     mod: boolean
+    isMuted: boolean
 }
 
 export interface IUser {
