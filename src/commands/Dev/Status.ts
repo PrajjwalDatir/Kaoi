@@ -12,7 +12,8 @@ export default class Command extends BaseCommand {
             category: 'dev',
             dm: true,
             usage: `${client.config.prefix}status [text] [tag Image/Video]`,
-            modsOnly: true
+            modsOnly: true,
+            baseXp : 30,
         })
     }
 
