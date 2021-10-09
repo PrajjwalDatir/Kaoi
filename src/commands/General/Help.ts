@@ -10,7 +10,8 @@ export default class Command extends BaseCommand {
             description: 'Displays the help menu or shows the info of the command provided',
             category: 'general',
             usage: `${client.config.prefix}help (command_name)`,
-            aliases: ['h']
+            aliases: ['h'],
+            baseXp: 30,
         })
     }
 
@@ -21,7 +22,6 @@ export default class Command extends BaseCommand {
             for (const command of commands) {
                 const info = this.handler.commands.get(command)
                 if (!command) continue
-                // if (!info?.config?.category || info.config.category === 'dev') continue
                 if (!info?.config?.category) continue
                 if (Object.keys(categories).includes(info.config.category)) categories[info.config.category].push(info)
                 else {
@@ -30,7 +30,7 @@ export default class Command extends BaseCommand {
                 }
             }
             let text = `👾 *Kaoi's Command List* 👾\n\n`
-            const keys = Object.keys(categories)
+            const keys = Object.keys(categories).sort((a,b)=> a.localeCompare(b))
             for (const key of keys)
                 text += `${this.emojis[keys.indexOf(key)]} *${this.client.util.capitalize(key)}*\n❐ \`\`\`${categories[
                     key
@@ -49,7 +49,7 @@ export default class Command extends BaseCommand {
             `🎫 *Command:* ${this.client.util.capitalize(command.config?.command)}\n🎗️ *Status:* ${
                 state ? 'Disabled' : 'Available'
             }\n🀄 *Category:* ${this.client.util.capitalize(command.config?.category || '')}${
-                command.config.aliases
+                command.config.aliases && command.config.command !== 'react'
                     ? `\n🍥 *Aliases:* ${command.config.aliases.map(this.client.util.capitalize).join(', ')}`
                     : ''
             }\n🃏 *Group Only:* ${this.client.util.capitalize(
@@ -58,5 +58,5 @@ export default class Command extends BaseCommand {
         )
     }
 
-    emojis = ['👨‍💻', '🌀', '🎴', '🔮', '👑', '🎈', '⚙️', '⚙️', '🍀']
+    emojis = ['📺','🤖','⚙️','👨‍💻', '📚', '👻', '🎲', '😶‍🌫️', '📼', '🦉', '🪜']
 }
