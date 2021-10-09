@@ -7,11 +7,12 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'leave',
-            description: 'Leaves the group',
+            description: 'Bot Leaves the group',
             category: 'dev',
             dm: true,
             usage: `${client.config.prefix}leave`,
-            modsOnly: true
+            modsOnly: true,
+            baseXp : 0
         })
     }
 
