@@ -15,7 +15,7 @@ export default class Command extends BaseCommand {
             aliases: ['animegirl'],
             category: 'anime',
             usage: `${client.config.prefix}waifu`,
-            baseXp: 50,
+            baseXp: 50
         })
     }
 

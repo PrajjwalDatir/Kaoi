@@ -13,7 +13,7 @@ export default class Command extends BaseCommand {
             category: 'general',
             usage: `${client.config.prefix}profile (@tag)`,
             aliases: ['p'],
-            baseXp: 30,
+            baseXp: 30
         })
     }
 

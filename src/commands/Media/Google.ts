@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             description: 'Search on the web ',
             category: 'media',
             usage: `${client.config.prefix}google [query]`,
-            baseXp : 10,
+            baseXp: 10
         })
     }
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {

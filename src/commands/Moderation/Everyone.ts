@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             category: 'general',
             usage: `${client.config.prefix}everyone`,
             adminOnly: true,
-            baseXp : 20,
+            baseXp: 20
         })
     }
 
@@ -22,7 +22,7 @@ export default class Command extends BaseCommand {
             undefined,
             undefined,
             M.groupMetadata?.participants.map((user) => user.jid)
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ).catch((reason: any) => M.reply(`an error occurred, Reason: ${reason}`)))
     }
 }

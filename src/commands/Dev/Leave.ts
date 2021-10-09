@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             dm: true,
             usage: `${client.config.prefix}leave`,
             modsOnly: true,
-            baseXp : 0
+            baseXp: 0
         })
     }
 

@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             category: 'general',
             usage: `${client.config.prefix}mods`,
             aliases: ['moderators', 'mod', 'owner'],
-            baseXp : 40,
+            baseXp: 40
         })
     }
 

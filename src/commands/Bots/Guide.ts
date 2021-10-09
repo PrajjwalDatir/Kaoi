@@ -15,8 +15,8 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        return void M.reply(
-            `👾 To Be Updated Soon ... 👾`
-        ).catch((reason: Error) => M.reply(`an error occurred, Reason: ${reason}`))
+        return void M.reply(`👾 To Be Updated Soon ... 👾`).catch((reason: Error) =>
+            M.reply(`an error occurred, Reason: ${reason}`)
+        )
     }
 }

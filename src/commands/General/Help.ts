@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             category: 'general',
             usage: `${client.config.prefix}help (command_name)`,
             aliases: ['h'],
-            baseXp: 30,
+            baseXp: 30
         })
     }
 
@@ -30,7 +30,7 @@ export default class Command extends BaseCommand {
                 }
             }
             let text = `👾 *Kaoi's Command List* 👾\n\n`
-            const keys = Object.keys(categories).sort((a,b)=> a.localeCompare(b))
+            const keys = Object.keys(categories).sort((a, b) => a.localeCompare(b))
             for (const key of keys)
                 text += `${this.emojis[keys.indexOf(key)]} *${this.client.util.capitalize(key)}*\n❐ \`\`\`${categories[
                     key
@@ -58,5 +58,5 @@ export default class Command extends BaseCommand {
         )
     }
 
-    emojis = ['📺','🤖','⚙️','👨‍💻', '📚', '👻', '🎲', '😶‍🌫️', '📼', '🦉', '🪜']
+    emojis = ['📺', '🤖', '⚙️', '👨‍💻', '📚', '👻', '🎲', '😶‍🌫️', '📼', '🦉', '🪜']
 }

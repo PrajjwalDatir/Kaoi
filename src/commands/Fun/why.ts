@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             description: 'Asks you a *why* question.',
             category: 'fun',
             usage: `${client.config.prefix}why`,
-            baseXp : 10,
+            baseXp: 10
         })
     }
 
