@@ -38,7 +38,7 @@ Use any one of the above to deploy
 ## 🍥 Features of the Repo
 
 -   To view all features, click
-    here➡️[Void_featuresList.md](https://github.com/PrajjwalDatir/Kaoi/blob/main/Features.md)
+    here➡️[Kaoi_featuresList.md](https://github.com/PrajjwalDatir/Kaoi/blob/main/Features.md)
 
 ## 💪 Contribution
 
@@ -47,7 +47,7 @@ Use any one of the above to deploy
 -   Make sure to follow the ESLint Rules while editing the code and run
     `yarn run prettier-format` before opening PRs
 
-## 🤝 Contributers
+## 🤝 Contributors
 
 <a href="https://github.com/PrajjwalDatir/Kaoi/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=PrajjwalDatir/Kaoi" />

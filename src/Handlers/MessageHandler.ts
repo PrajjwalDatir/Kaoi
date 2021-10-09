@@ -44,7 +44,6 @@ export default class MessageHandler {
                     })
             }
         }
-
         if (!M.groupMetadata && !(M.chat === 'dm')) return void null
 
         if ((await this.client.getGroupData(M.from)).mod && M.groupMetadata?.admins?.includes(this.client.user.jid))
@@ -52,10 +51,18 @@ export default class MessageHandler {
         if (!args[0] || !args[0].startsWith(this.client.config.prefix))
             return void this.client.log(
                 `${chalk.blueBright('MSG')} from ${chalk.green(sender.username)} in ${chalk.cyanBright(
-                    groupMetadata?.subject
+                    groupMetadata?.subject || ''
                 )}`
             )
         const cmd = args[0].slice(this.client.config.prefix.length).toLowerCase()
+        // If the group is set to muted, don't do anything
+        const allowedCommands = ['activate', 'deactivate', 'act', 'deact']
+        if (!(allowedCommands.includes(cmd) || (await this.client.getGroupData(M.from)).cmd))
+            return void this.client.log(
+                `${chalk.green('CMD')} ${chalk.yellow(`${args[0]}[${args.length - 1}]`)} from ${chalk.green(
+                    sender.username
+                )} in ${chalk.cyanBright(groupMetadata?.subject || 'DM')}`
+            )
         const command = this.commands.get(cmd) || this.aliases.get(cmd)
         this.client.log(
             `${chalk.green('CMD')} ${chalk.yellow(`${args[0]}[${args.length - 1}]`)} from ${chalk.green(
@@ -68,6 +75,9 @@ export default class MessageHandler {
         const state = await this.client.DB.disabledcommands.findOne({ command: command.config.command })
         if (state) return void M.reply(`❌ This command is disabled${state.reason ? ` for ${state.reason}` : ''}`)
         if (!command.config?.dm && M.chat === 'dm') return void M.reply('This command can only be used in groups')
+        if (command.config?.modsOnly && !this.client.config.mods?.includes(M.sender.jid)) {
+            return void M.reply(`Only MODS are allowed to use this command`)
+        }
         if (command.config?.adminOnly && !M.sender.isAdmin)
             return void M.reply(`Only admins are allowed to use this command`)
         try {
@@ -75,7 +85,8 @@ export default class MessageHandler {
             if (command.config.baseXp) {
                 await this.client.setXp(M.sender.jid, command.config.baseXp || 10, 50)
             }
-        } catch (err) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        } catch (err: any) {
             return void this.client.log(err.message, true)
         }
     }
@@ -92,7 +103,7 @@ export default class MessageHandler {
                         this.client.log(
                             `${chalk.blueBright('MOD')} ${chalk.green('Group Invite')} by ${chalk.yellow(
                                 M.sender.username
-                            )} in ${M.groupMetadata?.subject}`
+                            )} in ${M.groupMetadata?.subject || ''}`
                         )
                         return void (await this.client.groupRemove(M.from, [M.sender.jid]))
                     }

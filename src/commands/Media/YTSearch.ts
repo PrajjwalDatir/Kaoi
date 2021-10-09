@@ -8,10 +8,10 @@ import yts from 'yt-search'
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
-            command: 'yts',
+            command: 'ytsearch',
             description: 'Searches YT',
             category: 'media',
-            aliases: ['ytsearch'],
+            aliases: ['yts'],
             usage: `${client.config.prefix}yts [term]`,
             baseXp: 20
         })

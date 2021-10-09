@@ -128,7 +128,7 @@ export default class WAClient extends Base {
 
     log = (text: string, error?: boolean): void => {
         console.log(
-            chalk[error ? 'red' : 'green']('[VOID]'),
+            chalk[error ? 'red' : 'green']('[KAOI]'),
             chalk.blue(moment(Date.now() * 1000).format('DD/MM HH:mm:ss')),
             chalk.yellowBright(text)
         )
@@ -215,5 +215,6 @@ export enum toggleableGroupActions {
     events = 'events',
     NSFW = 'nsfw',
     safe = 'safe',
-    mod = 'mod'
+    mod = 'mod',
+    cmd = 'cmd'
 }

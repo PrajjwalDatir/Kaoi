@@ -11,7 +11,8 @@ export default class Command extends BaseCommand {
             aliases: ['deact'],
             description: 'deactivate certain features on group-chats',
             category: 'moderation',
-            usage: `${client.config.prefix}deactivate [feature]`
+            usage: `${client.config.prefix}deactivate [feature]`,
+            baseXp: 0
         })
     }
 
@@ -20,7 +21,7 @@ export default class Command extends BaseCommand {
         if (!Object.values(toggleableGroupActions).includes(type))
             return void M.reply(`🟥 Invalid Option: *${this.client.util.capitalize(type)}*`)
         const data = await this.client.getGroupData(M.from)
-        if (!data[type]) return void M.reply(`🟨 *${this.client.util.capitalize(type)}* is alerady inactive`)
+        if (!data[type]) return void M.reply(`🟨 *${this.client.util.capitalize(type)}* is already *inactive*`)
         await this.client.DB.group.updateOne({ jid: M.from }, { $set: { [type]: false } })
         return void M.reply(`🟩 *${this.client.util.capitalize(type)}* is now inactive`)
     }

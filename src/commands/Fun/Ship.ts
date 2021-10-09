@@ -8,9 +8,10 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'ship',
-            description: `Let's ship people.`,
+            description: `Ship 💖 People`,
             category: 'fun',
-            usage: `${client.config.prefix}ship [tag user]`
+            usage: `${client.config.prefix}ship [tag user]`,
+            baseXp: 50
         })
     }
 

@@ -11,7 +11,8 @@ export default class Command extends BaseCommand {
             command: 'close',
             description: 'Close the group for all participants. Only Admins can message',
             category: 'moderation',
-            usage: `${client.config.prefix}close`
+            usage: `${client.config.prefix}close`,
+            baseXp: 0
         })
     }
 

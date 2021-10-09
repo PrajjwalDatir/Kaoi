@@ -11,6 +11,7 @@ export interface IConfig {
     mods: string[]
     gkey: string
     chatBotUrl: string
+    ckey: string
 }
 
 export interface IParsedArgs {
@@ -37,6 +38,7 @@ export interface IGroup {
     nsfw: boolean
     safe: boolean
     mod: boolean
+    cmd: boolean
 }
 
 export interface IUser {

@@ -12,7 +12,8 @@ export default class Command extends BaseCommand {
             description: 'Displays user-profile 🌟',
             category: 'general',
             usage: `${client.config.prefix}profile (@tag)`,
-            aliases: ['p']
+            aliases: ['p'],
+            baseXp: 30
         })
     }
 

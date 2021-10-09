@@ -10,15 +10,13 @@ export default class Command extends BaseCommand {
             command: 'purge',
             description: 'Removes all group members',
             category: 'moderation',
-            usage: `${client.config.prefix}purge`
+            usage: `${client.config.prefix}purge`,
+            baseXp: 0
         })
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (
-            M.groupMetadata?.owner !== M.sender.jid &&
-            M.groupMetadata?.owner !== M.sender.jid.replace('s.whatsapp.net', 'c.us')
-        )
+        if (!(M.groupMetadata?.owner.split('@')[0] === M.sender.jid.split('@')[0]))
             return void M.reply('Only the group owner can use this command')
         if (!M.groupMetadata?.admins?.includes(this.client.user.jid))
             return void M.reply("I can't remove without being an admin")
@@ -29,7 +27,8 @@ export default class Command extends BaseCommand {
             )
         }
         M.groupMetadata.participants.map(async (user) => {
-            if (!user.isAdmin) await this.client.groupRemove(M.from, [user.jid]).catch(() => console.log('Failed to remove users'))
+            if (!user.isAdmin)
+                await this.client.groupRemove(M.from, [user.jid]).catch(() => console.log('Failed to remove users'))
         })
         // now remove all admins except yourself and the owner
         M.groupMetadata.admins.map(async (user) => {
