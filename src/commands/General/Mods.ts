@@ -10,12 +10,13 @@ export default class Command extends BaseCommand {
             description: "Displays the Moderators' contact info",
             category: 'general',
             usage: `${client.config.prefix}mods`,
-            aliases: ['moderators', 'mod', 'owner']
+            aliases: ['moderators', 'mod', 'owner'],
+            baseXp : 40,
         })
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!this.client.config.mods || !this.client.config.mods[0]) return void M.reply('*[UNMODERATED]*')
+        if (!this.client.config.mods || !this.client.config.mods[0]) return void M.reply('*No Mods Set*')
         const filteredMap = this.client.config.mods.map((mod) => this.client.getContact(mod)).filter((user) => user)
         let text = '🍥 *Moderators* 🍥\n\n'
         filteredMap.forEach(
