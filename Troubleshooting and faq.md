@@ -1,4 +1,4 @@
-## Faq guide for Void
+## Faq guide for Kaoi
  <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRCG1Ejs__vHbFp6Gah9NMUnSyMu6d---oGcw&usqp=CAU" alt="troubleshooting banner" border="0">
 <div align="center"> <br>
 Nothing is perfect in the world or is made perfect, and so is our little project void is. So here we're providing you the troubleshooting guide to save your soul :v <br>
@@ -6,9 +6,9 @@ Nothing is perfect in the world or is made perfect, and so is our little project
 <div align="left"><br>
 
 
-## 1) Types of error one can get on Void
+## 1) Types of error one can get on Kaoi
 - There's not so many errors our repo can give you but a few of them are there and mostly they're the common reason why your bot is malfunctioning.
-- Errors depends on the method you're hosting void, one is Selfhosting on your pc💻 and other is on heroku deploy🌐
+- Errors depends on the method you're hosting Kaoi, one is Self-hosting on your pc💻 and other is on heroku deploy🌐
 - Lets look at both in details shall we?
 
 ## 🌐Heroku Deployers errors troubleshooting guide
@@ -19,7 +19,7 @@ Nothing is perfect in the world or is made perfect, and so is our little project
 <Br><strong>1) Why is my app showing application error upon clicking open app?</strong>
 <Br> 
 - The possible error can be within your mongo_URI, cross check if you've written the correct password in the secret string defined on your config vars.</li>
-- Added to that there's possiblity that your URi isn't giving ip access, in such cases, go to your cluster's setting and check the <strong>'network access' tab</strong>, and open your cluster's ip. If the given ip isn't public then do it but clicking on "allow access from anywhere" option on the dialogue box
+- Added to that there's possibility that your URi isn't giving ip access, in such cases, go to your cluster's setting and check the <strong>'network access' tab</strong>, and open your cluster's ip. If the given ip isn't public then do it but clicking on "allow access from anywhere" option on the dialogue box
  If you've done it then refreshing your heroku's page shall fix the problem.</li>
 - Another error can be "no web processes running". Well this is a very simple error that might have been accidentally caused. If we explain what's it then the fact is, on heroku there's a option called "web npm start" which starts the web processes to launch your application. When it's turned off, this error surfaces. You can simply re enable it by clicking on the configure dynos option and then hitting the on button.
 
