@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             aliases: ['pkmn'],
             category: 'fun',
             usage: `${client.config.prefix}pokemon [name]`
-           
+
         })
     }
 
