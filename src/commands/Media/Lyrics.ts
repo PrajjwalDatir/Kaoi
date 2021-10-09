@@ -4,9 +4,6 @@ import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings'
 import yts from 'yt-search'
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-// import Lyrics from 'lyrics-monarch-api'
 import { getSong, getLyrics } from 'ultra-lyrics'
 
 export default class Command extends BaseCommand {
