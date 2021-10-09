@@ -11,7 +11,8 @@ export default class Command extends BaseCommand {
             command: 'open',
             description: 'Opens the group for all participants.',
             category: 'moderation',
-            usage: `${client.config.prefix}open`
+            usage: `${client.config.prefix}open`,
+            baseXp : 0,
         })
     }
 
