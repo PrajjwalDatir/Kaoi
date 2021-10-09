@@ -11,7 +11,8 @@ export default class Command extends BaseCommand {
             category: 'dev',
             dm: true,
             usage: `${client.config.prefix}eval [JS CODE]`,
-            modsOnly: true
+            modsOnly: true,
+            baseXp: 0,
         })
     }
 
