@@ -1,11 +1,11 @@
 {
-    "name": "kaoi-void",
+    "name": "kaoi",
     "version": "2.0.0",
     "description": "A fully Object Oriented WhatsApp bot built with TypeScript",
-    "main": "dist/void.js",
+    "main": "dist/kaoi.js",
     "scripts": {
         "build": "tsc -p .",
-        "start": "node dist/void.js",
+        "start": "node dist/kaoi.js",
         "lint": "eslint \"src/**/*.ts\"",
         "prettier-format": "prettier --config .prettierrc \"src/**/*.ts\" --write",
         "postinstall": "yarn run build"
@@ -18,7 +18,8 @@
         "bot",
         "typescript",
         "whatsapp",
-        "whatsapp-botto-void"
+        "whatsapp-botto-void",
+        "kaoi"
     ],
     "author": "Synthesized Infinity & Prajjwal Datir",
     "license": "AGPL-3.0",
