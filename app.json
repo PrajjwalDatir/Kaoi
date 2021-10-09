@@ -40,6 +40,10 @@
         "CHAT_BOT_URL": {
             "description": "BrainShop API Brain url",
             "required": false
+        },
+        "CRYPTO_API_KEY": {
+            "description": "Crypto API key for Crypto searches for MODS (Not Required)",
+            "required": false
         }
     },
     "buildpacks": [
