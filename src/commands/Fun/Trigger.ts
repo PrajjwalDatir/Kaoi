@@ -12,10 +12,10 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'trigger',
-            description: 'Triggers you.',
-            aliases: ['triggered'],
+            description: 'Sends the triggered version of you',
             category: 'fun',
-            usage: `${client.config.prefix}trigger [image | @mention]`
+            usage: `${client.config.prefix}trigger [tag/caption image | @mention]`,
+            baseXp : 10,
         })
     }
 
@@ -60,20 +60,16 @@ export default class Command extends BaseCommand {
                 ? this.client.downloadMediaMessage(M.quoted.message)
                 : M.quoted?.sender
                 ? this.client.getProfilePicture(M.quoted.sender)
+                : M.mentioned
+                ? this.client.getProfilePicture(M.mentioned[0])
                 : this.client.getProfilePicture(M.sender.jid))
-            // console.log("here")
-            // console.log(image)
             const sticker = new Sticker(await getImage(image), {
                 pack: `Triggered`,
                 author: M.sender.username || `Kaoi`,
                 type: 'full',
                 categories: ['💢']
             })
-            // console.log(sticker)
-            // console.log("there")
             if (!sticker) return void M.reply(`I couldn't find an image to trigger.`)
-            // console.log("where?")
-            // return void M.reply(`*Trigger* feature is currently unavailable.`)
             return void (await M.reply(await sticker.build(), MessageType.sticker, Mimetype.webp))
         } catch (err) {
             console.log(err)
