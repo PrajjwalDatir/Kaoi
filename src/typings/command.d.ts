@@ -21,13 +21,14 @@ export interface ICommand {
 }
 
 export type TCategory =
-    | 'general'
-    | 'moderation'
-    | 'misc'
-    | 'media'
-    | 'utils'
+    | 'anime'
+    | 'bots'
+    | 'config'
     | 'dev'
-    | 'category'
     | 'fun'
-    | 'reactions'
-    | 'reactions2'
+    | 'games'
+    | 'educative'
+    | 'general'
+    | 'media'
+    | 'moderation'
+    | 'category'
