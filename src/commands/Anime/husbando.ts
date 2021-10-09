@@ -14,7 +14,7 @@ export default class Command extends BaseCommand {
             aliases: ['husbu'],
             category: 'anime',
             usage: `${client.config.prefix}husbu`,
-            baseXp: 50,
+            baseXp: 50
         })
     }
 

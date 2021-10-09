@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             description: 'Close the group for all participants. Only Admins can message',
             category: 'moderation',
             usage: `${client.config.prefix}close`,
-            baseXp : 0,
+            baseXp: 0
         })
     }
 

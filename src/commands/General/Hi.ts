@@ -10,7 +10,7 @@ export default class Command extends BaseCommand {
             description: 'Generally used to check if bot is Up',
             category: 'general',
             usage: `${client.config.prefix}hi`,
-            baseXp : 0,
+            baseXp: 0
         })
     }
 

@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             category: 'general',
             usage: `${client.config.prefix}delete`,
             adminOnly: true,
-            baseXp : 0,
+            baseXp: 0
         })
     }
 

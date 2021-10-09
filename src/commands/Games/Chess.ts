@@ -14,7 +14,7 @@ export default class Command extends BaseCommand {
             description: 'Play Chess ♟️ on WhatsApp 🤯',
             category: 'games',
             usage: `${client.config.prefix}chess`,
-            baseXp : 20,
+            baseXp: 20
         })
     }
 

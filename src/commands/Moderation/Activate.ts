@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             description: 'activate certain features on group-chats',
             category: 'moderation',
             usage: `${client.config.prefix}activate [feature]`,
-            baseXp : 0,
+            baseXp: 0
         })
     }
 

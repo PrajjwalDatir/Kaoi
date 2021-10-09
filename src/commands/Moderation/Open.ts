@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             description: 'Opens the group for all participants.',
             category: 'moderation',
             usage: `${client.config.prefix}open`,
-            baseXp : 0,
+            baseXp: 0
         })
     }
 

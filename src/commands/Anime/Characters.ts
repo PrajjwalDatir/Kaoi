@@ -15,22 +15,28 @@ export default class Command extends BaseCommand {
             aliases: ['ac', 'achar'],
             category: 'anime',
             usage: `${client.config.prefix}ac (option)`,
-            baseXp: 20,
+            baseXp: 20
         })
     }
 
-    run = async (M: ISimplifiedMessage, {joined}:IParsedArgs): Promise<void> => {
+    run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         // consider neko and kitsune in furry
-        const char = ['neko', 'shinobu', 'megumin','awoo']
+        const char = ['neko', 'shinobu', 'megumin', 'awoo']
         const term = joined.trim().split(' ')[0].toLowerCase()
         let text = ''
         char.map((c) => {
             text += `📍${c.charAt(0).toUpperCase() + c.slice(1)}\n`
             // index % 4 === 3 ? (text += '\n') : (text += ' '.repeat(10 - c.length))
         })
-        if (!term) return void M.reply(`🪧 *OPTIONS:*\n${text}Use ${this.client.config.prefix}ac (option) to get Characters\nExample: ${this.client.config.prefix}ac neko`)
-        if (!char.includes(term)) return void M.reply(`🧧 Invalid option! 🧧\nUse ${this.client.config.prefix}ac to see all available options`)
-        
+        if (!term)
+            return void M.reply(
+                `🪧 *OPTIONS:*\n${text}Use ${this.client.config.prefix}ac (option) to get Characters\nExample: ${this.client.config.prefix}ac neko`
+            )
+        if (!char.includes(term))
+            return void M.reply(
+                `🧧 Invalid option! 🧧\nUse ${this.client.config.prefix}ac to see all available options`
+            )
+
         // fetch result of https://waifu.pics/api/sfw from the API using axios
         const { data } = await axios.get(`https://waifu.pics/api/sfw/${term}`)
         const buffer = await request.buffer(data.url).catch((e) => {

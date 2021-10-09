@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             category: 'general',
             usage: `${client.config.prefix}xp (@tag)`,
             aliases: ['exp'],
-            baseXp : 10,
+            baseXp: 10
         })
     }
 

@@ -14,7 +14,7 @@ export default class Command extends BaseCommand {
             dm: true,
             modsOnly: true,
             usage: `${client.config.prefix}crypto (Symbol) (Target)\nFor Example\ncrypto BTC INR\nIf you use ${client.config.prefix}crypto without parameters fetches all.`,
-            baseXp: 100,
+            baseXp: 100
         })
     }
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
@@ -593,7 +593,7 @@ export default class Command extends BaseCommand {
                     text = `🟥 ERROR 🟥\n📍Code: ${res.data.error.code}\n📍Type: ${res.data.error.type}\n📍Info: ${res.data.error.info}`
                 } else {
                     text = `🟩 Target: ${res.data.target}\n\n${res.data.rates.map((coin: string, index: number) => {
-                        `🪙Coin: ${res.data.rates[index]}   📊Price: ${coin}\n`
+                        ;`🪙Coin: ${res.data.rates[index]}   📊Price: ${coin}\n`
                     })}`
                 }
             })

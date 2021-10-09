@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             aliases: ['qu'],
             category: 'fun',
             usage: `${client.config.prefix}quote`,
-            baseXp : 30,
+            baseXp: 30
         })
     }
 
