@@ -7,10 +7,11 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'ban',
-            description: 'Bans the tagged users',
+            description: 'Bans the tagged users globally',
             category: 'dev',
             usage: `${client.config.prefix}ban [@tag]`,
-            modsOnly: true
+            modsOnly: true,
+            baseXp: 0,
         })
     }
 
