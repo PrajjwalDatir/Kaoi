@@ -11,12 +11,12 @@ export default class Command extends BaseCommand {
             aliases: ['g', 'search'],
             description: 'Search on the web ',
             category: 'media',
-            dm: true,
-            usage: `${client.config.prefix}google [query]`
+            usage: `${client.config.prefix}google [query]`,
+            baseXp : 10,
         })
     }
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        if (!this.client.config.gkey) return void null
+        if (!this.client.config.gkey) return void M.reply('No google API key set')
         if (!joined) return void M.reply('🔎 Provide a search term')
         const term = joined.trim()
         await axios
