@@ -11,7 +11,8 @@ export default class Command extends BaseCommand {
             aliases: ['act'],
             description: 'activate certain features on group-chats',
             category: 'moderation',
-            usage: `${client.config.prefix}activate [feature]`
+            usage: `${client.config.prefix}activate [feature]`,
+            baseXp : 0,
         })
     }
 
