@@ -9,13 +9,15 @@ export default class Command extends BaseCommand {
             command: 'admins',
             description: 'Tags all Admins 🎖️',
             category: 'general',
-            usage: `${client.config.prefix}admins (Message)`
+            usage: `${client.config.prefix}admins (Message)`,
+            baseXp : 0,
         })
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         return void (await M.reply(`ADMINS!\n[Tags Hidden]`, undefined, undefined, M.groupMetadata?.admins).catch(
-            (reason: any) => M.reply(`an error occupered, Reason: ${reason}`)
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (reason: any) => M.reply(`an error occurred, Reason: ${reason}`)
         ))
     }
 }
