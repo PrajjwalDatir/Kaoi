@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             aliases: ['deact'],
             description: 'deactivate certain features on group-chats',
             category: 'moderation',
-            usage: `${client.config.prefix}deactivate [events | mod | safe | nsfw]`,
+            usage: `${client.config.prefix}deactivate [events | mod | safe | nsfw | cmd]`,
             baseXp: 0
         })
     }
