@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             command: 'screenshot',
             aliases: ['ss', 'ssweb'],
             description: 'Gives you the screenshot of the given url. ',
-            category: 'utils',
+            category: 'media',
             usage: `${client.config.prefix}screenshot [url]`,
             baseXp: 30
         })
