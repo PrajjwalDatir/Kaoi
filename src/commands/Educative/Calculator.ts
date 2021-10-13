@@ -15,7 +15,7 @@ export default class Command extends BaseCommand {
             baseXp: 50
         })
     }
-    
+
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         if (!joined) return void M.reply('*Expressions:* \n2B = Addition(+)\n- = Subtraction(-)\n/ = Divide(÷)\n* = Multiply(×)\n')
         const solve = joined.trim()
