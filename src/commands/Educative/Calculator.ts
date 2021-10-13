@@ -22,7 +22,7 @@ export default class Command extends BaseCommand {
         await axios.get(`https://api.mathjs.org/v4/?expr=(${solve})`)
         .then((response) => {
                 // console.log(response);
-                const text = `💡 *Solution for ${chitoge} = ${response.data}*`
+                const text = `💡 *Solution for ${solve} = ${response.data}*`
                 M.reply(text);
             }).catch(err => {
                 M.reply(`✖ Invalid Expression.\nUse ${this.client.config.prefix}calc to see the expressions.`)
