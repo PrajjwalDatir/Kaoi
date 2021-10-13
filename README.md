@@ -33,7 +33,7 @@ Use any one of the above to deploy
 
 ## 💻 Deploy/Hosting Guide
 
--   Section Moved to [Kaoi-Guides](https://github.com/Hiroto77/Kaoi-Guides)
+-   Section Moved to [Kaoi-Guides](https://github.com/Hiroto77/Kaoi-Guides/blob/main/README.md)
 
 ## 🍥 Features of the Repo
 
