@@ -17,7 +17,7 @@ export default class Command extends BaseCommand {
             baseXp: 30
         })
     }
-    
+
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         if (!joined) return void (await M.reply(`Please provide the url`))
         const url = joined.trim()
