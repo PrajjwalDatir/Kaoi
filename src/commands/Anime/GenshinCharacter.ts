@@ -11,9 +11,9 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'genshincharacter',
             description: `Gives you the data of the given genshin character.`,
-            aliases: ['gchara', 'genshinchara'],
+            aliases: ['gchar', 'genshin'],
             category: 'anime',
-            usage: `${client.config.prefix}genshincharacter [name]`,
+            usage: `${client.config.prefix}gchar [name]`,
             baseXp: 50
         })
     }
@@ -23,7 +23,6 @@ export default class Command extends BaseCommand {
         const gchara = joined.trim()
         await axios.get(`https://api.genshin.dev/characters/${gchara}`)
         .then((response) => {
-                // console.log(response);
                 const text = `💎 *Name: ${response.data.name}*\n💠 *Vision: ${response.data.vision}*\n📛 *Weapon: ${response.data.weapon}*\n⛩ *Nation: ${response.data.nation}*\n📛 *Affiliation: ${response.data.affiliation}*\n❄ *Constellation: ${response.data.constellation}*\n🎗 *Rarity: ${response.data.rarity} stars*\n🎁 *Birthday: ${response.data.birthday}*\n💚 *Description: ${response.data.description}* `
                 M.reply(text);
             }).catch(err => {
