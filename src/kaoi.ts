@@ -19,7 +19,8 @@ const client = new WAClient({
     prefix: process.env.PREFIX || '!',
     mods: (process.env.MODS || '').split(',').map((number) => `${number}@s.whatsapp.net`),
     gkey: process.env.GOOGLE_API_KEY || '',
-    chatBotUrl: process.env.CHAT_BOT_URL || ''
+    chatBotUrl: process.env.CHAT_BOT_URL || '',
+    weatherApi: process.env.WEATHER_API_KEY || ''
 })
 client.log('Starting...')
 
