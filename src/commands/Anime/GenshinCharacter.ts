@@ -23,7 +23,7 @@ export default class Command extends BaseCommand {
         const gchara = joined.trim()
         await axios.get(`https://api.genshin.dev/characters/${gchara}`)
         .then((response) => {
-                const text = `💎 *Name: ${response.data.name}*\n💠 *Vision: ${response.data.vision}*\n📛 *Weapon: ${response.data.weapon}*\n⛩ *Nation: ${response.data.nation}*\n📛 *Affiliation: ${response.data.affiliation}*\n❄ *Constellation: ${response.data.constellation}*\n🎗 *Rarity: ${response.data.rarity} stars*\n🎁 *Birthday: ${response.data.birthday}*\n💚 *Description: ${response.data.description}* `
+                const text = `💎 *Name:* ${response.data.name}\n💠 *Vision:* ${response.data.vision}\n📛 *Weapon:* ${response.data.weapon}\n⛩ *Nation:* ${response.data.nation}\n📛 *Affiliation:* ${response.data.affiliation}\n❄ *Constellation:* ${response.data.constellation}\n🎗 *Rarity:* ${response.data.rarity} stars\n🎁 *Birthday:* ${response.data.birthday}\n💚 *Description:* ${response.data.description}\n`
                 M.reply(text);
             }).catch(err => {
                 M.reply(`Sorry, couldn't find character *${gchara}*\n📝 *Note:* Nicknames does not work here.`)
