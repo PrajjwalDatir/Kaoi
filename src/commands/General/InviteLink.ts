@@ -8,7 +8,7 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'invitelink',
-            aliases: ['invite'],
+            aliases: ['invite', 'linkgc'],
             description: 'Get the group invite link',
             category: 'general',
             usage: `${client.config.prefix}invite`,
@@ -22,7 +22,7 @@ export default class Command extends BaseCommand {
         if ((await this.client.getGroupData(M.from)).invitelink) {
             const code = await this.client.groupInviteCode(M.from).catch(() => { return void M.reply('Could not get the invite link')})
             // if(!code) return void M.reply('Could not get invite code')
-            await this.client.sendMessage(M.sender.jid, `Invite link: https://chat.whatsapp.com/${code}`, MessageType.text)
+            await this.client.sendMessage(M.sender.jid, `*Invite link:* https://chat.whatsapp.com/${code}`, MessageType.text)
             return void M.reply('Sent you the Group Link in personal message')
         }
         else {
