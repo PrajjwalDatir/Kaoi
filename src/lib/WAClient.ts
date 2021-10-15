@@ -4,7 +4,15 @@ import qrImage from 'qr-image'
 import { existsSync, writeFileSync } from 'fs'
 import moment from 'moment'
 import { join } from 'path'
-import { IConfig, IExtendedGroupMetadata, IGroupModel, ISession, ISimplifiedMessage, IUserModel } from '../typings'
+import {
+    IConfig,
+    IExtendedGroupMetadata,
+    IFeatureModel,
+    IGroupModel,
+    ISession,
+    ISimplifiedMessage,
+    IUserModel
+} from '../typings'
 import Utils from './Utils'
 import DatabaseHandler from '../Handlers/DatabaseHandler'
 import axios from 'axios'
@@ -209,6 +217,9 @@ export default class WAClient extends Base {
 
     getGroupData = async (jid: string): Promise<IGroupModel> =>
         (await this.DB.group.findOne({ jid })) || (await new this.DB.group({ jid }).save())
+
+    getFeatures = async (feature: string): Promise<IFeatureModel> =>
+        (await this.DB.feature.findOne({ feature })) || (await new this.DB.feature({ feature }).save())
 }
 
 export enum toggleableGroupActions {

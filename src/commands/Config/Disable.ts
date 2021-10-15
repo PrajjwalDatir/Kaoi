@@ -20,6 +20,13 @@ export default class Command extends BaseCommand {
         const split = joined.split('|')
         const key = split[0].toLowerCase().trim()
         if (!key) return void (await M.reply(`Provide the command you want to disable`))
+        const feature = key === 'chatbot' ? key : ''
+        if (feature) {
+            const data = await this.client.getFeatures(feature)
+            if (!data.state) return void M.reply(`🟨 *${this.client.util.capitalize(feature)}* is already *inactive*`)
+            await this.client.DB.feature.updateOne({ feature: feature }, { $set: { ['state']: false } })
+            return void M.reply(`🟩 *${this.client.util.capitalize(feature)}* is now inactive`)
+        }
         const command = this.handler.commands.get(key) || this.handler.aliases.get(key)
         if (!command) return void (await M.reply(`No command found`))
         if (await this.client.DB.disabledcommands.findOne({ command: command.config.command }))
