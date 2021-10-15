@@ -38,6 +38,7 @@ export interface IGroup {
     safe: boolean
     mod: boolean
     cmd: boolean
+    invitelink: boolean
 }
 
 export interface IUser {

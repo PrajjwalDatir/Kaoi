@@ -37,6 +37,12 @@ const GroupSchema = new Schema({
         type: Boolean,
         required: false,
         default: true
+    },
+    // Can people ask for Invite link of this group?
+    invitelink: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 })
 
