@@ -6,11 +6,11 @@ import { ISimplifiedMessage } from '../../typings'
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
-            command: 'xp',
-            description: "Displays User's Xp 🌟",
+            command: 'exp',
+            description: "Displays User's Exp 🌟",
             category: 'general',
-            usage: `${client.config.prefix}xp (@tag)`,
-            aliases: ['exp'],
+            usage: `${client.config.prefix}exp [tag/quote]`,
+            aliases: ['xp'],
             baseXp: 10
         })
     }
@@ -24,6 +24,6 @@ export default class Command extends BaseCommand {
             // username = contact.notify || contact.vname || contact.name || user.split('@')[0]
             username = user.split('@')[0]
         }
-        return void (await M.reply(`${username} XP: ${(await this.client.getUser(user)).Xp || 0}`))
+        return void (await M.reply(`*${username}'s Exp: ${(await this.client.getUser(user)).Xp || 0}*`))
     }
 }
