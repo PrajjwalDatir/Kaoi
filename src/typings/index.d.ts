@@ -48,6 +48,11 @@ export interface IUser {
     Xp: number
 }
 
+export interface IFeature {
+    feature: string
+    state: boolean
+}
+
 export interface IPackage {
     description: string
     dependencies: { [key: string]: string }

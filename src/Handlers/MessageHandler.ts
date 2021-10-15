@@ -23,7 +23,7 @@ export default class MessageHandler {
 
         if (M.from.includes('status')) return void null
         const { args, groupMetadata, sender } = M
-        if (M.chat === 'dm') {
+        if (M.chat === 'dm' && (await this.client.getFeatures('chatbot')).state) {
             if (this.client.config.chatBotUrl) {
                 const myUrl = new URL(this.client.config.chatBotUrl)
                 const params = myUrl.searchParams
