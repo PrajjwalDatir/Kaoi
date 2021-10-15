@@ -9,9 +9,9 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'profile',
-            description: 'Displays user-profile 🌟',
+            description: 'Displays user-profile 📜',
             category: 'general',
-            usage: `${client.config.prefix}profile (@tag)`,
+            usage: `${client.config.prefix}profile [tag/quote]`,
             aliases: ['p'],
             baseXp: 30
         })
@@ -33,20 +33,66 @@ export default class Command extends BaseCommand {
             pfp =
                 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Kawaii_robot_power_clipart.svg/640px-Kawaii_robot_power_clipart.svg.png'
         }
-        const data = await this.client.getUser(user)
+        const exp = (await this.client.getUser(user)).Xp
+        let role
+        if (exp < 500) {
+            role = '🌸 Citizen'
+        } else if (exp < 1000) {
+            role = '🔎 Cleric'
+        } else if (exp < 2000) {
+            role = '🔮 Wizard'
+        } else if (exp < 5000) {
+            role = '♦️ Mage'
+        } else if (exp < 10000) {
+            role = '🎯 Noble'
+        } else if (exp < 25000) {
+            role = '✨ Elite'
+        } else if (exp < 50000) {
+            role = '🔶️ Ace'
+        } else if (exp < 75000) {
+            role = '🌀 Hero'
+        } else if (exp < 100000) {
+            role = '💎 Supreme'
+        } else {
+            role = '❄️ Mystic'
+        }
+
+        let level
+        if (exp < 500) {
+            role = '1'
+        } else if (exp < 1000) {
+            level = '2'
+        } else if (exp < 2000) {
+            level = '3'
+        } else if (exp < 5000) {
+            level = '4'
+        } else if (exp < 10000) {
+            level = '5'
+        } else if (exp < 25000) {
+            level = '6'
+        } else if (exp < 50000) {
+            level = '7'
+        } else if (exp < 75000) {
+            level = '8'
+        } else if (exp < 100000) {
+            level = '9'
+        } else {
+            level = 'Max'
+        }
+        
         await M.reply(
             await request.buffer(
                 pfp ||
-                    'https://upload.wikimedia.org/wikipedia/commons/thumb/7/75/Kawaii_robot_power_clipart.svg/640px-Kawaii_robot_power_clipart.svg.png'
+                    'https://i.pinimg.com/736x/ca/e7/8a/cae78ad7f8e6459ad20bde350e2eb78b.jpg'
             ),
             MessageType.image,
             undefined,
             undefined,
             `🎋 *Username: ${username}*\n\n🎫 *About: ${
                 (await this.client.getStatus(user)).status || 'None'
-            }*\n\n🌟 *XP: ${data.Xp || 0}*\n\n👑 *Admin: ${
+            }*\n\n〽️ *Level: ${level}*\n\n🌟 *Exp: ${exp || 0}*\n\n💫 *Role: ${role}*\n\n👑 *Admin: ${
                 M.groupMetadata?.admins?.includes(user) || false
-            }*\n\n❌ *Ban ${data.ban || false}*`
+            }*\n\n❌ *Ban ${(await this.client.getUser(user)).ban || false}*`
         )
     }
 }
