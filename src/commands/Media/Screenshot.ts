@@ -21,13 +21,15 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         if (!joined) return void (await M.reply(`Please provide the url`))
         const url = joined.trim()
-        return void M.reply( await request.buffer(`https://shot.screenshotapi.net/screenshot?&url=${url}&full_page=true&fresh=true&output=image&file_type=png&wait_for_event=load`),
-        MessageType.image,
-                    undefined,
-                    undefined,
-                    `🌟 Here you go.\n`,
-                    undefined
-                ).catch((reason: any) =>
-            M.reply(`✖ An error occurred. Please try again later. ${reason}`))
+        return void M.reply(
+            await request.buffer(
+                `https://shot.screenshotapi.net/screenshot?&url=${url}&full_page=true&fresh=true&output=image&file_type=png&wait_for_event=load`
+            ),
+            MessageType.image,
+            undefined,
+            undefined,
+            `🌟 Here you go.\n`,
+            undefined
+        ).catch((reason: any) => M.reply(`✖ An error occurred. Please try again later. ${reason}`))
     }
 }
