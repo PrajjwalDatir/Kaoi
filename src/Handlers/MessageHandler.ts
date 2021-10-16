@@ -23,7 +23,7 @@ export default class MessageHandler {
 
         if (M.from.includes('status')) return void null
         const { args, groupMetadata, sender } = M
-        if (M.chat === 'dm' && (await this.client.getFeatures('chatbot')).state) {
+        if (M.chat === 'dm' && this.client.isFeature('chatbot')) {
             if (this.client.config.chatBotUrl) {
                 const myUrl = new URL(this.client.config.chatBotUrl)
                 const params = myUrl.searchParams
@@ -128,6 +128,13 @@ export default class MessageHandler {
             }
         })
         this.client.log(`Successfully Loaded ${chalk.greenBright(this.commands.size)} Commands`)
+    }
+
+    loadFeatures = (): void => {
+        this.client.log(chalk.green('Loading Features...'))
+        this.client.setFeatures().then(() => {
+            this.client.log(`Successfully Loaded ${chalk.greenBright(this.client.features.size)} Features`)
+        })
     }
 
     parseArgs = (args: string[]): IParsedArgs => {
