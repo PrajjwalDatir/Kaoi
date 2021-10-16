@@ -4,6 +4,7 @@
 | Character  | Gives you an Anime Character based on Options |
 | Husbu      | Gives you an Anime Husbando                   |
 | Waifu      | Gives you an Anime Waifu                      |
+| Loli       | Gives you an Anime Loli                       |
 
 | Bot      | usage                                 |
 | -------- | ------------------------------------- |
@@ -40,20 +41,22 @@
 | Ship      | Ship People              |
 | Triggered | Triggered Sticker        |
 | Why       | Asks you a why question  |
+| Chat      | Chats with user in group |
 
 | Games | usage                                                                                    |
 | ----- | ---------------------------------------------------------------------------------------- |
 | Chess | Launches a game of chess straight in the group chat, YES THIS IS THE FUTURE! EMBRACE IT! |
 
-| General | usage                                                   |
-| ------- | ------------------------------------------------------- |
-| Admins  | Tags all the admins in a given group                    |
-| Delete  | Deletes the bot's message                               |
-| Help    | Displays all the available commands of bot in the group |
-| Hi      | Says Hi to the user                                     |
-| Mods    | Lists all the mods                                      |
-| Profile | Displays the user's profile                             |
-| Xp      | Displays the user's xp                                  |
+| General    | usage                                                   |
+| ---------- | ------------------------------------------------------- |
+| Admins     | Tags all the admins in a given group                    |
+| Delete     | Deletes the bot's message                               |
+| Help       | Displays all the available commands of bot in the group |
+| Hi         | Says Hi to the user                                     |
+| Mods       | Lists all the mods                                      |
+| Profile    | Displays the user's profile                             |
+| Xp         | Displays the user's xp                                  |
+| Invitelink | Sends you group invite link of the group                |
 
 | Media          | usage                                        |
 | -------------- | -------------------------------------------- |
@@ -81,3 +84,4 @@
 | Open       | Opens the group chat, can only work if the bot is an admin and the one commanding this too                                               |
 | Everyone   | Tags all the users in a group chat                                                                                                       |
 | Purge      | Purges the group chat, can only work if the bot is an admin and the one commanding is the owner of the Group chat                        |
+| Revoke     | Revokes the group invite link, can only work if the bot is an admin and the one commanding this too                                      |
