@@ -220,6 +220,22 @@ export default class WAClient extends Base {
 
     getFeatures = async (feature: string): Promise<IFeatureModel> =>
         (await this.DB.feature.findOne({ feature })) || (await new this.DB.feature({ feature }).save())
+
+    features = new Map<string, boolean>()
+
+    // set the values to the db
+    setFeatures = async (): Promise<void> => {
+        const dbfeatures = await this.DB.feature.find()
+        for (const feature of dbfeatures) {
+            this.features.set(feature.feature.toString(), feature.state)
+        }
+    }
+    // get the value of a feature
+    isFeature = (feature: string): boolean => this.features.get(feature) || false
+
+    setFeature = (feature: string, value: boolean): void => {
+        this.features.set(feature, value)
+    }
 }
 
 export enum toggleableGroupActions {
