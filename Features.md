@@ -4,7 +4,7 @@
 | Character  | Gives you an Anime Character based on Options |
 | Husbu      | Gives you an Anime Husbando                   |
 | Waifu      | Gives you an Anime Waifu                      |
-| Loli       | Gives you an Anime Loli                       |  
+| Loli       | Gives you an Anime Loli                       |
 
 | Bot      | usage                                 |
 | -------- | ------------------------------------- |
@@ -48,7 +48,7 @@
 | Chess | Launches a game of chess straight in the group chat, YES THIS IS THE FUTURE! EMBRACE IT! |
 
 | General    | usage                                                   |
-| -------    | ------------------------------------------------------- |
+| ---------- | ------------------------------------------------------- |
 | Admins     | Tags all the admins in a given group                    |
 | Delete     | Deletes the bot's message                               |
 | Help       | Displays all the available commands of bot in the group |
