@@ -24,7 +24,10 @@ export default class Command extends BaseCommand {
         if (feature) {
             const data = await this.client.getFeatures(feature)
             if (data.state) return void M.reply(`🟨 *${this.client.util.capitalize(feature)}* is already *active*`)
-            await this.client.DB.feature.updateOne({ feature: feature }, { $set: { state: true } })
+            await this.client.DB.feature.updateOne({ feature: feature }, { $set: { state: true } }).catch(() => {
+                return void M.reply(`🟨 *${this.client.util.capitalize(feature)}* failed to enable`)
+            })
+            this.client.features.set('chatbot', true)
             return void M.reply(`🟩 *${this.client.util.capitalize(feature)}* is now active`)
         }
         if (!command) return void (await M.reply(`No command found`))
