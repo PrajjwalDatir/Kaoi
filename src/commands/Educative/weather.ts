@@ -14,9 +14,9 @@ export default class Command extends BaseCommand {
         })
     }
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        
-        
-        
+
+
+
         if (!joined) return void M.reply('🔎 Provide a place name')
         const term = joined.trim()
         await axios.get(`http://api.openweathermap.org/data/2.5/weather?q=${term}&units=metric&appid=d6bab2c6c404f2efd371b0f9d3389cdc&language=tr`)
