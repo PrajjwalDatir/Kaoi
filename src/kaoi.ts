@@ -29,6 +29,7 @@ const assetHandler = new AssetHandler(client)
 const eventHandler = new EventHandler(client)
 messageHandler.loadCommands()
 assetHandler.loadAssets()
+messageHandler.loadFeatures()
 
 const db = mongoose.connection
 
