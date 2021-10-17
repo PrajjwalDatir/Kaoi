@@ -33,7 +33,6 @@ interface RepoInfo {
     full_name: string
     owner: UserInfo
     description: string | null
-    fork: boolean
     language: string
     stargazers_count: number
     watchers_count: number
@@ -50,74 +49,66 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'github',
+            aliases: ['gh'],
             description: 'Get github information about a user/repo',
             category: 'educative',
             usage: `${client.config.prefix}github`
         })
     }
 
-    //eslint-disable-next-line
-    run = async (M: ISimplifiedMessage, args: IParsedArgs): Promise<void> => {
-        //
-        const terms = args.joined.trim().split(' ')
-        if (terms.length > 1)
-            return void M.reply(
-                `The github command must be formatted like: \"${this.client.config.prefix}github (/username/repo | /username)\"`
-            )
-        const path = terms[0]
-        const userRegex = /\/\w+[^\/\w*]/
-        if (userRegex.test(path)) {
-            // remove first char
-            const username = path.substring(1)
+    run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
+        const terms = joined.trim().split('/')
+        if (terms[0] === '')
+            return void M.reply(`Arguments not found : Use ${this.client.config.prefix}gh (username/repo | username)`)
+        const username = terms[0]
+        const repo = terms.length > 1 ? terms[1] : null
+        let text = ''
+        if (!repo) {
             const userInfo = await axios
                 .get<UserInfo>(`https://api.github.com/users/${username}`)
                 .then((res) => res.data)
                 .catch((err) => {
                     console.log(err)
-                    return void M.reply('🟥 ERROR 🟥\nThis might be due to API service being down')
+                    return void M.reply('🟥 ERROR 🟥\n Failed to fetch the User')
                 })
 
             if (userInfo === undefined) {
-                return void M.reply('🟥 ERROR 🟥\nThis might be due to API service being down')
+                return void M.reply('🟥 ERROR 🟥\n Failed to fetch the User')
             }
 
             // prepare text information
-            let text = ''
-            text += `Github: user ${username} information\n`
-            text += `\n`
-            text += `Name: ${userInfo.name}\n`
-            if (userInfo.email !== null) text += `Email: ${userInfo.email}\n`
-            if (userInfo.location !== null) text += `Location: ${userInfo.location}\n`
-            if (userInfo.bio !== null) text += `Bio: ${userInfo.bio}\n`
-            text += `Followers: ${userInfo.followers} Following: ${userInfo.following}\n`
-            text += `Repositories: ${userInfo.public_repos}\n`
-
+            text += `*🐙 Link :* http://github.com/${username}\n`
+            text += `*📝 Name:* ${userInfo.name}\n`
+            if (userInfo.email !== null) text += `*📧 Email:* ${userInfo.email}\n`
+            if (userInfo.location !== null) text += `*📍 Location:* ${userInfo.location}\n`
+            if (userInfo.bio !== null) text += `*ℹ️ Bio:* ${userInfo.bio}\n`
+            text += `*👥 Followers:* ${userInfo.followers}\n*👥 Following:* ${userInfo.following}\n`
+            text += `*🎒 Repositories:* ${userInfo.public_repos}\n`
             return void M.reply(text)
         } else {
             const repoInfo = await axios
-                .get<RepoInfo>(`https://api.github.com/repos${path}`)
+                .get<RepoInfo>(`https://api.github.com/repos/${username}/${repo}`)
                 .then((res) => res.data)
                 .catch((err) => {
                     console.log(err)
-                    return void M.reply('🟥 ERROR 🟥\nThis might be due to API service being down')
+                    return void M.reply('🟥 ERROR 🟥\n Failed to fetch the Repo')
                 })
 
             if (repoInfo === undefined) {
-                return void M.reply('🟥 ERROR 🟥\nThis might be due to API service being down')
+                return void M.reply('🟥 ERROR 🟥\n Failed to fetch the Repo')
             }
 
             // prepare text information
-            let text = ''
-            text += `Github: repo ${repoInfo.name} information\n`
-            text += `\n`
-            text += `Description: ${repoInfo.description ?? '-'}\n`
-            text += `Licence: ${repoInfo.license.name}\n`
-            text += `Stars: ${repoInfo.stargazers_count}\n`
-            text += `Language: ${repoInfo.language}\n`
-            text += `Watchers: ${repoInfo.watchers_count}\n`
-            text += `Forks: ${repoInfo.forks_count}\n`
-            text += `Issues: ${repoInfo.open_issues_count}\n`
-            text += `Fork: ${repoInfo.fork ? 'Yes' : 'No'}\n`
+            text += `*🐙 Link :* http://github.com/${username}/${repo}\n`
+            text += `*🎒 Repositary Name :* ${repoInfo.name}\n`
+            text += `*ℹ️ Description:* ${repoInfo.description ?? '-'}\n`
+            text += `*📜 Licence:* ${repoInfo.license.name}\n`
+            text += `*🌟 Stars:* ${repoInfo.stargazers_count}\n`
+            text += `*💻 Language:* ${repoInfo.language}\n`
+            text += `*🍴 Forks:* ${repoInfo.forks_count}\n`
+            text += `*⚠️ Issues:* ${repoInfo.open_issues_count}\n`
+            text += `*📅 Created:* ${repoInfo.created_at}\n`
+            text += `*📅 Updated:* ${repoInfo.updated_at.slice(0, 11)}\n`
 
             return void M.reply(text)
         }
