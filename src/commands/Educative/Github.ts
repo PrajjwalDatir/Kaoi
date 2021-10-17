@@ -100,7 +100,7 @@ export default class Command extends BaseCommand {
 
             // prepare text information
             text += `*🐙 Link :* http://github.com/${username}/${repo}\n`
-            text += `*🎒 Repositary Name :* ${repoInfo.name}\n`
+            text += `*🎒 Repository Name :* ${repoInfo.name}\n`
             text += `*ℹ️ Description:* ${repoInfo.description ?? '-'}\n`
             text += `*📜 Licence:* ${repoInfo.license.name}\n`
             text += `*🌟 Stars:* ${repoInfo.stargazers_count}\n`
