@@ -5,17 +5,17 @@ import { IParsedArgs, ISimplifiedMessage } from '../../typings'
 import axios from 'axios'
 
 
- export default class Command extends BaseCommand {	
-    constructor(client: WAClient, handler: MessageHandler) {	
-        super(client, handler, {	
+ export default class Command extends BaseCommand {
+    constructor(client: WAClient, handler: MessageHandler) {
+        super(client, handler, {
             command: 'genshin-charecter',
             description: 'Well....',
             aliases: ['genshin-char', 'gchar'],
             category: 'anime',
-            usage: `${client.config.prefix}gchar`	
-     
-        })	
-    }	
+            usage: `${client.config.prefix}gchar`
+
+        })
+    }
 
      run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
         if (!joined) return void M.reply('You didnt provide any name of the charecter\n if you dont know use these charecter name \n\n albedo \n aloy \n amber \n ayaka \n barbara \n beidou \n bennett \n chongyun \n diluc \n diona \n eula \n fischl \n ganyu \n hu-tao \n jean \n kaeya \n kazuha \n keqing \n klee \n kokomi \n lisa \n mona \n ningguang \n noelle \n qiqi \n raiden \n razor \n rosaria \n sara \n sayu \n sucrose \n tartaglia \n traveler-anemo \n traveler-geo \n venti \n xiangling \n xiao \n xingqiu \n xinyan \n yanfei \n yoimiya \n zhongli \n\n *Example:* Type genshin-charecter amber or gchar amber')
