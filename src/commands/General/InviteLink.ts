@@ -24,7 +24,11 @@ export default class Command extends BaseCommand {
             const code = await this.client.groupInviteCode(M.from).catch(() => {
                 return void M.reply('Could not get the invite link')
             })
-            await this.client.sendMessage(M.sender.jid, `*Invite link:* https://chat.whatsapp.com/${code}`, MessageType.text)
+            await this.client.sendMessage(
+                M.sender.jid,
+                `*Invite link:* https://chat.whatsapp.com/${code}`,
+                MessageType.text
+            )
             return void M.reply('Sent you the Group Link in personal message')
         } else {
             return void M.reply(
