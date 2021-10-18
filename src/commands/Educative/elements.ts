@@ -14,9 +14,9 @@ export default class Command extends BaseCommand {
         })
     }
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        
-        
-        
+
+
+
         if (!joined) return void M.reply('🔎 Provide a element symbol')
         const term = joined.trim()
         await axios.get(`https://neelpatel05.pythonanywhere.com/element/symbol?symbol=${term}`)
