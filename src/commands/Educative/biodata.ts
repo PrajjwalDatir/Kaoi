@@ -24,7 +24,7 @@ export default class Command extends BaseCommand {
         await axios
             .get(`https://api.abirhasan.wtf/bioDataGenerator?countryCode=${biodata}`)
             .then((response) => {
-                const text = ` 📌 *Generated Biodata Results*\n\n Name : ${response.data.Name}\n Age : ${response.data.Age} \n Address : ${response.data.Address} \n City : ${response.data.City} \n Gender : ${response.data.Gender} \n Ethnicity: ${response.data.Ethnicity} \n Date Of Birth : ${response.data.DateOfBirth} \n Phone Number : ${response.data.PhoneNumber} \n Email : ${response.data.Email} \n Credit Card Number : ${response.data.CreditCardNumber} \n Credit Card Expiry Date : ${response.data.CreditCardExpiry} \n Credit Card CVV : ${response.data.CreditCardCVV2} \n Credit Card Type : ${response.data.CreditCardType} `
+                const text = ` 📌 *Generated Biodata Results*\n\n Name : ${response.data.Name}\n Age : ${response.data.Age} \n Address : ${response.data.Address} \n City : ${response.data.City} \n Gender : ${response.data.Gender} \n Ethnicity: ${response.data.Ethnicity} \n Date Of Birth : ${response.data.DateOfBirth} \n Phone Number : ${response.data.CompanyPhone} \n Email : ${response.data.CompanyEmail} \n Credit Card Number : ${response.data.CreditCardNumber} \n Credit Card Expiry Date : ${response.data.CreditCardExpiry} \n Credit Card CVV : ${response.data.CreditCardCVV2} \n Credit Card Type : ${response.data.CreditCardType} `
                 M.reply(text)
             })
             .catch((err) => {
