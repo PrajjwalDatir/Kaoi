@@ -17,7 +17,7 @@ export default class Command extends BaseCommand {
             baseXp: 50
         })
     }
-    
+
     run = async (M: ISimplifiedMessage): Promise<void> => {
         const waifuclient = new waifulist()
         const haigusha = await waifuclient.getRandom()
