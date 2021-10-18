@@ -19,7 +19,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        if (!joined) return void (await M.reply(`Please provide the character name that you wanna search.`))
+        if (!joined) return void (await M.reply(`You didnt provide any name of the charecter\n if you dont know use these charecter name \n\n albedo \n aloy \n amber \n ayaka \n barbara \n beidou \n bennett \n chongyun \n diluc \n diona \n eula \n fischl \n ganyu \n hu-tao \n jean \n kaeya \n kazuha \n keqing \n klee \n kokomi \n lisa \n mona \n ningguang \n noelle \n qiqi \n raiden \n razor \n rosaria \n sara \n sayu \n sucrose \n tartaglia \n traveler-anemo \n traveler-geo \n venti \n xiangling \n xiao \n xingqiu \n xinyan \n yanfei \n yoimiya \n zhongli \n\n *Example:* Type genshin-charecter amber or gchar amber`))
         const gchara = joined.trim()
         await axios
             .get(`https://api.genshin.dev/characters/${gchara}`)
