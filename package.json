@@ -12,7 +12,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/PrajjwalDatir/Kaoi.git"
+        "url": "git+https://github.com/ShinNouzen/Chitoge.git"
     },
     "keywords": [
         "bot",
@@ -44,6 +44,7 @@
         "@types/node-cron": "^2.0.3",
         "@types/qr-image": "^3.2.3",
         "axios": "^0.21.2",
+        "brainly-scraper-v2": "^2.0.4-1",
         "canvas": "^2.8.0",
         "chalk": "^4.1.1",
         "chess-image-generator-ts": "^1.0.0",
@@ -57,10 +58,13 @@
         "jimp": "^0.16.1",
         "jpeg-js": "^0.4.3",
         "lyrics-monarch-api": "^2.1.0",
+        "mathjs": "^9.5.1",
         "moment": "^2.29.1",
         "mongoose": "^5.12.12",
         "node-cron": "^3.0.0",
+        "node-fetch": "^2.6.5",
         "npm": "^7.17.0",
+        "public-waifulist": "^0.0.2",
         "qr-image": "^3.2.0",
         "spotifydl-core": "^0.1.2",
         "ultra-lyrics": "^1.0.3",
