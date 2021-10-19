@@ -19,6 +19,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
+        const country = await axios.get(`https://api.abirhasan.wtf/bioDataGenerator`)
         if (!joined) return void (await M.reply(`Please provide the country code to generate data like for India give _in_ `))
         const biodata = joined.trim()
         await axios
@@ -28,7 +29,7 @@ export default class Command extends BaseCommand {
                 M.reply(text)
             })
             .catch((err) => {
-                M.reply(`Sorry, couldn't find country *${biodata}*\n📝 *Note:* Capital Letters do not work here.`)
+                M.reply(`Sorry, couldn't find country *${biodata}*\n📒 *List of Biodata:*\n${country.data.CountryCodesList}`)
             })
     }
 }
