@@ -10,10 +10,10 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'biodata',
-            description: `Generate random biodata for given country code`,
+            description: `Generate random biodata from the given country code.`,
             aliases: ['biodata', 'bio'],
             category: 'educative',
-            usage: `${client.config.prefix}biodata [name]`,
+            usage: `${client.config.prefix}biodata [country_code]`,
             baseXp: 50
         })
     }
@@ -29,7 +29,7 @@ export default class Command extends BaseCommand {
                 M.reply(text)
             })
             .catch((err) => {
-                M.reply(`Sorry, couldn't find country *${biodata}*\n📒 *List of Biodata:*\n${country.data.CountryCodesList}`)
+                M.reply(`Sorry, couldn't find country *${biodata}*\n📒 *List of Biodata:*\n${country.data.CountryCodesList}\n\n📝 *Note:* Capitals letter don't work here.`)
             })
     }
 }
