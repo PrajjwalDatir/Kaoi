@@ -30,6 +30,6 @@ export default class Command extends BaseCommand {
             }).catch((e)=>{
                 M.reply('sorry couldn\'t send the image')
             })
-       
+
     }
 }
