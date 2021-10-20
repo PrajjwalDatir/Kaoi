@@ -27,7 +27,8 @@ export default class Command extends BaseCommand {
                 `http://api.urbandictionary.com/v0/define?term=${term}`
             )
            .then((response) => {
-                 console.log(response);
+                // console.log(response);
+                const text = `*urban dictionary: ${term}*\n*Defination :* ${response.data.list[0].definition.replace(/\[/g,'').replace(/\]/g,'')}\n*Example :* ${response.data.list[0].example.replace(/\[/g,'').replace(/\]/g,'')}`
             })
             .catch((err) => {
                 M.reply(`Sorry, couldn't find any definations related to *${term}*.`)
