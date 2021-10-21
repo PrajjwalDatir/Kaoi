@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'urbandictionary',
             aliases: ['ur'],
-            description: 'Gives you the defination of the given word. ',
+            description: 'Gives you the definition of the given word. ',
             category: 'educative',
             usage: `${client.config.prefix}ur [Word you want to search about]`,
             baseXp: 50
@@ -28,7 +28,7 @@ export default class Command extends BaseCommand {
             )
            .then((response) => {
                 // console.log(response);
-                const text = `📚 *urban dictionary :* ${term}\n\n📖 *Defination :* ${response.data.list[0].definition.replace(/\[/g,'').replace(/\]/g,'')}\n\n💬 *Example :* ${response.data.list[0].example.replace(/\[/g,'').replace(/\]/g,'')}`
+                const text = `📚 *urban dictionary :* ${term}\n\n📖 *Definition :* ${response.data.list[0].definition.replace(/\[/g,'').replace(/\]/g,'')}\n\n💬 *Example :* ${response.data.list[0].example.replace(/\[/g,'').replace(/\]/g,'')}`
           M.reply(text)
                 })
             .catch((err) => {
