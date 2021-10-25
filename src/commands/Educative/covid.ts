@@ -14,9 +14,9 @@ export default class Command extends BaseCommand {
         })
     }
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        
-        
-        
+
+
+
         if (!joined) return void M.reply('🔎 Provide a place name')
         const term = joined.trim()
         await axios.get(`https://api.abirhasan.wtf/covid19/v1?country=${term}`)
