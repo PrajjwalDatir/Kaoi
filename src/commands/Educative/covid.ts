@@ -8,7 +8,7 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'covid',
             description: 'get the covid-19 info of the current place',
-            aliases: ['CD'],
+            aliases: ['COVID'],
             category: 'educative',
             usage: `${client.config.prefix}covid [name]`
         })
