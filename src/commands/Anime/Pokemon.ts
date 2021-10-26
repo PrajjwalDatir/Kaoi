@@ -17,9 +17,9 @@ export default class Command extends BaseCommand {
             baseXp: 50
         })
     }
-    
+
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        
+
         if (!joined) return void M.reply('Please provide the pokemon name or id you wanna search.')
         const o = joined.trim()
         console.log(o)
