@@ -36,7 +36,7 @@ export default class Command extends BaseCommand {
             await this.GIFBufferToVideoBuffer(
                 await this.client.getBuffer(
                     (
-                        await this.client.fetch<{ url: string }>(`https://gfycat.com/hopefulfabulouskouprey`)
+                        await this.client.fetch<{ url: string }>(`https://gfycat.com/silentsandygnatcatcher`)
                     ).url
                 )
             ),
