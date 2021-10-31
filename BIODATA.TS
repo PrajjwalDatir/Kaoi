@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
@@ -66,5 +66,5 @@ export default class Command extends BaseCommand {
                 M.reply(`Sorry, couldn't find country *${biodata}*\n📝 *Note:* Check https://api.abirhasan.wtf/bioDataGenerator for supported countries and codes.`)
             })
     }
->>>>>>> c004030563892b5a1984f700b233faf4a2b036f2
+
 }
