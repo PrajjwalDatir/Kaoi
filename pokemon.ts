@@ -33,6 +33,7 @@ export default class Command extends BaseCommand {
         i += `〽️ *Pokedex ID: ${data.id}\n`
         i += `⚖ *Weight: ${data.weight}*\n`
         i += `🔆 *Height: ${data.height}*\n`
+        8
         i += `🌟 *Base Experience: ${data.base_experience}*\n`
         i += `📛 *Abilities: ${data.abilities[0].ability.name}, ${data.abilities[1].ability.name}*\n`
         i += `🎀 *Type: ${data.types[0].type.name}*\n`
