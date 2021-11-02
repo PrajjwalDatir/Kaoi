@@ -10,7 +10,7 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'steal',
             description: 'Steals stickers',
-            category: 'utils',
+            category: 'fun',
             usage: `${client.config.prefix}steal [(as caption | tag)[video | image]]`,
             baseXp: 30
         })
