@@ -6,7 +6,7 @@ import BaseCommand from '../../lib/BaseCommand'
 
 import WAClient from '../../lib/WAClient' 
 
-import { ISimplifiedMessage } from '../../typings'
+import { IParsedArgs, ISimplifiedMessage } from '../../typings'
 
 import axios from 'axios'
 
@@ -30,7 +30,7 @@ export default class Command extends BaseCommand {
 
   }
 
-  run = async (M: ISimplifiedMessage): Promise<void> => {
+  run = async (M: ISimplifiedMessage, {joined}: IParsedArgs): Promise<void> => {
 
       await axios 
 
