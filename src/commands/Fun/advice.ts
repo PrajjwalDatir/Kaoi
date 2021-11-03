@@ -1,24 +1,24 @@
-import { MessageType } from '@adiwajshing/baileys' 
+import { MessageType } from '@adiwajshing/baileys'
 
-import MessageHandler from '../../Handlers/MessageHandler' 
+import MessageHandler from '../../Handlers/MessageHandler'
 
 import BaseCommand from '../../lib/BaseCommand'
 
-import WAClient from '../../lib/WAClient' 
+import WAClient from '../../lib/WAClient'
 
 import { ISimplifiedMessage } from '../../typings'
 
 import axios from 'axios'
 
-export default class Command extends BaseCommand { 
+export default class Command extends BaseCommand {
 
-  constructor(client: WAClient, handler: MessageHandler) { 
+  constructor(client: WAClient, handler: MessageHandler) {
 
-    super(client, handler, { 
+    super(client, handler, {
 
       command: 'advice',
 
-      description: 'Gives you advice', 
+      description: 'Gives you advice',
 
       category: 'fun',
 
@@ -32,27 +32,26 @@ export default class Command extends BaseCommand {
 
   run = async (M: ISimplifiedMessage): Promise<void> => {
 
-      await axios 
+      await axios
 
           .get(`https://api.adviceslip.com/advice`)
 
-          .then((response) => { 
+          .then((response) => {
 
               // console.log(response);
 
-              const text = `*Advice for you🔖:* ${response.data.advice}` 
+              const text = `*Advice for you🔖:* ${response.data.advice}`
 
               M.reply(text)
 
            })
 
-           .catch((err) => { 
+           .catch((err) => {
 
               M.reply(`🚫 Error: ${err}`)
 
-           }) 
+           })
 
   }
 
 }
-
