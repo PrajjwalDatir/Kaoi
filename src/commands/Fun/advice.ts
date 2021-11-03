@@ -2,11 +2,11 @@ import { MessageType } from '@adiwajshing/baileys'
 
 import MessageHandler from '../../Handlers/MessageHandler' 
 
-import BaseCommand from '../../BaseCommand'
+import BaseCommand from '../../lib/BaseCommand'
 
-import WAClient from '../../WAClient' 
+import WAClient from '../../lib/WAClient' 
 
-import { ISimplifiedMessaage } from '../../typings'
+import { ISimplifiedMessage } from '../../typings'
 
 import axios from 'axios'
 
