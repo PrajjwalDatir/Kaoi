@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
             command: 'advice',
             description: 'Gives you random advice.',
             category: 'fun',
-            usage: `${client.config.prefix}why`,
+            usage: `${client.config.prefix}advice`,
             baseXp: 30
         })
     }
