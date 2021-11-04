@@ -21,7 +21,7 @@ export default class Command extends BaseCommand {
             .get(`https://api.adviceslip.com/advice`)
             .then((response) => {
                 // console.log(response);
-                const text = `📝 *Advice for you🔖:* ${response.data.advice}`
+                const text = `*Advice for you🔖:* ${data.slip.advice}`
                 M.reply(text)
             })
             .catch((err) => {
