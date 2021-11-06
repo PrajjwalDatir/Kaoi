@@ -5,23 +5,22 @@ import { ISimplifiedMessage } from '../../typings'
 import axios from 'axios'
 import request from '../../lib/request'
 import { MessageType } from '@adiwajshing/baileys'
-// import { MessageType, Mimetype } from '@adiwajshing/baileys'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
-            command: 'waifu',
-            description: `sends you the Waifus aka\nGirls you can't have.`,
-            aliases: ['animegirl'],
-            category: 'anime',
-            usage: `${client.config.prefix}waifu`,
+            command: 'husbando',
+            description: `Will send you random husbando image. aka\nBoys you can't have`,
+            aliases: ['husbu'],
+            category: 'weeb',
+            usage: `${client.config.prefix}husbu`,
             baseXp: 50
         })
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        // fetch result of https://waifu.pics/api/sfw/waifu from the API using axios
-        const { data } = await axios.get('https://waifu.pics/api/sfw/waifu')
+        // fetch result of https://zxbott.herokuapp.com/husbu from the API using axios
+        const { data } = await axios.get('https://zxbott.herokuapp.com/husbu')
         const buffer = await request.buffer(data.url).catch((e) => {
             return void M.reply(e.message)
         })
@@ -32,10 +31,10 @@ export default class Command extends BaseCommand {
                     MessageType.image,
                     undefined,
                     undefined,
-                    `More than one waifu, will ruin your laifu.\n`,
+                    `Here you go ✨\n`,
                     undefined
                 ).catch((e) => {
-                    console.log(`This Error occurs when an image is sent via M.reply()\n Child Catch Block : \n${e}`)
+                    console.log(`This error occurs when an image is sent via M.reply()\n Child Catch Block : \n${e}`)
                     // console.log('Failed')
                     M.reply(`Could not fetch image. Here's the URL: ${data.url}`)
                 })
@@ -43,7 +42,7 @@ export default class Command extends BaseCommand {
             } catch (e) {
                 // console.log('Failed2')
                 M.reply(`Could not fetch image. Here's the URL : ${data.url}`)
-                console.log(`This Error occurs when an image is sent via M.reply()\n Parent Catch Block : \n${e}`)
+                console.log(`This error occurs when an image is sent via M.reply()\n Parent Catch Block : \n${e}`)
             }
         }
         return void null

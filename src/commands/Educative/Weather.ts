@@ -3,8 +3,6 @@ import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings'
 import axios from 'axios'
-import request from '../../lib/request'
-import { MessageType } from '@adiwajshing/baileys'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -19,24 +17,21 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
+        if (!this.client.config.weatherAppid) return void M.reply('No weather api key set')
         if (!joined) return void M.reply('Please provide me the place name.')
         const place = joined.trim()
         await axios
             .get(
-                `http://api.openweathermap.org/data/2.5/weather?q=${place}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=tr`
+                `http://api.openweathermap.org/data/2.5/weather?q=${this.client.config.weatherAppid}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=tr`
             )
-            /* Note
-  If you want to add some response, we'd recommend you to explore the json itself which provided link returns.
-  This stability of the url and API KEY is not guaranteed.
-  Regards: Team Kaoi
- */
+
             .then((response) => {
                 // console.log(response);
                 const text = `🔎 Weather for the place *${place}* found\n\n🌸 *Place:* ${response.data.name}\n*💮 Country:* ${response.data.sys.country}\n🌈 *Weather:* ${response.data.weather[0].description}\n🌡️ *Temperature:* ${response.data.main.temp}°C\n❄️ *Minimum Temperature:* ${response.data.main.temp_min}°C\n📛 *Maximum Temperature:* ${response.data.main.temp_max}°C\n💦 *Humidity:* ${response.data.main.humidity}%\n🎐 *Wind:* ${response.data.wind.speed} km/h\n`
                 M.reply(text)
             })
             .catch((err) => {
-                M.reply(`Sorry, couldn't find any state or place name related to *${place}*.`)
+                M.reply(`${err}`)
             })
     }
 }

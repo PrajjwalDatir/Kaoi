@@ -9,7 +9,7 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'blur',
             description: 'Blurs the given image or pfp',
-            category: 'media',
+            category: 'utils',
             usage: `${client.config.prefix}blur [(as caption | quote)[image] | @mention]`,
             baseXp: 30
         })

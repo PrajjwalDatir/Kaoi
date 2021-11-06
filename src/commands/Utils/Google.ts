@@ -10,7 +10,7 @@ export default class Command extends BaseCommand {
             command: 'google',
             aliases: ['g', 'search'],
             description: 'Search on the web ',
-            category: 'media',
+            category: 'utils',
             usage: `${client.config.prefix}google [query]`,
             baseXp: 10
         })

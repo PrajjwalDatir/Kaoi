@@ -1,7 +1,7 @@
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
-import { IParsedArgs, ISimplifiedMessage } from '../../typings'
+import { ISimplifiedMessage } from '../../typings'
 import axios from 'axios'
 import request from '../../lib/request'
 import { MessageType } from '@adiwajshing/baileys'
@@ -10,35 +10,18 @@ import { MessageType } from '@adiwajshing/baileys'
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
-            command: 'animechar',
-            description: `Anime characters ;)\nType ${client.config.prefix}ac to check all available options`,
-            aliases: ['ac', 'achar'],
-            category: 'anime',
-            usage: `${client.config.prefix}ac (option)`,
-            baseXp: 20
+            command: 'waifu',
+            description: `sends you the Waifus aka\nGirls you can't have.`,
+            aliases: ['animegirl'],
+            category: 'weeb',
+            usage: `${client.config.prefix}waifu`,
+            baseXp: 50
         })
     }
 
-    run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        // consider neko and kitsune in furry
-        const char = ['neko', 'shinobu', 'megumin', 'awoo']
-        const term = joined.trim().split(' ')[0].toLowerCase()
-        let text = ''
-        char.map((c) => {
-            text += `📍${c.charAt(0).toUpperCase() + c.slice(1)}\n`
-            // index % 4 === 3 ? (text += '\n') : (text += ' '.repeat(10 - c.length))
-        })
-        if (!term)
-            return void M.reply(
-                `🪧 *OPTIONS:*\n${text}Use ${this.client.config.prefix}ac (option) to get Characters\nExample: ${this.client.config.prefix}ac neko`
-            )
-        if (!char.includes(term))
-            return void M.reply(
-                `🧧 Invalid option! 🧧\nUse ${this.client.config.prefix}ac to see all available options`
-            )
-
-        // fetch result of https://waifu.pics/api/sfw from the API using axios
-        const { data } = await axios.get(`https://waifu.pics/api/sfw/${term}`)
+    run = async (M: ISimplifiedMessage): Promise<void> => {
+        // fetch result of https://waifu.pics/api/sfw/waifu from the API using axios
+        const { data } = await axios.get('https://waifu.pics/api/sfw/waifu')
         const buffer = await request.buffer(data.url).catch((e) => {
             return void M.reply(e.message)
         })
@@ -49,7 +32,7 @@ export default class Command extends BaseCommand {
                     MessageType.image,
                     undefined,
                     undefined,
-                    `Here you go.\n`,
+                    `More than one waifu, will ruin your laifu.\n`,
                     undefined
                 ).catch((e) => {
                     console.log(`This Error occurs when an image is sent via M.reply()\n Child Catch Block : \n${e}`)

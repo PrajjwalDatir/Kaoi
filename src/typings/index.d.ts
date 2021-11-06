@@ -11,6 +11,8 @@ export interface IConfig {
     mods: string[]
     gkey: string
     chatBotUrl: string
+    gifApi: string
+    weatherAppid: string
 }
 
 export interface IParsedArgs {

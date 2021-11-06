@@ -34,11 +34,19 @@
             "description": "A secret String for Mongodb Connection.(Required)"
         },
         "GOOGLE_API_KEY": {
-            "description": "Google API key for Google searches for MODS (Not Required)",
+            "description": "Google API key for Google searches (Not Required)",
             "required": false
         },
         "CHAT_BOT_URL": {
             "description": "BrainShop API Brain url",
+            "required": false
+        },
+        "TENOR_API_KEY": {
+            "description": "A key used for gif searches",
+            "required": false
+        },
+        "WEATHER_APPID": {
+            "description": "A key used to see the weather updates",
             "required": false
         }
     },

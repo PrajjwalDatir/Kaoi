@@ -12,7 +12,7 @@ export default class Command extends BaseCommand {
             command: 'subred',
             description: 'Fetches post from reddit',
             aliases: ['sr', 'reddit'],
-            category: 'media',
+            category: 'utils',
             usage: `${client.config.prefix}subred [subredit_name]`,
             baseXp: 30
         })
