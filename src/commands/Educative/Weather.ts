@@ -22,7 +22,7 @@ export default class Command extends BaseCommand {
         const place = joined.trim()
         await axios
             .get(
-                `http://api.openweathermap.org/data/2.5/weather?q=${this.client.config.weatherAppid}&units=metric&appid=060a6bcfa19809c2cd4d97a212b19273&language=tr`
+                `http://api.openweathermap.org/data/2.5/weather?q=${place}&units=metric&appid=${this.client.config.weatherAppid}&language=tr`
             )
 
             .then((response) => {
