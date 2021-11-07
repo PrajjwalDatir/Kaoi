@@ -1,4 +1,3 @@
-import​ ​{​ ​MessageType​ ​}​ ​from​ ​'@adiwajshing/baileys'
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
@@ -21,7 +20,7 @@ export default class Command extends BaseCommand {
             .get(`https://api.adviceslip.com/advice`)
             .then((response) => {
                 // console.log(response);
-                const text = `*Advice for you🔖:* ${data.slip.advice}`
+                const text = `*Advice for you🔖:* ${response.data.slip.advice}`
                 M.reply(text)
             })
             .catch((err) => {
