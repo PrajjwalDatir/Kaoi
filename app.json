@@ -40,9 +40,13 @@
         "CHAT_BOT_URL": {
             "description": "BrainShop API Brain url",
             "required": false
-        }
-    },
-    "buildpacks": [
+        },
+        ​"GENIUS_KEY"​: { 
+ ​       ​    "description"​: ​"​Your access token of genius.com to fetch the lyrics​"​, 
+ ​           ​"required"​: ​false 
+ ​       }
+ ​  },
+   "buildpacks": [
         {
             "url": "heroku/nodejs"
         },
