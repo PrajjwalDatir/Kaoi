@@ -2386,6 +2386,14 @@ gauge@~2.7.3:
     strip-ansi "^3.0.1"
     wide-align "^1.1.0"
 
+genius-lyrics@^4.3.4:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/genius-lyrics/-/genius-lyrics-4.3.4.tgz#0173539d5bdfdffd4b0752805f8f55a848a19862"
+  integrity sha512-EuNrNM+tqRAJwuc78I8f8gtB03WaCtWu7JAxfagafnbNXyjSQQA3cl8sN8AMby+5oAR21WgC7gbJFK6OndZsHg==
+  dependencies:
+    cheerio "^1.0.0-rc.9"
+    got "^11.8.2"
+
 get-intrinsic@^1.0.2:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/get-intrinsic/-/get-intrinsic-1.1.1.tgz#15f59f376f855c446963948f0d24cd3637b4abc6"
