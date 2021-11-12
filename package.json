@@ -63,8 +63,7 @@
         "node-cron": "^3.0.0",
         "npm": "^7.17.0",
         "qr-image": "^3.2.0",
-        "spotifydl-core": "^0.1.2",
-        "ultra-lyrics": "^1.0.3",
+        "spotifydl-core": "^0.1.2"
         "wa-sticker-formatter": "^4.0.14",
         "yt-search": "^2.9.0",
         "ytdl-core": "^4.9.1"
