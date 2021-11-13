@@ -11,6 +11,7 @@ export interface IConfig {
     mods: string[]
     gkey: string
     chatBotUrl: string
+    geniuskey: string 
 }
 
 export interface IParsedArgs {
