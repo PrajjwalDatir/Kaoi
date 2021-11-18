@@ -10,7 +10,7 @@ export default class Command extends BaseCommand {
             command: 'broadcast',
             description: 'Sends msg to all group chats',
             aliases: ['BC', 'announcement','bc'],
-            category: 'general',
+            category: 'Dev',
             usage: `${client.config.prefix}broadcast`,
             modsOnly: true,
             baseXp: 0
