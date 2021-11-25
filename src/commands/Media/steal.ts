@@ -15,7 +15,7 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'steal',
-            aliases: ['chori'],
+            aliases: ['st'],
             description: 'steals the sticker for you',
             category: 'media',
             usage: `${client.config.prefix}sticker [(as caption | tag)[sticker]]`,
