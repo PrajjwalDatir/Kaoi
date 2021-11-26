@@ -4980,6 +4980,20 @@ tough-cookie@~2.5.0:
     psl "^1.1.28"
     punycode "^2.1.1"
 
+translate-google@^1.5.0:
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/translate-google/-/translate-google-1.5.0.tgz#673bc7ae9e6ad21ef8504cdf917b399b926e3f8d"
+  integrity sha512-wI/oX3U3t78PthVkvO7BdvKRcjb03JaUs53oAhs0NVmzFJUEm5ROiYWH7gomRHFZ5bL7LKxrFRx8Qy/l1eB46g==
+  dependencies:
+    configstore "^6.0.0"
+    got "^11.8.2"
+    is-keyword-js "^1.0.3"
+    is-url "^1.2.4"
+    lodash "^4.17.21"
+    num-or-not "^1.0.1"
+    safe-eval "^0.4.1"
+    user-agents "^1.0.779"
+
 treeverse@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/treeverse/-/treeverse-1.0.4.tgz#a6b0ebf98a1bca6846ddc7ecbc900df08cb9cd5f"
