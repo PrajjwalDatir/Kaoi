@@ -2,7 +2,7 @@ import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings'
-import axios from 'axios'
+import axios from 'axios' // BRRRRRRRRRRRRRRRRRRRRRRRUH
 import request from '../../lib/request'
 import { MessageType, Mimetype } from '@adiwajshing/baileys'
 
