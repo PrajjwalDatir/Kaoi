@@ -33,4 +33,3 @@ export default class Command extends BaseCommand {
             })
     }
 }
-// ARA ARA
