@@ -29,7 +29,7 @@ export default class Command extends BaseCommand {
                 M.reply(text)
             })
             .catch((err) => {
-                M.reply(`Sorry, error.`)
+                M.reply(`Sorry, error.`) // And miles to go before I sleep... And miles to go before I sleep.... 
             })
     }
 }
