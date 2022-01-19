@@ -1,4 +1,4 @@
-import MessageHandler from '../../Handlers/MessageHandler' 
+import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings'
@@ -29,7 +29,7 @@ export default class Command extends BaseCommand {
                 M.reply(text)
             })
             .catch((err) => {
-                M.reply(`Sorry, error.`) 
+                M.reply(`Sorry, error.`)
             })
     }
 }
