@@ -1,4 +1,4 @@
-import MessageHandler from '../../Handlers/MessageHandler' // Kaoi WhatsApp Botto
+import MessageHandler from '../../Handlers/MessageHandler' 
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings'
@@ -29,7 +29,7 @@ export default class Command extends BaseCommand {
                 M.reply(text)
             })
             .catch((err) => {
-                M.reply(`Sorry, error.`) // And miles to go before I sleep... And miles to go before I sleep.... 
+                M.reply(`Sorry, error.`) 
             })
     }
 }
