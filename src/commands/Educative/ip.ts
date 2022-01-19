@@ -1,4 +1,4 @@
-import MessageHandler from '../../Handlers/MessageHandler'
+import MessageHandler from '../../Handlers/MessageHandler' // Kaoi WhatsApp Botto
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings'
