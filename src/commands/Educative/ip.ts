@@ -25,6 +25,7 @@ export default class Command extends BaseCommand {
         await axios
             .get(`http://ip-api.com/json/${pypi}`)
             .then((response) => {
+                if (response.data.status === "fail") return void M.reply("Invalid id.")
                 const text = `Status : ${response.data.status} \n IP : ${response.data.query} \n ISP : ${response.data.isp} \n Organisation : ${response.data.org} \n Country : ${response.data.country} \n Region : ${response.data.regionName} \n City : ${response.data.country} `
                 M.reply(text)
             })
