@@ -4821,23 +4821,6 @@ split2@^3.1.1:
   dependencies:
     readable-stream "^3.0.0"
 
-spotify-web-api-node@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/spotify-web-api-node/-/spotify-web-api-node-5.0.2.tgz#683669b3ccc046a5a357300f151df93a2b3539fe"
-  integrity sha512-r82dRWU9PMimHvHEzL0DwEJrzFk+SMCVfq249SLt3I7EFez7R+jeoKQd+M1//QcnjqlXPs2am4DFsGk8/GCsrA==
-  dependencies:
-    superagent "^6.1.0"
-
-spotifydl-core@^0.1.2:
-  version "0.1.2"
-  resolved "https://registry.yarnpkg.com/spotifydl-core/-/spotifydl-core-0.1.2.tgz#b8f285e5a8deefdfe2dc882ceccbb2b8255b636a"
-  integrity sha512-WBHqk1XQrgohzURVwMPMsYUX9mT8fzsg+lztt2dp3d/RZdo4hPfhMuZiiwBWYc28X80tqKSk6MCtNWIKdRjmXA==
-  dependencies:
-    axios "^0.21.1"
-    fluent-ffmpeg "^2.1.2"
-    fs-extra "^10.0.0"
-    spotify-web-api-node "^5.0.2"
-
 sprintf-js@~1.0.2:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
