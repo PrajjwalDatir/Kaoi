@@ -61,7 +61,6 @@
         "node-cron": "^3.0.0",
         "npm": "^7.17.0",
         "qr-image": "^3.2.0",
-        "spotifydl-core": "^0.1.2",
         "ultra-lyrics": "^1.0.3",
         "wa-sticker-formatter": "^4.2.0"
     }
