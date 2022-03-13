@@ -16,7 +16,7 @@ export default class Command extends BaseCommand {
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         let text = ''
-        text += '*👾 Kaoi 👾*\n'
+        text += '*👾 Void 👾*\n'
         text += '*🔗 README* : https://github.com/PrajjwalDatir/Kaoi#readme\n'
         text += '*🔗 FEATURES* : https://github.com/PrajjwalDatir/Kaoi/blob/main/Features.md\n'
         text += '*🔗 CONTRIBUTERS* : https://github.com/PrajjwalDatir/Kaoi/graphs/contributors\n'
@@ -31,7 +31,7 @@ export default class Command extends BaseCommand {
         text +=
             '🔗 How to get the MongoDB URL : https://github.com/Hiroto77/Kaoi-Guides/blob/main/Mongo-Atlas-guide.md\n'
         text += '🔗 App sleeping? : https://www.youtube.com/watch?v=B9SvhFWKloM\n'
-        text += '\n_Thank You for using Kaoi. Help others setup Kaoi by contribution to Kaoi Guides_'
+        text += '\n_Thank You for using Void. Help others setup Kaoi by contribution to Kaoi Guides_'
         return void M.reply(text).catch((reason: Error) => M.reply(`an error occurred, Reason: ${reason}`))
     }
 }
