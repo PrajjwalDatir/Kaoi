@@ -8,7 +8,7 @@ export interface IConfig {
     mods?: string[]
     prefix: string
     session: string
-//     mods: string[]
+    mods: string[]
     gkey: string
     chatBotUrl: string
 }
