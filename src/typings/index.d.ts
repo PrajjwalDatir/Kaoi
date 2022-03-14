@@ -5,7 +5,7 @@ export * from './command'
 export * from './mongo'
 export interface IConfig {
     name: string
-    mods?: string[]
+//     mods?: string[]
     prefix: string
     session: string
     mods: string[]
