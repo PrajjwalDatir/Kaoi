@@ -1,5 +1,5 @@
 import { MessageType, Mimetype } from '@adiwajshing/baileys'
-import { Sticker, Categories, StickerTypes } from 'wa-sticker-formatter'
+import { Sticker } from 'wa-sticker-formatter'
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
@@ -9,10 +9,10 @@ export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
         super(client, handler, {
             command: 'sticker',
-            aliases: ['s'],
             description: 'Converts images/videos into stickers',
-            category: 'media',
+            category: 'utils',
             usage: `${client.config.prefix}sticker [(as caption | tag)[video | image]]`,
+            dm: true,
             baseXp: 30
         })
     }
