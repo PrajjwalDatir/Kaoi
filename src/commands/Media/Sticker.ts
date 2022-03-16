@@ -1,5 +1,5 @@
 import { MessageType, Mimetype } from '@adiwajshing/baileys'
-import { Sticker } from 'wa-sticker-formatter'
+import { Sticker, Categories, StickerTypes } from 'wa-sticker-formatter'
 import MessageHandler from '../../Handlers/MessageHandler'
 import BaseCommand from '../../lib/BaseCommand'
 import WAClient from '../../lib/WAClient'
@@ -10,7 +10,7 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'sticker',
             description: 'Converts images/videos into stickers',
-            category: 'utils',
+            category: 'media',
             usage: `${client.config.prefix}sticker [(as caption | tag)[video | image]]`,
             dm: true,
             baseXp: 30
@@ -29,7 +29,13 @@ export default class Command extends BaseCommand {
         const sticker = new Sticker(buffer, {
             pack: pack[1] || '👾 𝐇𝐚𝐧𝐝𝐜𝐫𝐚𝐟𝐭𝐞𝐝 𝐅𝐨𝐫 𝐘𝐨𝐮 ',
             author: pack[2] || '𝐖𝐡𝐚𝐭𝐬𝐀𝐩𝐩 𝐁𝐨𝐭𝐭𝐨 𝐕𝐨𝐢𝐝 👾',
-            crop: parsedArgs.flags.includes('--stretch')
+            type: StickerTypes[
+                    parsedArgs.flags.includes('--crop') || parsedArgs.flags.includes('--c')
+                        ? 'CROPPED'
+                        : parsedArgs.flags.includes('--stretch') || parsedArgs.flags.includes('--s')
+                        ? 'DEFAULT'
+                        : 'FULL'
+                ]
         })
         await sticker.build()
         await M.reply(await sticker.get(), MessageType.sticker, Mimetype.webp)
