@@ -57,7 +57,7 @@
         "jimp": "^0.16.1",
         "jpeg-js": "^0.4.4",
         "lyrics-monarch-api": "^2.1.0",
-        "moment": "^2.29.1",
+        "moment": "^2.29.4",
         "mongoose": "^5.12.12",
         "node-cron": "^3.0.0",
         "npm": "^8.11.0",
