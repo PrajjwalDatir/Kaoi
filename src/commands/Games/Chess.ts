@@ -22,20 +22,28 @@ export default class Command extends BaseCommand {
     challenges = new Map<string, { challenger: string; challengee: string } | undefined>()
     ongoing = new Set<string>()
 
-    parseBoard = (board: string[]): string[][] =>
-        this.client.util
+    parseBoard = (board: string[]): string[][] => {
+        const pieceMap: { [key: string]: string } = {
+            bK: 'k',
+            wK: 'K',
+            wk: 'N',
+            bk: 'n'
+        }
+        return this.client.util
             .chunk(
                 board.map((tile) => {
-                    if (tile === 'bK') return 'k'
-                    if (tile === 'wK') return 'K'
-                    if (tile === 'wk') return 'N'
-                    if (tile === 'bk') return 'n'
-                    if (tile[0] === 'w') return tile[1].toUpperCase()
+                    if (pieceMap[tile]) {
+                        return pieceMap[tile]
+                    }
+                    if (tile[0] === 'w') {
+                        return tile[1].toUpperCase()
+                    }
                     return tile[1].toLowerCase()
                 }),
                 8
             )
             .reverse()
+    }
 
     run = async (M: ISimplifiedMessage, { args }: IParsedArgs): Promise<void> => {
         const end = async (winner?: 'Black' | 'White' | string) => {
@@ -120,14 +128,21 @@ export default class Command extends BaseCommand {
                     const cig = new CIG()
                     cig.loadArray(this.parseBoard(game.board.getPieces(game.white, game.black)))
                     let sent = false
-                    while (!sent) {
+                    let retries = 0
+                    const maxRetries = 3
+                    while (!sent && retries < maxRetries) {
                         try {
-                            await cig
-                                .generateBuffer()
-                                .then(async (data) => await this.client.sendMessage(M.from, data, MessageType.image))
+                            const buffer = await cig.generateBuffer()
+                            await this.client.sendMessage(M.from, buffer, MessageType.image)
                             sent = true
                         } catch (err) {
-                            continue
+                            retries++
+                            this.client.log(`Error generating chess board image (attempt ${retries}/${maxRetries}): ${err}`, true)
+                            if (retries >= maxRetries) {
+                                M.reply('Failed to generate chess board image after multiple attempts. Please try again later.')
+                            } else {
+                                await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+                            }
                         }
                     }
                 })
@@ -165,12 +180,21 @@ export default class Command extends BaseCommand {
                         const cig = new CIG()
                         cig.loadArray(this.parseBoard(g.board.getPieces(g.white, g.black)))
                         let sent = false
-                        while (!sent) {
+                        let retries = 0
+                        const maxRetries = 3
+                        while (!sent && retries < maxRetries) {
                             try {
-                                await cig.generateBuffer().then(async (data) => await M.reply(data, MessageType.image))
+                                const buffer = await cig.generateBuffer()
+                                await M.reply(buffer, MessageType.image)
                                 sent = true
                             } catch (err) {
-                                continue
+                                retries++
+                                this.client.log(`Error generating chess board image on move (attempt ${retries}/${maxRetries}): ${err}`, true)
+                                if (retries >= maxRetries) {
+                                    M.reply('Failed to generate chess board image after multiple attempts. Please try again later.')
+                                } else {
+                                    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+                                }
                             }
                         }
                     })
@@ -202,12 +226,21 @@ export default class Command extends BaseCommand {
                     const cig = new CIG()
                     cig.loadArray(this.parseBoard(g.board.getPieces(g.white, g.black)))
                     let sent = false
-                    while (!sent) {
+                    let retries = 0
+                    const maxRetries = 3
+                    while (!sent && retries < maxRetries) {
                         try {
-                            await cig.generateBuffer().then(async (data) => await M.reply(data, MessageType.image))
+                            const buffer = await cig.generateBuffer()
+                            await M.reply(buffer, MessageType.image)
                             sent = true
                         } catch (err) {
-                            continue
+                            retries++
+                            this.client.log(`Error generating chess board image on move (attempt ${retries}/${maxRetries}): ${err}`, true)
+                            if (retries >= maxRetries) {
+                                M.reply('Failed to generate chess board image after multiple attempts. Please try again later.')
+                            } else {
+                                await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second before retrying
+                            }
                         }
                     }
                 })
