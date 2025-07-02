@@ -133,18 +133,34 @@ export default class Command extends BaseCommand {
                 })
                 return void this.games.set(M.from, game)
             case 'reject':
-                const ch = this.challenges.get(M.from)
-                if (ch?.challengee !== M.sender.jid && ch?.challenger !== M.sender.jid)
-                    return void M.reply('No one challenged you to a chess match')
-                this.challenges.set(M.from, undefined)
+                const ch = this.challenges.get(M.from);
+                if (!ch) {
+                    return void M.reply('No one challenged you to a chess match');
+                }
+
+                // Challenge exists, check if sender is part of it
+                if (ch.challengee !== M.sender.jid && ch.challenger !== M.sender.jid) {
+                    return void M.reply('You are not part of the current chess challenge. Only the challenger or challengee can reject it.');
+                }
+
+                // Sender is part of the challenge, proceed to reject
+                this.challenges.set(M.from, undefined);
+                const isChallenger = ch.challenger === M.sender.jid;
+                const challengerJid = ch.challenger.split('@')[0];
+
+                // Ensure both original participants are mentioned.
+                // The sender is one of them, so they will be included.
+                const initialMentionedJids = [ch.challenger, ch.challengee].filter(Boolean) as string[];
+                const mentionedJids = Array.from(new Set(initialMentionedJids));
+
                 return void M.reply(
-                    ch.challenger === M.sender.jid
-                        ? `You rejected your challenge`
-                        : `You Rejected @${ch.challenger.split('@')[0]}'s Challenge`,
+                    isChallenger
+                        ? `You rejected your challenge.`
+                        : `You rejected @${challengerJid}'s challenge.`,
                     MessageType.text,
                     undefined,
-                    [ch.challengee || '', M.sender.jid]
-                )
+                    mentionedJids
+                );
             case 'move':
                 const g = this.games.get(M.from)
                 if (!g) return void M.reply('No Chess sessions are currently going on')

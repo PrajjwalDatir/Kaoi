@@ -11,15 +11,22 @@ export default class MessageHandler {
     constructor(public client: WAClient) {}
 
     handleMessage = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!(M.chat === 'dm') && M.WAMessage.key.fromMe && M.WAMessage.status.toString() === '2') {
-            /*
-            BUG : It receives message 2 times and processes it twice.
-            https://github.com/adiwajshing/Baileys/blob/8ce486d/WAMessage/WAMessage.d.ts#L18529
-            https://adiwajshing.github.io/Baileys/enums/proto.webmessageinfo.webmessageinfostatus.html#server_ack
-            */
-            M.sender.jid = this.client.user.jid
-            M.sender.username = this.client.user.name || this.client.user.vname || this.client.user.short || 'Kaoi Bot'
-        } else if (M.WAMessage.key.fromMe) return void null
+        if (M.WAMessage.key.fromMe) {
+            // If the message is from the bot itself
+            if (!(M.chat === 'dm') && M.WAMessage.status?.toString() === '2') {
+                /*
+                Original BUG comment: It receives message 2 times and processes it twice.
+                This was likely because own messages with SERVER_ACK (status 2) were processed.
+                The following lines update sender info for bot's own messages in groups,
+                which might be useful for other parts of the system or logging.
+                */
+                M.sender.jid = this.client.user.jid;
+                M.sender.username = this.client.user.name || this.client.user.vname || this.client.user.short || 'Kaoi Bot';
+            }
+            // In any case, if the message is from the bot, do not process it for commands.
+            // This prevents the bot from reacting to its own messages or processing them as commands.
+            return void null;
+        }
 
         if (M.from.includes('status')) return void null
         const { args, groupMetadata, sender } = M

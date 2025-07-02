@@ -16,61 +16,91 @@ export default class Command extends BaseCommand {
         })
     }
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        let term = joined.trim().split(' ')
-        // upper case
-        term = term.map((t) => t.toUpperCase())
+        let terms = joined.trim().split(' ').map(t => t.toUpperCase());
+        // Filter out empty strings that might result from multiple spaces
+        terms = terms.filter(t => t.length > 0);
+        let text = '';
+        const usageHint = `\nUsage: ${this.client.config.prefix}crypto [COIN] [CURRENCY] [AMOUNT]\nExample: ${this.client.config.prefix}crypto BTC INR 1\n${this.client.config.prefix}crypto USDT BTC\n${this.client.config.prefix}crypto (for all prices)`;
 
-        let text = ''
-        await axios
-            .get(`https://public.coindcx.com/market_data/current_prices`)
-            .then(async (res) => {
-                if (!res) return void M.reply('🟥 ERROR 🟥\nThis might be due to API service being down')
+        try {
+            const res = await axios.get(`https://public.coindcx.com/market_data/current_prices`);
 
-                const data = res.data
-                const count = term.length > 2 ? (isNaN(parseInt(term[2])) ? 1 : parseInt(term[2])) : 1
-                if (term[0] === '') {
-                    text = `*Crypto Prices*\n\n`
-                    // loop over the array of key and value, and add them to the text
-                    for (const [key, value] of Object.entries(data)) {
-                        text += `*${key}*: ${value}\n`
-                    }
-                } else if (term.length == 1) {
-                    // concat 'INR' to the term
-                    term[0] = term[0] + 'INR'
-                    // check if the value of the term is present in the data, if it's present then return the value
-                    if (data[term[0]]) {
-                        text = `*${term[0]}*: ${data[term[0]]}`
-                    } else {
-                        text = `*${term[0]}*: Not Found\nUsage example\n${this.client.config.prefix}cr BTC INR\n${this.client.config.prefix}cr USDT BTC\n${this.client.config.prefix}cr INR BTC\n${this.client.config.prefix}cr without parameters returns data on all coins`
-                    }
-                } else if (term.length == 2 || isNaN(count)) {
-                    // concat term[1] to the term[0]
-                    term[0] = term[0] + term[1]
-                    // check if the value of the term is present in the data, if it's present then return the value
-                    if (data[term[0]]) {
-                        text = `*${term[0]}*: ${data[term[0]]}`
-                    } else {
-                        text = `*${term[0]}*: Not Found\nUsage example\n${this.client.config.prefix}cr BTC INR\n${this.client.config.prefix}cr USDT BTC\n${this.client.config.prefix}cr INR BTC\n${this.client.config.prefix}cr without parameters returns data on all coins`
+            if (!res.data || typeof res.data !== 'object' || Object.keys(res.data).length === 0) {
+                console.log('Unexpected API response from Coindcx:', res.data);
+                return void M.reply('🟥 ERROR 🟥\nCould not retrieve valid crypto data. The API might be down or returned an unexpected response.');
+            }
+
+            const data: { [key: string]: string | number } = res.data;
+
+            if (terms.length === 0 || (terms.length === 1 && terms[0] === '')) {
+                text = `*All Crypto Prices (vs INR)*:\n\n`;
+                let foundCount = 0;
+                for (const [key, value] of Object.entries(data)) {
+                    // Display only pairs ending with INR for the general request for brevity, or adjust as needed
+                    if (key.endsWith('INR')) {
+                         text += `*${key.replace('INR', '')}*: ${value} INR\n`;
+                         foundCount++;
                     }
                 }
-                // Get the value of the term[0] and multiply it by the term[2]
-                // if (term.length == 3)
-                else {
-                    // concat term[1] to the term[0]
-                    term[0] = term[0] + term[1]
-                    // check if the value of the term is present in the data, if it's present then return the value
-                    if (data[term[0]]) {
-                        text = `*${term[0]}*: ${data[term[0]] * count}`
+                if (foundCount === 0) {
+                    text = 'No INR pairs found or API data is not in the expected format.';
+                }
+            } else {
+                let coin = terms[0];
+                let currency = terms.length > 1 ? terms[1] : 'INR'; // Default to INR
+                let countInput = terms.length > 2 ? terms[2] : '1';
+                let count = parseFloat(countInput);
+                if (isNaN(count) || count <= 0) count = 1;
+
+                const pair = coin + currency;
+
+                if (data[pair]) {
+                    const price = parseFloat(data[pair] as string);
+                    if (isNaN(price)) {
+                        text = `*${pair}*: Invalid price data received from API.`;
                     } else {
-                        text = `*${term[0]}*: Not Found\nUsage example\n${this.client.config.prefix}cr BTC INR\n${this.client.config.prefix}cr USDT BTC\n${this.client.config.prefix}cr INR BTC\n${this.client.config.prefix}cr without parameters returns data on all coins`
+                        text = `*${countInput} ${coin} (${pair})* = ${price * count} ${currency}`;
+                    }
+                } else {
+                    // Attempt reverse pairing for convenience, e.g., user types "INR BTC"
+                    const reversePair = currency + coin;
+                    if (data[reversePair]) {
+                         const price = parseFloat(data[reversePair] as string);
+                         if (isNaN(price)) {
+                            text = `*${reversePair}* (used as ${pair}): Invalid price data received from API.`;
+                         } else {
+                            if (price === 0) {
+                                text = `*${countInput} ${coin} (via ${reversePair})*: Cannot convert as ${reversePair} price is 0.`;
+                            } else {
+                                // Price is for currency/coin, so for coin/currency it's 1/price
+                                text = `*${countInput} ${coin} (via ${reversePair})* = ${(1 / price) * count} ${currency}`;
+                            }
+                         }
+                    } else {
+                        text = `*${pair}*: Not Found.${usageHint}`;
                     }
                 }
-            })
-            .catch((err) => {
-                console.log(err)
-                return void M.reply('🟥 ERROR 🟥\nThis might be due to API service being down')
-            })
+            }
 
-        return void M.reply(text)
+            if (text) {
+                return void M.reply(text);
+            } else {
+                // This case should ideally not be reached if logic is sound
+                return void M.reply(`Could not generate a response. Please check your input or try general usage.${usageHint}`);
+            }
+
+        } catch (err: any) {
+            console.error('Error fetching crypto prices:', err.message);
+            let errorText = '🟥 ERROR 🟥\nAn issue occurred while fetching crypto prices.';
+            if (err.response) {
+                console.error('API Error Status:', err.response.status);
+                console.error('API Error Data:', err.response.data);
+                errorText += ` (API Status: ${err.response.status})`;
+            } else if (err.request) {
+                console.error('API No Response:', err.request);
+                errorText = '🟥 ERROR 🟥\nNo response from the crypto API service. Please try again later.';
+            }
+            return void M.reply(errorText);
+        }
     }
 }
