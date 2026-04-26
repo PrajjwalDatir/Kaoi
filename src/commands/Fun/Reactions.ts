@@ -96,7 +96,12 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'react',
             description: `Let's React`,
-            aliases: Object.keys(REACTION_SOURCES).concat(['r']),
+            // `kick` is reserved for the moderation Remove command (more
+            // useful as a group-management alias). The kick reaction is still
+            // reachable via `!react kick`.
+            aliases: Object.keys(REACTION_SOURCES)
+                .filter((k) => k !== 'kick')
+                .concat(['r']),
             category: 'fun',
             usage: `${client.config.prefix}(reaction) [tag/quote users]\nExample: ${client.config.prefix}pat`,
             baseXp: 10
