@@ -1,7 +1,7 @@
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { ISimplifiedMessage } from '../../typings'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { ISimplifiedMessage } from '../../typings/index.js'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -21,7 +21,7 @@ export default class Command extends BaseCommand {
             `${M.groupMetadata?.subject || '*EVERYONE*'}\n*READ QUOTED MESSAGE*\n*[TAGGED MAGICALLY]*`,
             undefined,
             undefined,
-            M.groupMetadata?.participants.map((user) => user.jid)
+            M.groupMetadata?.participants.map((user) => user.id)
             // eslint-disable-next-line @typescript-eslint/no-explicit-any
         ).catch((reason: any) => M.reply(`an error occurred, Reason: ${reason}`)))
     }

@@ -1,10 +1,22 @@
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { IParsedArgs, ISimplifiedMessage } from '../../typings'
-import { MessageType, Mimetype } from '@adiwajshing/baileys'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { IParsedArgs, ISimplifiedMessage } from '../../typings/index.js'
+import { MessageType, Mimetype } from '../../lib/types.js'
 import EventEmitter from 'events'
-import Game, { genRealMove } from 'chess-node'
+// chess-node doesn't ship default exports correctly; load via interop.
+import * as ChessNode from 'chess-node'
+const Game: new (e: EventEmitter, jid: string) => ChessGame = (ChessNode as unknown as { default?: unknown }).default
+    ? ((ChessNode as unknown as { default: new (e: EventEmitter, jid: string) => ChessGame }).default)
+    : (ChessNode as unknown as new (e: EventEmitter, jid: string) => ChessGame)
+const { genRealMove } = ChessNode as unknown as { genRealMove: (m: string) => unknown }
+type ChessGame = {
+    board: { getPieces(white: unknown, black: unknown): string[] }
+    eventEmitter: EventEmitter
+    white: unknown
+    black: unknown
+    start(...args: unknown[]): void
+}
 import CIG from 'chess-image-generator-ts'
 
 export default class Command extends BaseCommand {
@@ -18,7 +30,7 @@ export default class Command extends BaseCommand {
         })
     }
 
-    games = new Map<string, Game | undefined>()
+    games = new Map<string, ChessGame | undefined>()
     challenges = new Map<string, { challenger: string; challengee: string } | undefined>()
     ongoing = new Set<string>()
 

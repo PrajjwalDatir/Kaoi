@@ -1,10 +1,10 @@
-import { MessageType } from '@adiwajshing/baileys'
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { IParsedArgs, ISimplifiedMessage } from '../../typings'
+import { MessageType } from '../../lib/types.js'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { IParsedArgs, ISimplifiedMessage } from '../../typings/index.js'
 import yts from 'yt-search'
-import YT from '../../lib/YT'
+import YT from '../../lib/YT.js'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {

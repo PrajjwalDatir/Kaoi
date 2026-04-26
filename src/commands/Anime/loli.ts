@@ -1,9 +1,9 @@
-import { MessageType } from '@adiwajshing/baileys'
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import request from '../../lib/request'
-import WAClient from '../../lib/WAClient'
-import { ISimplifiedMessage } from '../../typings'
+import { MessageType } from '../../lib/types.js'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import request from '../../lib/request.js'
+import WAClient from '../../lib/WAClient.js'
+import { ISimplifiedMessage } from '../../typings/index.js'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {

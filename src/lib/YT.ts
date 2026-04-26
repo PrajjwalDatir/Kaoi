@@ -1,4 +1,4 @@
-import request from './request'
+import request from './request.js'
 import { createWriteStream, readFile } from 'fs-extra'
 import { tmpdir } from 'os'
 import ytdl, { validateURL } from 'ytdl-core'

@@ -1,17 +1,25 @@
-import { MessageType, WAParticipantAction } from '@adiwajshing/baileys'
 import chalk from 'chalk'
-import request from '../lib/request'
-import WAClient from '../lib/WAClient'
+import request from '../lib/request.js'
+import WAClient from '../lib/WAClient.js'
+import { MessageType, WAParticipantAction } from '../lib/types.js'
+
+interface IEvent {
+    jid: string
+    participants: string[]
+    actor?: string | undefined
+    action: WAParticipantAction
+}
 
 export default class EventHandler {
     constructor(public client: WAClient) {}
 
     handle = async (event: IEvent): Promise<void> => {
-        const group = await this.client.fetchGroupMetadataFromWA(event.jid)
+        const group = await this.client.fetchGroupMetadataFromWA(event.jid).catch(() => null)
+        if (!group) return
         this.client.log(
             `${chalk.blueBright('EVENT')} ${chalk.green(
                 `${this.client.util.capitalize(event.action)}[${event.participants.length}]`
-            )} in ${chalk.cyanBright(group?.subject || 'Group')}`
+            )} in ${chalk.cyanBright(group.subject || 'Group')}`
         )
         const data = await this.client.getGroupData(event.jid)
         if (!data.events) return void null
@@ -23,10 +31,10 @@ export default class EventHandler {
                   .map((jid) => `@${jid.split('@')[0]}`)
                   .join(', ')}*`
             : event.action === 'remove'
-            ? `*@${event.participants[0].split('@')[0]}* has left the chat 👋`
-            : `*@${event.participants[0].split('@')[0]}* got ${this.client.util.capitalize(event.action)}d${
-                  event.actor ? ` by *@${event.actor.split('@')[0]}*` : ''
-              }`
+              ? `*@${event.participants[0].split('@')[0]}* has left the chat 👋`
+              : `*@${event.participants[0].split('@')[0]}* got ${this.client.util.capitalize(event.action)}d${
+                    event.actor ? ` by *@${event.actor.split('@')[0]}*` : ''
+                }`
         const contextInfo = {
             mentionedJid: event.actor ? [...event.participants, event.actor] : event.participants
         }
@@ -41,11 +49,4 @@ export default class EventHandler {
         }
         return void this.client.sendMessage(event.jid, text, MessageType.extendedText, { contextInfo })
     }
-}
-
-interface IEvent {
-    jid: string
-    participants: string[]
-    actor?: string | undefined
-    action: WAParticipantAction
 }

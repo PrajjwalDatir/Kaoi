@@ -1,6 +1,6 @@
-import MessageHandler from '../Handlers/MessageHandler'
-import { WAClient } from '../lib/WAClient'
-import { IParsedArgs, ISimplifiedMessage } from './'
+import MessageHandler from '../Handlers/MessageHandler.js'
+import WAClient from '../lib/WAClient.js'
+import type { IParsedArgs, ISimplifiedMessage } from './index.js'
 
 export interface ICommand {
     client?: WAClient

@@ -1,0 +1,25 @@
+# Native deps for canvas, sharp and ffmpeg/imagemagick used by media commands.
+[phases.setup]
+nixPkgs = [
+    "nodejs_20",
+    "ffmpeg-full",
+    "imagemagick",
+    "libwebp",
+    "pkg-config",
+    "cairo",
+    "pango",
+    "libpng",
+    "libjpeg",
+    "giflib",
+    "librsvg",
+    "python3"
+]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+cmds = ["npm run build"]
+
+[start]
+cmd = "node dist/kaoi.js"

@@ -1,12 +1,12 @@
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { ISimplifiedMessage } from '../../typings'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { ISimplifiedMessage } from '../../typings/index.js'
 import Canvas from 'canvas'
 import GIFEncoder from 'gifencoder'
 import { Sticker } from 'wa-sticker-formatter'
-import { MessageType, Mimetype } from '@adiwajshing/baileys'
-// import { MessageType, Mimetype } from '@adiwajshing/baileys'
+import { MessageType, Mimetype } from '../../lib/types.js'
+// import { MessageType, Mimetype } from '../../lib/types.js'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -63,6 +63,7 @@ export default class Command extends BaseCommand {
                 : M.mentioned
                 ? this.client.getProfilePicture(M.mentioned[0])
                 : this.client.getProfilePicture(M.sender.jid))
+            if (!image) return void M.reply(`Couldn't fetch an image to trigger.`)
             const sticker = new Sticker(await getImage(image), {
                 pack: `Triggered`,
                 author: M.sender.username || `Kaoi`,

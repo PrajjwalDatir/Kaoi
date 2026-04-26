@@ -1,8 +1,8 @@
 import axios from 'axios'
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { IParsedArgs, ISimplifiedMessage } from '../../typings'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { IParsedArgs, ISimplifiedMessage } from '../../typings/index.js'
 
 // https://docs.github.com/en/rest/reference/users
 interface UserInfo {

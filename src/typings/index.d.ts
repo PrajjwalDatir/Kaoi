@@ -1,14 +1,14 @@
-import { WAGroupMetadata } from '@adiwajshing/baileys'
+import type { GroupMetadata } from 'baileys'
 
-export * from './message'
-export * from './command'
-export * from './mongo'
+export * from './message.js'
+export * from './command.js'
+export * from './mongo.js'
+
 export interface IConfig {
     name: string
-    mods?: string[]
+    mods: string[]
     prefix: string
     session: string
-    mods: string[]
     gkey: string
     chatBotUrl: string
 }
@@ -19,7 +19,7 @@ export interface IParsedArgs {
     joined: string
 }
 
-export interface IExtendedGroupMetadata extends WAGroupMetadata {
+export interface IExtendedGroupMetadata extends GroupMetadata {
     admins?: string[]
 }
 
@@ -60,4 +60,11 @@ export interface IPackage {
     repository: {
         url: string
     }
+}
+
+export interface IContactInfo {
+    notify?: string
+    name?: string
+    vname?: string
+    short?: string
 }

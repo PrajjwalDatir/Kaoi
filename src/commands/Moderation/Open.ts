@@ -1,8 +1,8 @@
-import { GroupSettingChange } from '@adiwajshing/baileys'
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { ISimplifiedMessage } from '../../typings'
+import { GroupSettingChange } from '../../lib/types.js'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { ISimplifiedMessage } from '../../typings/index.js'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -19,7 +19,7 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage): Promise<void> => {
         if (!M.groupMetadata?.admins?.includes(this.client.user.jid))
             return void M.reply("I can't open the group without being an admin")
-        if (M.groupMetadata.announce === 'false') return void M.reply('Group is already open')
+        if (M.groupMetadata.announce === false) return void M.reply('Group is already open')
 
         this.client.groupSettingChange(M.groupMetadata.id, GroupSettingChange.messageSend, false)
     }

@@ -1,7 +1,7 @@
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { ICommand, IParsedArgs, ISimplifiedMessage } from '../../typings'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { ICommand, IParsedArgs, ISimplifiedMessage } from '../../typings/index.js'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -53,7 +53,7 @@ export default class Command extends BaseCommand {
                     ? `\n🍥 *Aliases:* ${command.config.aliases.map(this.client.util.capitalize).join(', ')}`
                     : ''
             }\n🃏 *Group Only:* ${this.client.util.capitalize(
-                JSON.stringify(!command.config.dm ?? true)
+                JSON.stringify(!command.config.dm)
             )}\n🎀 *Usage:* ${command.config?.usage || ''}\n\n🔖 *Description:* ${command.config?.description || ''}`
         )
     }

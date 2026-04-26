@@ -1,7 +1,7 @@
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { ISimplifiedMessage } from '../../typings'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { ISimplifiedMessage } from '../../typings/index.js'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -16,7 +16,8 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!(M.groupMetadata?.owner.split('@')[0] === M.sender.jid.split('@')[0]))
+        const owner = M.groupMetadata?.owner || ''
+        if (owner.split('@')[0] !== M.sender.jid.split('@')[0])
             return void M.reply('Only the group owner can use this command')
         if (!M.groupMetadata?.admins?.includes(this.client.user.jid))
             return void M.reply("I can't remove without being an admin")
@@ -27,11 +28,10 @@ export default class Command extends BaseCommand {
             )
         }
         M.groupMetadata.participants.map(async (user) => {
-            if (!user.isAdmin)
-                await this.client.groupRemove(M.from, [user.jid]).catch(() => console.log('Failed to remove users'))
+            if (!user.admin)
+                await this.client.groupRemove(M.from, [user.id]).catch(() => console.log('Failed to remove users'))
         })
-        // now remove all admins except yourself and the owner
-        M.groupMetadata.admins.map(async (user) => {
+        M.groupMetadata.admins?.map(async (user) => {
             if (user !== M.sender.jid && user !== this.client.user.jid)
                 await this.client.groupRemove(M.from, [user]).catch(() => console.log('error removing admin'))
         })

@@ -1,9 +1,12 @@
 import axios from 'axios'
 import chalk from 'chalk'
-import { join } from 'path'
-import BaseCommand from '../lib/BaseCommand'
-import WAClient from '../lib/WAClient'
-import { ICommand, IParsedArgs, ISimplifiedMessage } from '../typings'
+import { dirname, join } from 'path'
+import { fileURLToPath, pathToFileURL } from 'url'
+import BaseCommand from '../lib/BaseCommand.js'
+import WAClient from '../lib/WAClient.js'
+import { ICommand, IParsedArgs, ISimplifiedMessage } from '../typings/index.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default class MessageHandler {
     commands = new Map<string, ICommand>()
@@ -11,15 +14,12 @@ export default class MessageHandler {
     constructor(public client: WAClient) {}
 
     handleMessage = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!(M.chat === 'dm') && M.WAMessage.key.fromMe && M.WAMessage.status.toString() === '2') {
-            /*
-            BUG : It receives message 2 times and processes it twice.
-            https://github.com/adiwajshing/Baileys/blob/8ce486d/WAMessage/WAMessage.d.ts#L18529
-            https://adiwajshing.github.io/Baileys/enums/proto.webmessageinfo.webmessageinfostatus.html#server_ack
-            */
+        const status = (M.WAMessage.status as unknown as number | string | undefined)?.toString()
+        if (!(M.chat === 'dm') && M.WAMessage.key?.fromMe && status === '2') {
             M.sender.jid = this.client.user.jid
-            M.sender.username = this.client.user.name || this.client.user.vname || this.client.user.short || 'Kaoi Bot'
-        } else if (M.WAMessage.key.fromMe) return void null
+            M.sender.username =
+                this.client.user.name || this.client.user.vname || this.client.user.short || 'Kaoi Bot'
+        } else if (M.WAMessage.key?.fromMe) return void null
 
         if (M.from.includes('status')) return void null
         const { args, groupMetadata, sender } = M
@@ -55,7 +55,6 @@ export default class MessageHandler {
                 )}`
             )
         const cmd = args[0].slice(this.client.config.prefix.length).toLowerCase()
-        // If the group is set to muted, don't do anything
         const allowedCommands = ['activate', 'deactivate', 'act', 'deact']
         if (!(allowedCommands.includes(cmd) || (await this.client.getGroupData(M.from)).cmd))
             return void this.client.log(
@@ -85,9 +84,9 @@ export default class MessageHandler {
             if (command.config.baseXp) {
                 await this.client.setXp(M.sender.jid, command.config.baseXp || 10, 50)
             }
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        } catch (err: any) {
-            return void this.client.log(err.message, true)
+        } catch (err: unknown) {
+            const message = err instanceof Error ? err.message : String(err)
+            return void this.client.log(message, true)
         }
     }
 
@@ -112,21 +111,22 @@ export default class MessageHandler {
         }
     }
 
-    loadCommands = (): void => {
+    loadCommands = async (): Promise<void> => {
         this.client.log(chalk.green('Loading Commands...'))
         const path = join(__dirname, '..', 'commands')
         const files = this.client.util.readdirRecursive(path)
-        files.map((file) => {
-            const filename = file.split('/')
-            if (!filename[filename.length - 1].startsWith('_')) {
-                //eslint-disable-next-line @typescript-eslint/no-var-requires
-                const command: BaseCommand = new (require(file).default)(this.client, this)
-                this.commands.set(command.config.command, command)
-                if (command.config.aliases) command.config.aliases.forEach((alias) => this.aliases.set(alias, command))
-                this.client.log(`Loaded: ${chalk.green(command.config.command)} from ${chalk.green(file)}`)
-                return command
-            }
-        })
+        for (const file of files) {
+            const filename = file.split(/[\\/]/)
+            if (filename[filename.length - 1].startsWith('_')) continue
+            if (!file.endsWith('.js') && !file.endsWith('.ts')) continue
+            const mod = await import(pathToFileURL(file).href)
+            const Cmd = mod.default
+            const command: BaseCommand = new Cmd(this.client, this)
+            this.commands.set(command.config.command, command)
+            if (command.config.aliases)
+                command.config.aliases.forEach((alias) => this.aliases.set(alias, command))
+            this.client.log(`Loaded: ${chalk.green(command.config.command)} from ${chalk.green(file)}`)
+        }
         this.client.log(`Successfully Loaded ${chalk.greenBright(this.commands.size)} Commands`)
     }
 

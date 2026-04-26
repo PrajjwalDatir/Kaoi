@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import { IGroupModel } from '../../../typings'
+import { IGroupModel } from '../../../typings/index.js'
 
 const GroupSchema = new Schema({
     // This is the id of the group
