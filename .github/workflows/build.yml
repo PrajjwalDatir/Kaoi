@@ -1,25 +1,31 @@
 name: Build Testing
 
 on:
-  push:
-    branches: [ main, beta ]
-  pull_request:
-    branches: [ main, beta ]
+    push:
+        branches: [main, beta]
+    pull_request:
+        branches: [main, beta]
 
 jobs:
-  build:
+    build:
+        runs-on: ubuntu-latest
 
-    runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                node-version: [20.x, 22.x]
 
-    strategy:
-      matrix:
-        node-version: [14.x]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
-        with:
-          node-version: ${{ matrix.node-version }}
-      - run: rm -rf node_modules && yarn install --frozen-lockfile
-      - run: yarn run build
+        steps:
+            - uses: actions/checkout@v4
+            - name: Use Node.js ${{ matrix.node-version }}
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ matrix.node-version }}
+                  cache: npm
+            - name: Install system deps for canvas + sharp
+              run: |
+                  sudo apt-get update
+                  sudo apt-get install -y \
+                      pkg-config libcairo2-dev libpango1.0-dev libpng-dev \
+                      libjpeg-dev libgif-dev librsvg2-dev libvips-dev ffmpeg
+            - run: npm ci
+            - run: npm run build
