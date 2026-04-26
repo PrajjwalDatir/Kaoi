@@ -20,7 +20,7 @@ export default class Command extends BaseCommand {
         if (!M.urls.length) return void M.reply('Link?')
         const url = M.urls.find((u) => u.includes('chat.whatsapp.com'))
         if (!url) return void M.reply('No WhatsApp Invite URLs found in your message')
-        if (!this.client.config.mods?.includes(M.sender.jid)) return
+        if (!this.client.isMod(M.sender.jid)) return
         const groups = Array.from(this.client.chats).filter((jid) => jid.endsWith('@g.us'))
         const code = url.split('/').pop() || ''
         const { status, gid } = await this.client.acceptInvite(code)

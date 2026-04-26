@@ -18,7 +18,7 @@ export default class Command extends BaseCommand {
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         if (!M?.quoted?.message) return void M.reply('Quote the message you want to delete')
-        if (M.quoted.sender !== this.client.user.jid) return void M.reply(`I can only delete the messages sent by me`)
+        if (!this.client.isMe(M.quoted.sender)) return void M.reply(`I can only delete the messages sent by me`)
         // TODO : if the quoted message of the quoted message is sent by the user, delete it
         await this.client.deleteMessage(M.from, {
             // eslint-disable-next-line @typescript-eslint/no-explicit-any

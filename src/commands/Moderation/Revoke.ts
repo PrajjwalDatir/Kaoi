@@ -16,7 +16,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!M.groupMetadata?.admins?.includes(this.client.user.jid))
+        if (!M.groupMetadata || !this.client.isBotAdmin(M.groupMetadata))
             return void M.reply("I can't revoke the group link without being an admin")
         await this.client.groupRevokeInvite(M.from).catch(() => {
             return void M.reply('Failed to revoke the group link')

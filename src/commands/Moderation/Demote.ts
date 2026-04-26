@@ -16,18 +16,27 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!M.groupMetadata?.admins?.includes(this.client.user.jid))
+        if (!M.groupMetadata || !this.client.isBotAdmin(M.groupMetadata))
             return void M.reply(`❌ Failed to ${this.config.command} as I'm not an admin`)
         if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
         if (!M.mentioned.length) return void M.reply(`Please tag the users you want to ${this.config.command}`)
-        M.mentioned.forEach(async (user) => {
-            const usr = this.client.contacts[user]
+        for (const user of M.mentioned) {
+            const usr = this.client.getContact(user)
             const username = usr.notify || usr.vname || usr.name || user.split('@')[0]
-            if (!M.groupMetadata?.admins?.includes(user)) M.reply(`❌ Skipped *${username}* as they're not an admin`)
-            else if (user !== this.client.user.jid) {
-                await this.client.groupDemoteAdmin(M.from, [user])
-                M.reply(`➰ Successfully Demoted *${username}*`)
+            if (!M.groupMetadata?.admins?.includes(user)) {
+                await M.reply(`❌ Skipped *${username}* as they're not an admin`)
+                continue
             }
-        })
+            if (this.client.isMe(user)) {
+                await M.reply(`❌ Skipped *${username}* — I can't demote myself`)
+                continue
+            }
+            try {
+                await this.client.groupDemoteAdmin(M.from, [user])
+                await M.reply(`➰ Successfully Demoted *${username}*`)
+            } catch (err) {
+                await M.reply(`⚠ Could not demote *${username}*`)
+            }
+        }
     }
 }

@@ -14,12 +14,16 @@ export default class MessageHandler {
     constructor(public client: WAClient) {}
 
     handleMessage = async (M: ISimplifiedMessage): Promise<void> => {
-        const status = (M.WAMessage.status as unknown as number | string | undefined)?.toString()
-        if (!(M.chat === 'dm') && M.WAMessage.key?.fromMe && status === '2') {
+        // For messages sent from the bot's own phone, override the displayed
+        // username so logs make sense. We DO want to process these — they let
+        // the operator drive the bot from their own WhatsApp client. The
+        // infinite-loop protection is in WAClient.sentByBot, which strips the
+        // bot's own outbound message echoes before they reach this handler.
+        if (M.WAMessage.key?.fromMe) {
             M.sender.jid = this.client.user.jid
             M.sender.username =
                 this.client.user.name || this.client.user.vname || this.client.user.short || 'Kaoi Bot'
-        } else if (M.WAMessage.key?.fromMe) return void null
+        }
 
         if (M.from.includes('status')) return void null
         const { args, groupMetadata, sender } = M
@@ -27,26 +31,32 @@ export default class MessageHandler {
             if (this.client.config.chatBotUrl) {
                 const myUrl = new URL(this.client.config.chatBotUrl)
                 const params = myUrl.searchParams
-                await axios
-                    .get(
-                        `${encodeURI(
-                            `http://api.brainshop.ai/get?bid=${params.get('bid')}&key=${params.get('key')}&uid=${
+                // Use the actual message text (M.content) — `M.args` is an
+                // array and interpolating it produces a comma-joined string.
+                const messageText = (M.content || '').trim()
+                if (messageText) {
+                    await axios
+                        .get(
+                            `http://api.brainshop.ai/get?bid=${encodeURIComponent(
+                                params.get('bid') || ''
+                            )}&key=${encodeURIComponent(params.get('key') || '')}&uid=${encodeURIComponent(
                                 M.sender.jid
-                            }&msg=${M.args}`
-                        )}`
-                    )
-                    .then((res) => {
-                        if (res.status !== 200) return void M.reply(`🔍 Error: ${res.status}`)
-                        return void M.reply(res.data.cnt)
-                    })
-                    .catch(() => {
-                        M.reply(`Ummmmmmmmm.`)
-                    })
+                            )}&msg=${encodeURIComponent(messageText)}`,
+                            { timeout: 15_000 }
+                        )
+                        .then((res) => {
+                            if (res.status !== 200) return void M.reply(`🔍 Error: ${res.status}`)
+                            return void M.reply(res.data.cnt)
+                        })
+                        .catch(() => {
+                            M.reply(`Ummmmmmmmm.`)
+                        })
+                }
             }
         }
         if (!M.groupMetadata && !(M.chat === 'dm')) return void null
 
-        if ((await this.client.getGroupData(M.from)).mod && M.groupMetadata?.admins?.includes(this.client.user.jid))
+        if ((await this.client.getGroupData(M.from)).mod && this.client.isBotAdmin(M.groupMetadata))
             this.moderate(M)
         if (!args[0] || !args[0].startsWith(this.client.config.prefix))
             return void this.client.log(
@@ -73,8 +83,10 @@ export default class MessageHandler {
         if (user.ban) return void M.reply("You're Banned from using commands.")
         const state = await this.client.DB.disabledcommands.findOne({ command: command.config.command })
         if (state) return void M.reply(`❌ This command is disabled${state.reason ? ` for ${state.reason}` : ''}`)
-        if (!command.config?.dm && M.chat === 'dm') return void M.reply('This command can only be used in groups')
-        if (command.config?.modsOnly && !this.client.config.mods?.includes(M.sender.jid)) {
+        // DM is allowed for every command. Commands that need group context
+        // (admin checks, group metadata) fail gracefully on their own — see
+        // adminOnly below and individual command guards for !M.groupMetadata.
+        if (command.config?.modsOnly && !this.client.isMod(M.sender.jid)) {
             return void M.reply(`Only MODS are allowed to use this command`)
         }
         if (command.config?.adminOnly && !M.sender.isAdmin)
@@ -92,22 +104,22 @@ export default class MessageHandler {
 
     moderate = async (M: ISimplifiedMessage): Promise<void> => {
         if (M.sender.isAdmin) return void null
-        if (M.urls.length) {
-            const groupinvites = M.urls.filter((url) => url.includes('chat.whatsapp.com'))
-            if (groupinvites.length) {
-                groupinvites.forEach(async (invite) => {
-                    const splitInvite = invite.split('/')
-                    const z = await this.client.groupInviteCode(M.from)
-                    if (z !== splitInvite[splitInvite.length - 1]) {
-                        this.client.log(
-                            `${chalk.blueBright('MOD')} ${chalk.green('Group Invite')} by ${chalk.yellow(
-                                M.sender.username
-                            )} in ${M.groupMetadata?.subject || ''}`
-                        )
-                        return void (await this.client.groupRemove(M.from, [M.sender.jid]))
-                    }
-                })
-            }
+        if (!M.urls.length) return
+        const groupinvites = M.urls.filter((url) => url.includes('chat.whatsapp.com'))
+        if (!groupinvites.length) return
+        // Fetch our own group's invite code once, not once per URL.
+        const ourCode = await this.client.groupInviteCode(M.from).catch(() => undefined)
+        for (const invite of groupinvites) {
+            const splitInvite = invite.split('/')
+            const code = splitInvite[splitInvite.length - 1]
+            if (code === ourCode) continue
+            this.client.log(
+                `${chalk.blueBright('MOD')} ${chalk.green('Group Invite')} by ${chalk.yellow(
+                    M.sender.username
+                )} in ${M.groupMetadata?.subject || ''}`
+            )
+            await this.client.groupRemove(M.from, [M.sender.jid]).catch(() => undefined)
+            return
         }
     }
 
@@ -122,10 +134,32 @@ export default class MessageHandler {
             const mod = await import(pathToFileURL(file).href)
             const Cmd = mod.default
             const command: BaseCommand = new Cmd(this.client, this)
-            this.commands.set(command.config.command, command)
-            if (command.config.aliases)
-                command.config.aliases.forEach((alias) => this.aliases.set(alias, command))
-            this.client.log(`Loaded: ${chalk.green(command.config.command)} from ${chalk.green(file)}`)
+            const cmdName = command.config.command
+            if (this.commands.has(cmdName)) {
+                this.client.log(
+                    chalk.yellow(
+                        `Skipping duplicate command "${cmdName}" from ${file} — already registered`
+                    ),
+                    true
+                )
+                continue
+            }
+            this.commands.set(cmdName, command)
+            if (command.config.aliases) {
+                for (const alias of command.config.aliases) {
+                    if (this.commands.has(alias) || this.aliases.has(alias)) {
+                        this.client.log(
+                            chalk.yellow(
+                                `Alias collision: "${alias}" (from ${cmdName}) already maps to another command — skipping`
+                            ),
+                            true
+                        )
+                        continue
+                    }
+                    this.aliases.set(alias, command)
+                }
+            }
+            this.client.log(`Loaded: ${chalk.green(cmdName)} from ${chalk.green(file)}`)
         }
         this.client.log(`Successfully Loaded ${chalk.greenBright(this.commands.size)} Commands`)
     }

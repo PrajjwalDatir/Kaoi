@@ -17,7 +17,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!M.groupMetadata?.admins?.includes(this.client.user.jid))
+        if (!M.groupMetadata || !this.client.isBotAdmin(M.groupMetadata))
             return void M.reply('Can not update without being an admin')
         // check if first parameter is subject or description
         if (M.args.length < 2) return void M.reply('You need to specify a subject and a value')

@@ -16,18 +16,13 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        const immortals = this.client.config.mods
-            ? [M.sender.jid, this.client.user.jid, ...this.client.config.mods]
-            : [M.sender.jid, this.client.user.jid]
-
         if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
         if (!M.mentioned.length || !M.mentioned[0]) return void M.reply('Mention the user whom you want to ban')
         let text = '*STATE*\n\n'
-        // declare tagged as (string | undefined) []
-        // const tagged : (string | undefined)[] = []
+        const isImmortal = (jid: string): boolean =>
+            jid === M.sender.jid || this.client.isMe(jid) || this.client.isMod(jid)
         for (const user of M.mentioned) {
-            if (immortals.includes(user)) {
-                // tagged.push(user)
+            if (isImmortal(user)) {
                 text += `🟨 @${user.split('@')[0]} is an immortal, can't be banned\n`
                 continue
             }
