@@ -2,10 +2,10 @@ import MessageHandler from '../../Handlers/MessageHandler.js'
 import BaseCommand from '../../lib/BaseCommand.js'
 import WAClient from '../../lib/WAClient.js'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings/index.js'
-import axios from 'axios'
-import request from '../../lib/request.js'
+import request, { firstOk } from '../../lib/request.js'
 import { MessageType } from '../../lib/types.js'
-// import { MessageType, Mimetype } from '../../lib/types.js'
+
+const SUPPORTED = ['neko', 'shinobu', 'megumin', 'awoo'] as const
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -20,49 +20,31 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage, { joined }: IParsedArgs): Promise<void> => {
-        // consider neko and kitsune in furry
-        const char = ['neko', 'shinobu', 'megumin', 'awoo']
         const term = joined.trim().split(' ')[0].toLowerCase()
-        let text = ''
-        char.map((c) => {
-            text += `📍${c.charAt(0).toUpperCase() + c.slice(1)}\n`
-            // index % 4 === 3 ? (text += '\n') : (text += ' '.repeat(10 - c.length))
-        })
+        const text = SUPPORTED.map((c) => `📍${c.charAt(0).toUpperCase() + c.slice(1)}`).join('\n')
         if (!term)
             return void M.reply(
-                `🪧 *OPTIONS:*\n${text}Use ${this.client.config.prefix}ac (option) to get Characters\nExample: ${this.client.config.prefix}ac neko`
+                `🪧 *OPTIONS:*\n${text}\nUse ${this.client.config.prefix}ac (option) to get Characters\nExample: ${this.client.config.prefix}ac neko`
             )
-        if (!char.includes(term))
+        if (!SUPPORTED.includes(term as (typeof SUPPORTED)[number]))
             return void M.reply(
                 `🧧 Invalid option! 🧧\nUse ${this.client.config.prefix}ac to see all available options`
             )
 
-        // fetch result of https://waifu.pics/api/sfw from the API using axios
-        const { data } = await axios.get(`https://waifu.pics/api/sfw/${term}`)
-        const buffer = await request.buffer(data.url).catch((e) => {
-            return void M.reply(e.message)
-        })
-        while (true) {
-            try {
-                M.reply(
-                    buffer || 'Could not fetch image. Please try again later',
-                    MessageType.image,
-                    undefined,
-                    undefined,
-                    `Here you go.\n`,
-                    undefined
-                ).catch((e) => {
-                    console.log(`This Error occurs when an image is sent via M.reply()\n Child Catch Block : \n${e}`)
-                    // console.log('Failed')
-                    M.reply(`Could not fetch image. Here's the URL: ${data.url}`)
-                })
-                break
-            } catch (e) {
-                // console.log('Failed2')
-                M.reply(`Could not fetch image. Here's the URL : ${data.url}`)
-                console.log(`This Error occurs when an image is sent via M.reply()\n Parent Catch Block : \n${e}`)
-            }
+        const urlResult = await firstOk<string>([
+            async () => (await request.json<{ url: string }>(`https://api.waifu.pics/sfw/${term}`)).url,
+            async () =>
+                (await request.json<{ results: { url: string }[] }>(`https://nekos.best/api/v2/${term}`))
+                    .results?.[0]?.url
+        ])
+        if (!urlResult.ok || !urlResult.value)
+            return void M.reply(`Could not fetch a *${term}* image right now.`)
+
+        try {
+            const buffer = await request.buffer(urlResult.value)
+            await M.reply(buffer, MessageType.image, undefined, undefined, 'Here you go.')
+        } catch {
+            await M.reply(`Could not fetch image. Here's the URL: ${urlResult.value}`)
         }
-        return void null
     }
 }
