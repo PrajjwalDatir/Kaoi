@@ -1,4 +1,4 @@
-import request from './request.js'
+import request, { firstOk } from './request.js'
 
 export interface IRedditResponse {
     postLink: string
@@ -13,11 +13,11 @@ export interface IRedditResponse {
 }
 
 export default async (subreddit: string): Promise<IRedditResponse | { error: string }> => {
-    try {
-        const response = await request.json<IRedditResponse>(`https://meme-api.herokuapp.com/gimme/${subreddit}`)
-        if (!response.url) return { error: 'Invalid Subreddits' }
-        return response
-    } catch (err) {
-        return { error: 'Invalid Subreddits' }
-    }
+    const result = await firstOk<IRedditResponse>([
+        () => request.json<IRedditResponse>(`https://meme-api.com/gimme/${subreddit}`),
+        () => request.json<IRedditResponse>(`https://www.reddit-meme-api.com/gimme/${subreddit}`)
+    ])
+    if (!result.ok) return { error: 'Invalid Subreddits' }
+    if (!result.value.url) return { error: 'Invalid Subreddits' }
+    return result.value
 }
