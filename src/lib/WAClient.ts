@@ -69,31 +69,45 @@ const buildMessageContent = (
             return {
                 image: content,
                 caption,
-                mimetype: mime,
+                // Omit mimetype if not provided; Baileys sniffs the buffer header.
+                ...(mime ? { mimetype: mime } : {}),
                 mentions,
                 jpegThumbnail: thumbnail
             } as AnyMessageContent
-        case MessageType.video:
+        case MessageType.video: {
+            // GIF playback in WhatsApp is an MP4 with `gifPlayback: true`.
+            // Callers signal "this should play like a GIF" by passing
+            // `Mimetype.gif`. The actual buffer is MP4 (callers convert via
+            // ffmpeg first), so the mimetype on the message MUST be video/mp4
+            // — sending image/gif on a video message confuses clients and
+            // they refuse to render it. We override here so callers don't
+            // have to remember.
+            const isGif = mime === Mimetype.gif
             return {
                 video: content,
                 caption,
-                mimetype: mime,
+                mimetype: isGif ? 'video/mp4' : mime,
                 mentions,
-                gifPlayback: mime === Mimetype.gif,
+                gifPlayback: isGif,
                 jpegThumbnail: thumbnail
             } as AnyMessageContent
+        }
         case MessageType.sticker:
             return { sticker: content, mimetype: Mimetype.webp } as AnyMessageContent
         case MessageType.audio:
+            // Don't force a default mimetype: callers send a mix of MP3
+            // (yt-dlp/spotifydl), m4a, and opus. Forcing `audio/ogg; codecs=opus`
+            // on an MP3 made WhatsApp refuse to play it. Let Baileys sniff
+            // from the buffer; only set mimetype when the caller specifies one.
             return {
                 audio: content,
-                mimetype: mime || 'audio/ogg; codecs=opus',
+                ...(mime ? { mimetype: mime } : {}),
                 ptt: false
             } as AnyMessageContent
         case MessageType.document:
             return {
                 document: content,
-                mimetype: mime || 'application/octet-stream',
+                ...(mime ? { mimetype: mime } : {}),
                 fileName: caption || 'file'
             } as AnyMessageContent
         case MessageType.text:
