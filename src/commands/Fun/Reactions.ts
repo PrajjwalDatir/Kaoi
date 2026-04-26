@@ -30,7 +30,6 @@ const REACTION_SOURCES: Record<string, { waifu?: string; nekos?: string }> = {
     kill: { waifu: 'kill' },
     slap: { waifu: 'slap', nekos: 'slap' },
     cringe: { waifu: 'cringe' },
-    kick: { waifu: 'kick', nekos: 'kick' },
     wink: { waifu: 'wink', nekos: 'wink' },
     happy: { waifu: 'happy', nekos: 'happy' },
     poke: { waifu: 'poke', nekos: 'poke' },
@@ -59,7 +58,6 @@ const Reactions: { [key: string]: string[] } = {
     kill: ['Killed'],
     slap: ['Slapped'],
     cringe: ['Cringed at'],
-    kick: ['Kicked'],
     wink: ['Winked at'],
     happy: ['is Happy with', 'is Happy by'],
     poke: ['Poked'],
@@ -96,12 +94,7 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'react',
             description: `Let's React`,
-            // `kick` is reserved for the moderation Remove command (more
-            // useful as a group-management alias). The kick reaction is still
-            // reachable via `!react kick`.
-            aliases: Object.keys(REACTION_SOURCES)
-                .filter((k) => k !== 'kick')
-                .concat(['r']),
+            aliases: Object.keys(REACTION_SOURCES).concat(['r']),
             category: 'fun',
             usage: `${client.config.prefix}(reaction) [tag/quote users]\nExample: ${client.config.prefix}pat`,
             baseXp: 10
