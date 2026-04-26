@@ -17,7 +17,8 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!M.groupMetadata || !this.client.isBotAdmin(M.groupMetadata))
+        if (!M.groupMetadata) return void M.reply("This command can only be used in groups.")
+        if (!this.client.isBotAdmin(M.groupMetadata))
             return void M.reply("I can't close the group without being an admin")
         if (M.groupMetadata.announce === true) return void M.reply('Group is already closed')
         this.client.groupSettingChange(M.groupMetadata.id, GroupSettingChange.messageSend, true)

@@ -732,12 +732,14 @@ export default class WAClient extends EventEmitter {
 
         // Resolve sender. Keep whatever form WhatsApp gave us (LID or PN); the
         // group's own admins/participants are in the same form, so direct
-        // comparisons work. Cross-form comparisons (mods, bot-self) go through
-        // isMod() / isMe() which translate via the LID mapping store.
-        const senderRaw = isFromMe
-            ? this.user.jid
-            : fromGroup
-              ? M.key.participant || ''
+        // comparisons work. We prefer key.participant even for fromMe in groups,
+        // because that's the bot's JID *in the group's native form* — which is
+        // what admins[] uses. Falling back to this.user.jid (always PN) would
+        // break the admin check in LID-addressed groups.
+        const senderRaw = fromGroup
+            ? M.key.participant || (isFromMe ? this.user.jid : '')
+            : isFromMe
+              ? this.user.jid
               : remoteJid
         const sender = senderRaw ? jidNormalizedUser(senderRaw) : ''
 
