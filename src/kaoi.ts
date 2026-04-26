@@ -2,22 +2,23 @@ import { config } from 'dotenv'
 
 config()
 
-import MessageHandler from './Handlers/MessageHandler'
-import WAClient from './lib/WAClient'
-import Server from './lib/Server'
 import mongoose from 'mongoose'
 import chalk from 'chalk'
 import cron from 'node-cron'
-import CallHandler from './Handlers/CallHandler'
-import AssetHandler from './Handlers/AssetHandler'
-import EventHandler from './Handlers/EventHandler'
+import MessageHandler from './Handlers/MessageHandler.js'
+import WAClient from './lib/WAClient.js'
+import Server from './lib/Server.js'
+import CallHandler from './Handlers/CallHandler.js'
+import AssetHandler from './Handlers/AssetHandler.js'
+import EventHandler from './Handlers/EventHandler.js'
 
 if (!process.env.MONGO_URI) throw new Error('MONGO URL IS NOT PROVIDED')
+
 const client = new WAClient({
     name: process.env.NAME || 'Kaoi',
     session: process.env.SESSION || 'Kaoi',
     prefix: process.env.PREFIX || '!',
-    mods: (process.env.MODS || '').split(',').map((number) => `${number}@s.whatsapp.net`),
+    mods: (process.env.MODS || '').split(',').filter(Boolean).map((number) => `${number}@s.whatsapp.net`),
     gkey: process.env.GOOGLE_API_KEY || '',
     chatBotUrl: process.env.CHAT_BOT_URL || ''
 })
@@ -27,24 +28,22 @@ const messageHandler = new MessageHandler(client)
 const callHandler = new CallHandler(client)
 const assetHandler = new AssetHandler(client)
 const eventHandler = new EventHandler(client)
-messageHandler.loadCommands()
-assetHandler.loadAssets()
-messageHandler.loadFeatures()
-
-const db = mongoose.connection
 
 new Server(Number(process.env.PORT) || 4040, client)
 
-const start = async () => {
-    client.once('open', async () => {
+const start = async (): Promise<void> => {
+    await messageHandler.loadCommands()
+    assetHandler.loadAssets()
+    messageHandler.loadFeatures()
+
+    client.on('open', () => {
         client.log(
             chalk.green(
                 `Connected to WhatsApp as ${chalk.blueBright(
-                    client.user.notify || client.user.vname || client.user.name || client.user.jid.split('@')[0]
+                    client.user.name || client.user.notify || client.user.jid.split('@')[0]
                 )}`
             )
         )
-        await client.saveAuthInfo(client.config.session)
         if (process.env.CRON) {
             if (!cron.validate(process.env.CRON))
                 return void client.log(`Invalid Cron String: ${chalk.bgRedBright(process.env.CRON)}`, true)
@@ -57,31 +56,25 @@ const start = async () => {
         }
     })
 
-    client.on('CB:Call', async (json) => {
-        const isOffer = json[1]['type'] == 'offer'
-        const number = `${(json[1]['from'] as string).split('@')[0]}@s.whatsapp.net`
-        if (!isOffer) return void null
-        client.log(`${chalk.blue('CALL')} From ${client.contacts[number].notify || number}`)
-        await callHandler.rejectCall(number, json[1].id)
+    client.on('incoming-call', async ({ id, from }: { id: string; from: string }) => {
+        const display = client.contacts.get(from)?.notify || from
+        client.log(`${chalk.blue('CALL')} From ${display}`)
+        await callHandler.rejectCall(from, id)
     })
 
     client.on('new-message', messageHandler.handleMessage)
-
     client.on('group-participants-update', eventHandler.handle)
 
     await client.connect()
 }
 
-mongoose.connect(encodeURI(process.env.MONGO_URI), {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    useCreateIndex: true
-})
-
-db.once('open', () => {
-    client.log(chalk.green('Connected to Database!'))
-    client.getAuthInfo(client.config.session).then((session) => {
-        if (session) client.loadAuthInfo(session)
-        start()
+mongoose
+    .connect(process.env.MONGO_URI as string)
+    .then(() => {
+        client.log(chalk.green('Connected to Database!'))
+        start().catch((err) => client.log(String(err), true))
     })
-})
+    .catch((err) => {
+        client.log(`Database connection failed: ${String(err)}`, true)
+        process.exit(1)
+    })

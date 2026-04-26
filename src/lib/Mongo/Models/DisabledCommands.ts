@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import { IDisabledCommandModel } from '../../../typings'
+import { IDisabledCommandModel } from '../../../typings/index.js'
 
 const DisabledCommandSchema = new Schema({
     command: {

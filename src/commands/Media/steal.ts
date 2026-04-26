@@ -2,12 +2,12 @@
 /*eslint-disable @typescript-eslint/no-unused-vars */
 /*eslint-disable @typescript-eslint/explicit-module-boundary-types*/
 
-import { MessageType, Mimetype } from "@adiwajshing/baileys";
+import { MessageType, Mimetype } from "../../lib/types.js";
 import { Sticker, Categories, StickerTypes } from "wa-sticker-formatter";
-import MessageHandler from "../../Handlers/MessageHandler";
-import BaseCommand from "../../lib/BaseCommand";
-import WAClient from "../../lib/WAClient";
-import { IParsedArgs, ISimplifiedMessage } from "../../typings";
+import MessageHandler from "../../Handlers/MessageHandler.js";
+import BaseCommand from "../../lib/BaseCommand.js";
+import WAClient from "../../lib/WAClient.js";
+import { IParsedArgs, ISimplifiedMessage } from "../../typings/index.js";
 import fs from "fs";
 import { tmpdir } from "os";
 import { exec } from "child_process";

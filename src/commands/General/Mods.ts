@@ -1,7 +1,7 @@
-import MessageHandler from '../../Handlers/MessageHandler'
-import BaseCommand from '../../lib/BaseCommand'
-import WAClient from '../../lib/WAClient'
-import { ISimplifiedMessage } from '../../typings'
+import MessageHandler from '../../Handlers/MessageHandler.js'
+import BaseCommand from '../../lib/BaseCommand.js'
+import WAClient from '../../lib/WAClient.js'
+import { ISimplifiedMessage } from '../../typings/index.js'
 
 export default class Command extends BaseCommand {
     constructor(client: WAClient, handler: MessageHandler) {
@@ -17,14 +17,13 @@ export default class Command extends BaseCommand {
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         if (!this.client.config.mods || !this.client.config.mods[0]) return void M.reply('*No Mods Set*')
-        const filteredMap = this.client.config.mods.map((mod) => this.client.getContact(mod)).filter((user) => user)
+        const entries = this.client.config.mods.map((jid) => ({ jid, info: this.client.getContact(jid) }))
         let text = '🍥 *Moderators* 🍥\n\n'
-        filteredMap.forEach(
-            (user, index) =>
-                (text += `#${index + 1}\n🎫 *Username: ${
-                    user.notify || user.vname || user.name || 'null'
-                }*\n🍀 *Contact: https://wa.me/+${user?.jid?.split('@')[0]}*\n\n`)
-        )
+        entries.forEach(({ jid, info }, index) => {
+            text += `#${index + 1}\n🎫 *Username: ${
+                info.notify || info.vname || info.name || 'null'
+            }*\n🍀 *Contact: https://wa.me/+${jid.split('@')[0]}*\n\n`
+        })
         text += `\nTo deploy your own Bot or To support Kaoi👾\nVisit : https://github.com/PrajjwalDatir/Kaoi `
         return void M.reply(text)
     }

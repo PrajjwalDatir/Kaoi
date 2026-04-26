@@ -1,4 +1,4 @@
-import Spotify from 'spotifydl-core'
+import { Spotify } from 'spotifydl-core'
 
 /** Using public keys */
 const client = new Spotify({

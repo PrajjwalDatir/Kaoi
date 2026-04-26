@@ -1,6 +1,6 @@
-import MessageHandler from '../Handlers/MessageHandler'
-import { ICommand, IParsedArgs, ISimplifiedMessage } from '../typings'
-import WAClient from './WAClient'
+import MessageHandler from '../Handlers/MessageHandler.js'
+import { ICommand, IParsedArgs, ISimplifiedMessage } from '../typings/index.js'
+import WAClient from './WAClient.js'
 
 export default class BaseCommand implements ICommand {
     constructor(public client: WAClient, public handler: MessageHandler, public config: ICommand['config']) {}

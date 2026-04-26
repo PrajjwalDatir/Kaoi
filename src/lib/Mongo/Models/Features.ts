@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose'
-import { IFeatureModel } from '../../../typings'
+import { IFeatureModel } from '../../../typings/index.js'
 
 const FeatureSchema = new Schema({
     feature: { type: String, required: true, unique: true },

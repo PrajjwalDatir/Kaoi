@@ -1,7 +1,10 @@
 import express, { NextFunction, Request, Response } from 'express'
 import { EventEmitter } from 'events'
-import WAClient from './WAClient'
-import { join } from 'path'
+import { dirname, join } from 'path'
+import { fileURLToPath } from 'url'
+import WAClient from './WAClient.js'
+
+const __dirname = dirname(fileURLToPath(import.meta.url))
 
 export default class Server extends EventEmitter {
     app = express()
@@ -15,7 +18,8 @@ export default class Server extends EventEmitter {
         this.WARouter.get('/qr', (req, res) => {
             if (!this.client.QR)
                 return void res.json({
-                    message: this.client.state === 'open' ? "You're already authenticated" : 'QR is not generated yet'
+                    message:
+                        this.client.state === 'open' ? "You're already authenticated" : 'QR is not generated yet'
                 })
             res.contentType('image/png')
             return void res.send(this.client.QR)

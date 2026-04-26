@@ -1,14 +1,17 @@
-import { MessageType, Mimetype, WAMessage } from '@adiwajshing/baileys'
-import { IExtendedGroupMetadata } from '.'
+import type { WAMessage } from 'baileys'
+import type { MessageType, Mimetype } from '../lib/types.js'
+import type { IExtendedGroupMetadata } from './index.js'
+
+export type { WAMessage }
 
 export interface ISimplifiedMessage {
-    type: MessageType
+    type: MessageType | string
     content: string | null
     args: string[]
     reply(
         content: string | Buffer,
-        type?: MessageType,
-        mime?: Mimetype,
+        type?: MessageType | string,
+        mime?: Mimetype | string,
         mention?: string[],
         caption?: string,
         thumbnail?: Buffer

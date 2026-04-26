@@ -104,3 +104,7 @@ dist
 .tern-port
 
 **/*_session.json
+
+# Baileys auth state
+sessions/
+auth_info_baileys/

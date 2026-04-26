@@ -1,5 +1,5 @@
-import { Document, Model } from 'mongoose'
-import { IFeature, IGroup, IUser } from './'
+import type { Document, Model } from 'mongoose'
+import type { IFeature, IGroup, ISession, IUser } from './index.js'
 
 export interface IGroupModel extends IGroup, Document {}
 
