@@ -1,5 +1,5 @@
 import chalk from 'chalk'
-import { readFileSync } from 'fs-extra'
+import { readFileSync } from 'fs'
 import { dirname, join } from 'path'
 import { fileURLToPath } from 'url'
 import WAClient from '../lib/WAClient.js'

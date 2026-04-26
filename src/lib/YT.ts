@@ -1,7 +1,8 @@
 import request from './request.js'
-import { createWriteStream, readFile } from 'fs-extra'
+import { createWriteStream } from 'fs'
+import { readFile } from 'fs/promises'
 import { tmpdir } from 'os'
-import ytdl, { validateURL } from 'ytdl-core'
+import ytdl from '@distube/ytdl-core'
 
 export default class YT {
     id: string
@@ -10,7 +11,7 @@ export default class YT {
         this.id = this.parseId()
     }
 
-    validateURL = (): boolean => validateURL(this.url)
+    validateURL = (): boolean => ytdl.validateURL(this.url)
 
     getInfo = async (): Promise<ytdl.videoInfo> => await ytdl.getInfo(this.url)
 
