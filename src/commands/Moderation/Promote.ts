@@ -16,7 +16,8 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        if (!M.groupMetadata || !this.client.isBotAdmin(M.groupMetadata))
+        if (!M.groupMetadata) return void M.reply("This command can only be used in groups.")
+        if (!this.client.isBotAdmin(M.groupMetadata))
             return void M.reply(`❌ Failed to ${this.config.command} as I'm not an admin`)
         if (M.quoted?.sender) M.mentioned.push(M.quoted.sender)
         if (!M.mentioned.length) return void M.reply(`Please tag the users you want to ${this.config.command}`)

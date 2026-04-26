@@ -16,6 +16,7 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
+        if (!M.groupMetadata) return void M.reply('This command can only be used in groups.')
         // owner may be in LID form on modern groups; ownerPn is the PN equivalent.
         const owner = M.groupMetadata?.owner || ''
         const ownerPn = (M.groupMetadata as { ownerPn?: string } | null | undefined)?.ownerPn || ''
