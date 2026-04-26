@@ -131,10 +131,12 @@ export default class Command extends BaseCommand {
         if (!M.mentioned.length) M.mentioned.push(M.sender.jid)
         M.mentioned = [...new Set(M.mentioned)]
 
+        // Reactions[term] is a shared module-level object, so we read by index
+        // instead of mutating with .pop(). [0] is the active phrase ("Patted"),
+        // [1] is the passive/self phrase ("is Patting by") when present.
+        const phrases = Reactions[term]
         const grammar =
-            M.mentioned[0] === M.sender.jid
-                ? Reactions[term].pop() || Reactions[term][0]
-                : Reactions[term][0]
+            M.mentioned[0] === M.sender.jid ? phrases[1] || phrases[0] : phrases[0]
 
         const gifBuffer = await fetchReactionGif(term)
         if (!gifBuffer) {
