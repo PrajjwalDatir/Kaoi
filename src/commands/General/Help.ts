@@ -32,7 +32,7 @@ export default class Command extends BaseCommand {
             let text = `👾 *Kaoi's Command List* 👾\n\n`
             const keys = Object.keys(categories).sort((a, b) => a.localeCompare(b))
             for (const key of keys)
-                text += `${this.emojis[keys.indexOf(key)]} *${this.client.util.capitalize(key)}*\n❐ \`\`\`${categories[
+                text += `${this.emojiFor(key)} *${this.client.util.capitalize(key)}*\n❐ \`\`\`${categories[
                     key
                 ]
                     .map((command) => command.config?.command)
@@ -58,5 +58,19 @@ export default class Command extends BaseCommand {
         )
     }
 
-    emojis = ['📺', '🤖', '⚙️', '👨‍💻', '📚', '👻', '🎲', '😶‍🌫️', '📼', '🦉', '🪜']
+    /** Stable emoji per category — adding/removing categories doesn't shift others. */
+    private categoryEmojis: { [key: string]: string } = {
+        anime: '📺',
+        bots: '🤖',
+        config: '⚙️',
+        dev: '👨‍💻',
+        educative: '📚',
+        fun: '👻',
+        games: '🎲',
+        general: '😶‍🌫️',
+        media: '📼',
+        moderation: '🦉',
+        category: '🪜'
+    }
+    private emojiFor = (key: string): string => this.categoryEmojis[key] || '🔹'
 }

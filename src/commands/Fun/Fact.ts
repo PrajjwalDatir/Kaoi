@@ -18,7 +18,7 @@ export default class Command extends BaseCommand {
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         await axios
-            .get(`https://nekos.life/api/v2/fact`)
+            .get(`https://nekos.life/api/v2/fact`, { timeout: 15_000 })
             .then((response) => {
                 // console.log(response);
                 const text = `📝 *Fact:* ${response.data.fact}`

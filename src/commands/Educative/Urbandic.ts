@@ -23,9 +23,9 @@ export default class Command extends BaseCommand {
         const term = joined.trim()
         console.log(term,joined)
         await axios
-            .get(
-                `http://api.urbandictionary.com/v0/define?term=${term}`
-            )
+            .get(`http://api.urbandictionary.com/v0/define?term=${encodeURIComponent(term)}`, {
+                timeout: 15_000
+            })
            .then((response) => {
                 // console.log(response);
                 const text = `📚 *urban dictionary :* ${term}\n\n📖 *Definition :* ${response.data.list[0].definition.replace(/\[/g,'').replace(/\]/g,'')}\n\n💬 *Example :* ${response.data.list[0].example.replace(/\[/g,'').replace(/\]/g,'')}`

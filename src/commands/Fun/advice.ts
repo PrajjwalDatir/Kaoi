@@ -17,7 +17,7 @@ export default class Command extends BaseCommand {
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         await axios
-            .get(`https://api.adviceslip.com/advice`)
+            .get(`https://api.adviceslip.com/advice`, { timeout: 15_000 })
             .then((response) => {
                 // console.log(response);
                 const text = `*Advice for you🔖:* ${response.data.slip.advice}`

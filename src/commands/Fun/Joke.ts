@@ -17,7 +17,7 @@ export default class Command extends BaseCommand {
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
         await axios
-            .get(`https://v2.jokeapi.dev/joke/Any`)
+            .get(`https://v2.jokeapi.dev/joke/Any`, { timeout: 15_000 })
             .then((response) => {
                 // console.log(response);
                 const text = `📝 *Catagory:* ${response.data.category}\n\n*🎃 Joke:* ${response.data.setup}\n\n*💡 Answer:* ${response.data.delivery}`
