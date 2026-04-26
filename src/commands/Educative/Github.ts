@@ -65,7 +65,7 @@ export default class Command extends BaseCommand {
         let text = ''
         if (!repo) {
             const userInfo = await axios
-                .get<UserInfo>(`https://api.github.com/users/${username}`)
+                .get<UserInfo>(`https://api.github.com/users/${username}`, { timeout: 15_000 })
                 .then((res) => res.data)
                 .catch((err) => {
                     console.log(err)
@@ -87,7 +87,9 @@ export default class Command extends BaseCommand {
             return void M.reply(text)
         } else {
             const repoInfo = await axios
-                .get<RepoInfo>(`https://api.github.com/repos/${username}/${repo}`)
+                .get<RepoInfo>(`https://api.github.com/repos/${username}/${repo}`, {
+                    timeout: 15_000
+                })
                 .then((res) => res.data)
                 .catch((err) => {
                     console.log(err)

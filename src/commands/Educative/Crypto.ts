@@ -22,7 +22,7 @@ export default class Command extends BaseCommand {
 
         let text = ''
         await axios
-            .get(`https://public.coindcx.com/market_data/current_prices`)
+            .get(`https://public.coindcx.com/market_data/current_prices`, { timeout: 15_000 })
             .then(async (res) => {
                 if (!res) return void M.reply('🟥 ERROR 🟥\nThis might be due to API service being down')
 

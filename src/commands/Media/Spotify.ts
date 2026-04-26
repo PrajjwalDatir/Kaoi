@@ -22,22 +22,34 @@ export default class Command extends BaseCommand {
         if (!M.urls.length) return void M.reply(`🔎 Provide the Spotify Track URL that you want to download`)
         const url = M.urls[0]
         const track = new Spotify(url)
-        const info = await track.getInfo()
+        let info: Awaited<ReturnType<Spotify['getInfo']>>
+        try {
+            info = await track.getInfo()
+        } catch {
+            return void M.reply(`⚓ Error fetching: ${url}. Check if the URL is valid.`)
+        }
         if (info.error) return void M.reply(`⚓ Error Fetching: ${url}. Check if the url is valid and try again`)
+
         const caption = `🎧 *Title:* ${info.name || ''}\n🎤 *Artists:* ${(info.artists || []).join(',')}\n💽 *Album:* ${
             info.album_name
         }\n📆 *Release Date:* ${info.release_date || ''}`
-        M.reply(
-            await request.buffer(info?.cover_url as string),
-            MessageType.image,
-            undefined,
-            undefined,
-            caption
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        ).catch((reason: any) => M.reply(`❌ an error occurred, Reason: ${reason}`))
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        M.reply(await track.getAudio(), MessageType.audio).catch((reason: any) =>
-            M.reply(`❌ an error occurred, Reason: ${reason}`)
-        )
+
+        if (info.cover_url) {
+            try {
+                const coverBuffer = await request.buffer(info.cover_url)
+                await M.reply(coverBuffer, MessageType.image, undefined, undefined, caption)
+            } catch (err) {
+                await M.reply(`⚠ Couldn't fetch cover image: ${(err as Error).message}`)
+            }
+        } else {
+            await M.reply(caption)
+        }
+
+        try {
+            const audioBuffer = await track.getAudio()
+            await M.reply(audioBuffer, MessageType.audio)
+        } catch (err) {
+            await M.reply(`❌ Couldn't download the audio: ${(err as Error).message}`)
+        }
     }
 }
