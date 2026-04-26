@@ -68,10 +68,29 @@ const start = async (): Promise<void> => {
     await client.connect()
 }
 
+/** Drop indexes from prior schema versions that no longer match the current models.
+ * Currently: an old `gid` unique index lingered on the `groups` collection from a
+ * legacy schema; the current schema keys on `jid`, so the stale index causes
+ * duplicate-key errors on first insert with `gid: null`. */
+const dropLegacyIndexes = async (): Promise<void> => {
+    const stale: Array<{ collection: string; index: string }> = [
+        { collection: 'groups', index: 'gid_1' }
+    ]
+    for (const { collection, index } of stale) {
+        try {
+            await mongoose.connection.collection(collection).dropIndex(index)
+            client.log(chalk.yellow(`Dropped legacy index ${collection}.${index}`))
+        } catch {
+            /* index didn't exist — fine */
+        }
+    }
+}
+
 mongoose
     .connect(process.env.MONGO_URI as string)
-    .then(() => {
+    .then(async () => {
         client.log(chalk.green('Connected to Database!'))
+        await dropLegacyIndexes()
         start().catch((err) => client.log(String(err), true))
     })
     .catch((err) => {
