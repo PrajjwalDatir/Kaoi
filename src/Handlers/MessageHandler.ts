@@ -147,6 +147,9 @@ export default class MessageHandler {
             this.commands.set(cmdName, command)
             if (command.config.aliases) {
                 for (const alias of command.config.aliases) {
+                    // A command listing its own name as an alias is a no-op,
+                    // not a collision. Skip silently.
+                    if (alias === cmdName) continue
                     if (this.commands.has(alias) || this.aliases.has(alias)) {
                         this.client.log(
                             chalk.yellow(

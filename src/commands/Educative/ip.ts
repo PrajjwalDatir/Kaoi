@@ -11,7 +11,7 @@ export default class Command extends BaseCommand {
         super(client, handler, {
             command: 'ip',
             description: `Gives you info about IP Address`,
-            aliases: ['ipa', 'ip', 'ipaddress'],
+            aliases: ['ipa', 'ipaddress'],
             category: 'educative',
             usage: `${client.config.prefix}ip [name]`,
             baseXp: 50
