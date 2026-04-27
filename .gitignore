@@ -85,6 +85,11 @@ secrets/
 .nuxt
 dist
 
+# Runtime cache (view-once media snapshots, etc) — MUST stay out of git.
+# Without this, WAClient's `cache/viewonce/` directory of captured user
+# media gets accidentally swept in by `git add -A` from a clean clone.
+cache/
+
 # Gatsby files
 .cache/
 # Comment in the public line in if your project uses Gatsby and *not* Next.js
