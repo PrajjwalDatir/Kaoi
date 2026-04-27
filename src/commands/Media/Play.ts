@@ -1,4 +1,4 @@
-import { MessageType } from '../../lib/types.js'
+import { MessageType, Mimetype } from '../../lib/types.js'
 import MessageHandler from '../../Handlers/MessageHandler.js'
 import BaseCommand from '../../lib/BaseCommand.js'
 import WAClient from '../../lib/WAClient.js'
@@ -26,8 +26,10 @@ export default class Command extends BaseCommand {
         const audio = new YT(videos[0].url, 'audio')
         if (!audio.url) return
         M.reply('👾 Sending...')
-        this.client
-            .sendMessage(M.from, await audio.getBuffer(), MessageType.audio, {
+        try {
+            const buffer = await audio.getBuffer()
+            await this.client.sendMessage(M.from, buffer, MessageType.audio, {
+                mimetype: Mimetype.m4a,
                 quoted: M.WAMessage,
                 contextInfo: {
                     externalAdReply: {
@@ -39,6 +41,8 @@ export default class Command extends BaseCommand {
                     }
                 }
             })
-            .catch((reason: Error) => M.reply(`❌ an error occurred, Reason: ${reason}`))
+        } catch (reason) {
+            M.reply(`❌ an error occurred, Reason: ${(reason as Error).message}`)
+        }
     }
 }

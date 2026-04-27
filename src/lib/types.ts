@@ -23,6 +23,7 @@ export const Mimetype = {
     jpeg: 'image/jpeg',
     mp4: 'video/mp4',
     ogg: 'audio/ogg; codecs=opus',
+    m4a: 'audio/mp4',
     pdf: 'application/pdf'
 } as const
 

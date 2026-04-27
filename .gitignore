@@ -72,6 +72,9 @@ jspm_packages/
 .env
 .env.test
 
+# Local secrets — cookie jars, API tokens, etc.
+secrets/
+
 # parcel-bundler cache (https://parceljs.org/)
 .cache
 
