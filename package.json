@@ -63,7 +63,7 @@
         "link-preview-js": "^3.0.5",
         "lyrics-monarch-api": "^2.1.0",
         "moment": "^2.30.1",
-        "mongoose": "^8.4.0",
+        "mongoose": "^9.5.0",
         "node-cache": "^5.1.2",
         "node-cron": "^4.2.1",
         "pino": "^9.6.0",
