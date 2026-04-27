@@ -66,7 +66,7 @@
         "mongoose": "^8.4.0",
         "node-cache": "^5.1.2",
         "node-cron": "^4.2.1",
-        "pino": "^9.6.0",
+        "pino": "^10.3.1",
         "qrcode": "^1.5.4",
         "sharp": "^0.34.0",
         "spotifydl-core": "^0.2.0",
