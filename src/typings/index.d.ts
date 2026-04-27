@@ -93,6 +93,36 @@ export interface IFeature {
     state: boolean
 }
 
+/** A romantic / poly relation between 2–5 distinct JIDs. The `_id` is the
+ * canonical pipe-joined sorted-JID key, so `(A,B) === (B,A)` and lookups are
+ * O(1). `base` is computed once from `_id` and never moves. `contributions`
+ * stores the unique set of !react actions each sender has used on this bond;
+ * growth is derived (sum of action deltas, clamped to ±5 per sender) at read
+ * time so changing a delta doesn't require a migration. */
+export interface IBond {
+    _id: string
+    members: string[]
+    size: number
+    base: number
+    shipCount: number
+    firstShippedAt: Date
+    lastShippedAt: Date
+    /** Distinct JIDs that have invoked !ship for this bond. Drives outsider
+     * credit on UserRizz when a non-member ships them. */
+    shippers: string[]
+    /** Map<senderJid, action[]>. Each action recorded at most once per sender. */
+    contributions: Map<string, string[]>
+}
+
+/** Per-user rizz state. The score itself is computed on read from this doc
+ * plus the bonds the user appears in; we don't cache it (small, cheap). */
+export interface IUserRizz {
+    _id: string
+    baseRizz: number
+    /** Distinct outsiders (≠ this user) who have shipped this user with anyone. */
+    outsiderShippers: string[]
+}
+
 export interface IPackage {
     description: string
     dependencies: { [key: string]: string }

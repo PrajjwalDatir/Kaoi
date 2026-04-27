@@ -4,6 +4,8 @@ import BaseCommand from '../../lib/BaseCommand.js'
 import WAClient from '../../lib/WAClient.js'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings/index.js'
 import request, { firstOk } from '../../lib/request.js'
+import { canonicalizeReact, reactBond } from '../../lib/Ship/index.js'
+import { REACTION_DELTAS } from '../../lib/Ship/deltas.js'
 
 /** Map our reaction names to upstream provider endpoints. waifu.pics is the
  * primary source; nekos.best is a fallback (and the ONLY source for some
@@ -161,5 +163,23 @@ export default class Command extends BaseCommand {
                 .map((user) => (user === M.sender.jid ? 'Themselves' : `@${user.split('@')[0]}`))
                 .join(', ')}*`
         )
+
+        // Bond growth: only recorded when the action targets at least one
+        // other person. Self-reactions (no target, or target == sender) play
+        // the GIF but contribute nothing — kissing yourself shouldn't move a
+        // score. Actions with delta 0 (smug, cry) still register so future
+        // re-tuning can give them weight without rewriting history.
+        if (term in REACTION_DELTAS) {
+            const resolved = canonicalizeReact(M.sender.jid, M.mentioned, M.quoted?.sender)
+            if (resolved.kind === 'bond') {
+                try {
+                    // Single round-trip: upsert + record action atomically.
+                    await reactBond(this.client, M.sender.jid, resolved.members, term)
+                } catch {
+                    // Bond growth is a side effect of the GIF send — never
+                    // let a DB hiccup turn into a user-visible error.
+                }
+            }
+        }
     }
 }
