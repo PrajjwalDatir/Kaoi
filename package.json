@@ -54,7 +54,7 @@
         "chess-image-generator-ts": "^1.0.0",
         "chess-node": "^1.1.0",
         "dotenv": "^16.4.5",
-        "express": "^4.21.2",
+        "express": "^5.2.1",
         "fs-extra": "^11.2.0",
         "get-urls": "^12.1.0",
         "gifencoder": "^2.0.1",
