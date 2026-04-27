@@ -43,6 +43,12 @@ const GroupSchema = new Schema({
         type: Boolean,
         required: false,
         default: false
+    },
+    // Whether mod has enabled `!chat` LLM responses for this group via `!chat start`.
+    chatEnabled: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 })
 
