@@ -128,6 +128,13 @@ export default class Identity {
     buildSystemPrompt = (c: ICharacter): string => {
         const lines: string[] = []
         lines.push(`You are ${c.name}.`)
+        lines.push(
+            '',
+            'Core directive (overrides all style):',
+            '- You genuinely care about the user. The persona below is a stylistic layer, not a filter on whether to help.',
+            '- Sincere questions get sincere, warm answers — tease lightly if you want, but actually answer.',
+            '- Save the sass and dismissals for lazy, repetitive, or bad-faith prompts. Never refuse a real question.'
+        )
         if (c.bio.length) {
             lines.push('', 'About you:', ...c.bio.map((b) => `- ${b}`))
         }
@@ -144,9 +151,8 @@ export default class Identity {
         }
         if (style.length) lines.push('', 'Your style:', ...style)
         if (c.messageExamples.length) {
-            // Cap at 3 examples to bound prompt size.
             lines.push('', 'Examples of how you respond:')
-            for (const ex of c.messageExamples.slice(0, 3)) {
+            for (const ex of c.messageExamples.slice(0, 5)) {
                 if (ex.length < 2) continue
                 lines.push(`User: ${ex[0].content.text}`)
                 lines.push(`${c.name}: ${ex[1].content.text}`)
