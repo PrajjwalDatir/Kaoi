@@ -2,7 +2,11 @@ import MessageHandler from '../../Handlers/MessageHandler.js'
 import BaseCommand from '../../lib/BaseCommand.js'
 import WAClient from '../../lib/WAClient.js'
 import { IBondModel, IUserRizzModel, ISimplifiedMessage } from '../../typings/index.js'
-import { baseRizzFor, bondScore, clamp } from '../../lib/Ship/index.js'
+import {
+    baseRizzFor,
+    computeBondGrowth,
+    computeRizzScore
+} from '../../lib/Ship/index.js'
 import { MessageType } from '../../lib/types.js'
 
 const tagFor = (jid: string): string => `@${jid.split('@')[0]}`
@@ -43,12 +47,17 @@ export default class Command extends BaseCommand {
         const allBonds = (await this.client.DB.bond.find(query)) as IBondModel[]
         const bonds = allBonds.filter((b) => b.members.every((m) => scope.has(m)))
 
-        // Score every bond once and cache by id for the rizz fold below.
+        // Score every bond once. Cache `growth` alongside `score` so the rizz
+        // fold below can reuse it without a second pass over contributions.
         // This used to be N+1 (Shiptop called computeRizz per user, which
         // re-queried bonds containing that user); now it's a single bond
-        // sweep + a single rizz fetch. We sort `scored` in place — the order
-        // doesn't matter for the bondsByMember construction below.
-        const scored = bonds.map((b) => ({ b, score: bondScore(b) }))
+        // sweep + a single rizz fetch. We sort `scored` in place — order
+        // doesn't matter for the growthsByMember construction below.
+        const scored = bonds.map((b) => {
+            const growth = computeBondGrowth(b.contributions)
+            const score = Math.max(1, Math.min(99, Math.round(b.base + growth)))
+            return { b, growth, score }
+        })
         scored.sort((a, b) => b.score - a.score || b.b.shipCount - a.b.shipCount)
         const topBonds = scored.slice(0, 5)
         const mentions = new Set<string>()
@@ -68,16 +77,17 @@ export default class Command extends BaseCommand {
             .slice(0, 5)
 
         // Top rizz, in-memory. We need each candidate's rizz doc (for outsider
-        // count) plus the >50 contribution from every bond they appear in.
-        // Bonds were already scored above; group them by member to fold
-        // without further DB calls.
+        // count) plus the bond growths (NOT bond scores — see computeRizzScore
+        // for why) for every bond they appear in. Bonds were already scored
+        // above with growth cached; group them by member to fold without
+        // further DB calls.
         const rizzCandidates = Array.from(appearance.keys())
-        const bondsByMember = new Map<string, Array<{ b: IBondModel; score: number }>>()
+        const growthsByMember = new Map<string, number[]>()
         for (const entry of scored) {
             for (const m of entry.b.members) {
-                const arr = bondsByMember.get(m) || []
-                arr.push(entry)
-                bondsByMember.set(m, arr)
+                const arr = growthsByMember.get(m) || []
+                arr.push(entry.growth)
+                growthsByMember.set(m, arr)
             }
         }
         const rizzDocs = rizzCandidates.length
@@ -93,15 +103,12 @@ export default class Command extends BaseCommand {
             const r = rizzByJid.get(jid)
             const base = r?.baseRizz ?? baseRizzFor(jid)
             const outsiders = (r?.outsiderShippers || []).length
-            const outsiderTerm = Math.min(30, outsiders)
-            let bondTerm = 0
-            for (const e of bondsByMember.get(jid) || []) {
-                if (e.score > 50) bondTerm += (e.score - 50) / 10
-            }
-            rizzScored.push({
-                jid,
-                score: clamp(Math.round(base + outsiderTerm + bondTerm), 1, 99)
-            })
+            const breakdown = computeRizzScore(
+                base,
+                outsiders,
+                growthsByMember.get(jid) || []
+            )
+            rizzScored.push({ jid, score: breakdown.score })
         }
         rizzScored.sort((a, b) => b.score - a.score)
         const topRizz = rizzScored.slice(0, 5)

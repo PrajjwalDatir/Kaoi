@@ -3,23 +3,31 @@
  * Rules (enforced in src/lib/Ship/index.ts):
  *  - Each (sender, bond, action) tuple is recorded at most once. Spamming the
  *    same action does nothing.
- *  - Per-sender net contribution to a single bond is clamped to [-5, +5].
+ *  - Per-sender net contribution to a single bond is clamped to ±PER_SENDER_CAP.
  *  - Actions not listed here have delta 0.
+ *
+ * Calibration: the deltas + cap together set how fast a bond can climb. Bond
+ * base is 20–40, so reaching a "fated" 99% needs ~+59 in earned growth. With
+ * PER_SENDER_CAP = 3, that's ~20 distinct contributors at full cap each —
+ * which in an active chat naturally accrues over weeks, not days. Casual
+ * actions (pat/wave/etc) are 0 because we want them to play GIFs without
+ * moving the score; the score is reserved for actions that actually signal
+ * romance.
  */
 export const REACTION_DELTAS: Readonly<Record<string, number>> = {
-    // Romantic peak — single-handed cap.
-    kiss: 5,
+    // Romantic peak — full positive cap in one action.
+    kiss: 2,
 
     // Deep affection.
-    cuddle: 3,
-    handhold: 3,
-    hug: 3,
+    cuddle: 1,
+    handhold: 1,
+    hug: 1,
 
     // Affectionate.
-    glomp: 2,
-    blush: 2,
-    wink: 2,
-    lick: 2,
+    glomp: 1,
+    blush: 1,
+    wink: 1,
+    lick: 1,
 
     // Friendly.
     pat: 1,
@@ -38,16 +46,16 @@ export const REACTION_DELTAS: Readonly<Record<string, number>> = {
     cry: 0,
 
     // Hostile.
-    slap: -2,
-    kick: -2,
-    yeet: -2,
-    cringe: -2,
+    slap: -1,
+    kick: -1,
+    yeet: -1,
+    cringe: -1,
 
     // Mean.
-    bully: -3,
+    bully: -2,
 
-    // Breakup tier.
-    kill: -5
+    // Breakup tier — full negative cap.
+    kill: -2
 }
 
-export const PER_SENDER_CAP = 5
+export const PER_SENDER_CAP = 3

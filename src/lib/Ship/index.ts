@@ -11,6 +11,7 @@
  * would have half the entropy and isn't conceptually a relationship anyway.
  */
 import crypto from 'crypto'
+import { jidNormalizedUser } from 'baileys'
 import WAClient from '../WAClient.js'
 import { IBondModel, IUserRizzModel } from '../../typings/index.js'
 import { PER_SENDER_CAP, REACTION_DELTAS } from './deltas.js'
@@ -34,25 +35,45 @@ const hash32 = (s: string): number => {
  * but we never actually need to decode — we only iterate values. */
 const encodeJidKey = (jid: string): string => encodeURIComponent(jid)
 
-/** Sort + dedupe + drop empties. Order-independent identity for bond keys. */
+/** Normalize + sort + dedupe + drop empties. Order-independent identity for
+ * bond keys.
+ *
+ * Crucial detail: WAClient normalizes `quoted.sender` via jidNormalizedUser
+ * but leaves `mentioned[]` as the raw `ctxInfo.mentionedJid` (which can carry
+ * a `:NN` device suffix). Without normalizing here, the same human appears as
+ * two different JIDs depending on whether you @-tagged them or quoted them
+ * — producing two different bond keys for what should be one relationship.
+ */
 export const canonicalizeJids = (jids: Array<string | null | undefined>): string[] => {
     const out = new Set<string>()
     for (const j of jids) {
         if (!j) continue
         const t = j.trim()
-        if (t) out.add(t)
+        if (!t) continue
+        try {
+            out.add(jidNormalizedUser(t))
+        } catch {
+            // jidNormalizedUser throws on malformed JIDs; fall back to the
+            // trimmed original so we never silently drop a user.
+            out.add(t)
+        }
     }
     return Array.from(out).sort()
 }
 
 export const bondKey = (members: string[]): string => members.slice().sort().join('|')
 
-/** Base affinity for a bond — 20–79 range, deterministic per key. */
-export const baseScoreForBondKey = (key: string): number => (hash32(key) % 60) + 20
+/** Base affinity for a bond — 20–40 range, deterministic per key.
+ *
+ * Tight starting range is intentional: we don't want a brand-new pair to
+ * land at 78% just because their JIDs happened to hash that way. Earned
+ * growth (via !react) is what should move the score from "okay" to "fated".
+ */
+export const baseScoreForBondKey = (key: string): number => (hash32(key) % 21) + 20
 
-/** Base rizz for a user — 20–49, deterministic. Salt prefix prevents
+/** Base rizz for a user — 20–40, deterministic. Salt prefix prevents
  * collision with bond hashes and gives a different distribution. */
-export const baseRizzFor = (jid: string): number => (hash32(SHIP_PREFIX + jid) % 30) + 20
+export const baseRizzFor = (jid: string): number => (hash32(SHIP_PREFIX + jid) % 21) + 20
 
 /** Resolve `!ship` participants.
  *
@@ -260,29 +281,65 @@ export interface RizzBreakdown {
     bondTerm: number
 }
 
+/** Caps for the rizz formula, exported for tests / future tuning.
+ *
+ * baseRizz (20–40) + outsiderTerm (0–OUTSIDER_CAP) + bondTerm (0–BOND_CAP)
+ * → 40 + 30 + 30 = 100 raw, clamped to 99.
+ *
+ * Calibration: hitting 99 should take *real* social investment. Outsiders
+ * accrue at +1 each, capped at 30 distinct shippers. Bond contribution comes
+ * only from earned !react growth (NOT random base), capped at PER_BOND_RIZZ_CAP
+ * per bond and BOND_CAP across all bonds — so one runaway pair can't dominate
+ * and a popular user still has to be in many active relationships to max out.
+ */
+export const OUTSIDER_CAP = 30
+export const PER_BOND_RIZZ_CAP = 5
+export const BOND_CAP = 30
+
+/** Pure rizz formula. The two contribution terms are designed so that:
+ *
+ *  - The bond contribution is driven by **growth** (actual !react affection),
+ *    NOT bondScore. A freshly-created bond has growth 0 and contributes
+ *    nothing — so a third party shipping you doesn't double-credit your rizz
+ *    via "+1 outsider AND +(random_base−50)/10". The random base is RNG; only
+ *    earned affection moves rizz.
+ *  - Each individual bond is capped at PER_BOND_RIZZ_CAP so one runaway pair
+ *    can't dominate. Sum is capped at BOND_CAP.
+ *  - Outsider count is linear up to OUTSIDER_CAP — every new shipper adds
+ *    exactly +1 until the cap, matching the user-facing promise.
+ */
+export const computeRizzScore = (
+    baseRizz: number,
+    outsiderCount: number,
+    bondGrowths: number[]
+): RizzBreakdown => {
+    const outsiderTerm = Math.min(OUTSIDER_CAP, outsiderCount)
+    let bondTerm = 0
+    for (const g of bondGrowths) {
+        if (g > 0) bondTerm += Math.min(PER_BOND_RIZZ_CAP, g)
+    }
+    bondTerm = Math.min(BOND_CAP, bondTerm)
+    return {
+        score: clamp(Math.round(baseRizz + outsiderTerm + bondTerm), 1, 99),
+        base: baseRizz,
+        outsiderCount,
+        outsiderTerm,
+        bondCount: bondGrowths.length,
+        bondTerm
+    }
+}
+
 /** Self-rizz score with the components broken out so !shiprank can show them. */
 export const computeRizz = async (
     client: WAClient,
     jid: string
 ): Promise<RizzBreakdown> => {
     const rizz = await ensureRizz(client, jid)
-    const outsiderCount = (rizz.outsiderShippers || []).length
-    const outsiderTerm = Math.min(30, outsiderCount)
-
     const bonds = (await client.DB.bond.find({ members: jid })) as IBondModel[]
-    let bondTerm = 0
-    for (const bond of bonds) {
-        const s = bondScore(bond)
-        if (s > 50) bondTerm += (s - 50) / 10
-    }
-
-    const raw = rizz.baseRizz + outsiderTerm + bondTerm
-    return {
-        score: clamp(Math.round(raw), 1, 99),
-        base: rizz.baseRizz,
-        outsiderCount,
-        outsiderTerm,
-        bondCount: bonds.length,
-        bondTerm: Math.round(bondTerm * 10) / 10
-    }
+    const growths = bonds.map((b) => computeBondGrowth(b.contributions))
+    return computeRizzScore(
+        rizz.baseRizz,
+        (rizz.outsiderShippers || []).length,
+        growths
+    )
 }
