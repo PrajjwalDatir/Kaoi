@@ -35,14 +35,14 @@
         "@types/express": "^5.0.0",
         "@types/fs-extra": "^11.0.4",
         "@types/gifencoder": "^2.0.3",
-        "@types/node": "^20.12.7",
+        "@types/node": "^25.6.0",
         "@types/qrcode": "^1.5.5",
         "@types/yt-search": "^2.10.3",
-        "@typescript-eslint/eslint-plugin": "^7.7.0",
-        "@typescript-eslint/parser": "^7.7.0",
-        "eslint": "^8.57.0",
+        "@typescript-eslint/eslint-plugin": "^8.59.0",
+        "@typescript-eslint/parser": "^8.59.0",
+        "eslint": "^10.2.1",
         "prettier": "^3.2.5",
-        "typescript": "^5.4.5"
+        "typescript": "^6.0.3"
     },
     "dependencies": {
         "@hapi/boom": "^10.0.1",
