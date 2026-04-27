@@ -49,6 +49,13 @@ const GroupSchema = new Schema({
         type: Boolean,
         required: false,
         default: false
+    },
+    // Per-group accumulated identity (lore/topics/style.chat additions emitted
+    // by the LLM during conversation). Append-only at runtime. See Identity.ts.
+    chatIdentity: {
+        lore: { type: [String], default: [] },
+        topics: { type: [String], default: [] },
+        styleChat: { type: [String], default: [] }
     }
 })
 

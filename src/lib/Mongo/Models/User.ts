@@ -41,6 +41,14 @@ const UserSchema = new Schema({
         type: Date,
         required: true,
         default: () => new Date(0)
+    },
+    // Per-DM accumulated identity (lore/topics/style.chat additions emitted by
+    // the LLM during conversation). Append-only at runtime; immutable parts of
+    // the character live only in assets/json/kaoi-default.json. See Identity.ts.
+    chatIdentity: {
+        lore: { type: [String], default: [] },
+        topics: { type: [String], default: [] },
+        styleChat: { type: [String], default: [] }
     }
 })
 export default model<IUserModel>('users', UserSchema)

@@ -63,6 +63,7 @@ export default class Command extends BaseCommand {
 
         const result = await this.client.chatAI.chat({
             jid: M.from,
+            kind: M.chat === 'group' ? 'group' : 'user',
             senderName: M.sender.username,
             text
         })

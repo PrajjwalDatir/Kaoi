@@ -43,6 +43,7 @@ export interface IGroup {
     cmd: boolean
     invitelink: boolean
     chatEnabled: boolean
+    chatIdentity?: ICharacterDelta
 }
 
 export interface IUser {
@@ -54,6 +55,37 @@ export interface IUser {
     chatQuotaLimit: number
     chatQuotaUsed: number
     chatQuotaResetAt: Date
+    chatIdentity?: ICharacterDelta
+}
+
+/** Character file shape — matches the eliza/character.json convention. The
+ * baseline lives on disk (assets/json/kaoi-default.json) and is immutable from
+ * runtime; per-chat drift is stored as a delta (see ICharacterDelta). */
+export interface ICharacter {
+    name: string
+    bio: string[]
+    lore: string[]
+    topics: string[]
+    adjectives: string[]
+    style: { all: string[]; chat: string[]; post?: string[] }
+    messageExamples: Array<Array<{ user: string; content: { text: string } }>>
+    postExamples?: string[]
+}
+
+/** Per-chat append-only additions to the character. Only these three growable
+ * fields can mutate at runtime; immutable parts (name/bio/adjectives/etc) live
+ * only in the default character file. */
+export interface ICharacterDelta {
+    lore: string[]
+    topics: string[]
+    styleChat: string[]
+}
+
+/** What the model is allowed to emit as `identityAdd` in its JSON envelope. */
+export interface IIdentityAdd {
+    lore?: string[]
+    topics?: string[]
+    styleChat?: string[]
 }
 
 export interface IFeature {

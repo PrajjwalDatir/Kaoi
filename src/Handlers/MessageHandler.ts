@@ -123,6 +123,7 @@ export default class MessageHandler {
 
         const result = await this.client.chatAI.chat({
             jid: M.from,
+            kind: 'user',
             senderName: M.sender.username,
             text,
             audio

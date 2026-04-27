@@ -37,6 +37,7 @@ import {
 
 import DatabaseHandler from '../Handlers/DatabaseHandler.js'
 import ChatAI from './ChatAI.js'
+import Identity from './Identity.js'
 import Utils from './Utils.js'
 import {
     IConfig,
@@ -123,6 +124,7 @@ export default class WAClient extends EventEmitter {
     sock!: WASocket
     DB = new DatabaseHandler()
     util = new Utils()
+    identity: Identity = new Identity(this)
     chatAI: ChatAI = new ChatAI(this)
     assets = new Map<string, Buffer>()
     features = new Map<string, boolean>()
