@@ -4,12 +4,17 @@ import WAClient from '../../lib/WAClient.js'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings/index.js'
 import { MessageType, Mimetype } from '../../lib/types.js'
 import EventEmitter from 'events'
-// chess-node doesn't ship default exports correctly; load via interop.
+// chess-node ships Game and genRealMove as named exports, but its `default`
+// is also a namespace object containing the same names. Resolve to whichever
+// shape is present so this works under both ESM and CJS-interop.
 import * as ChessNode from 'chess-node'
-const Game: new (e: EventEmitter, jid: string) => ChessGame = (ChessNode as unknown as { default?: unknown }).default
-    ? ((ChessNode as unknown as { default: new (e: EventEmitter, jid: string) => ChessGame }).default)
-    : (ChessNode as unknown as new (e: EventEmitter, jid: string) => ChessGame)
-const { genRealMove } = ChessNode as unknown as { genRealMove: (m: string) => unknown }
+type ChessLib = {
+    Game: new (e: EventEmitter, jid: string) => ChessGame
+    genRealMove: (m: string) => unknown
+}
+const lib = ((ChessNode as unknown as { default?: ChessLib }).default ?? (ChessNode as unknown as ChessLib))
+const Game = lib.Game
+const { genRealMove } = lib
 type ChessGame = {
     board: { getPieces(white: unknown, black: unknown): string[] }
     eventEmitter: EventEmitter
