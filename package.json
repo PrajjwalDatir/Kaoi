@@ -36,7 +36,6 @@
         "@types/fs-extra": "^11.0.4",
         "@types/gifencoder": "^2.0.3",
         "@types/node": "^20.12.7",
-        "@types/node-cron": "^3.0.11",
         "@types/qrcode": "^1.5.5",
         "@types/yt-search": "^2.10.3",
         "@typescript-eslint/eslint-plugin": "^7.7.0",
@@ -50,7 +49,7 @@
         "audio-decode": "^2.2.2",
         "axios": "^1.13.5",
         "baileys": "^7.0.0-rc.9",
-        "canvas": "^2.11.2",
+        "canvas": "^3.2.3",
         "chalk": "^4.1.2",
         "chess-image-generator-ts": "^1.0.0",
         "chess-node": "^1.1.0",
@@ -66,14 +65,25 @@
         "moment": "^2.30.1",
         "mongoose": "^8.4.0",
         "node-cache": "^5.1.2",
-        "node-cron": "^3.0.3",
+        "node-cron": "^4.2.1",
         "pino": "^9.6.0",
         "qrcode": "^1.5.4",
-        "sharp": "^0.33.5",
+        "sharp": "^0.34.0",
         "spotifydl-core": "^0.2.0",
         "ultra-lyrics": "^1.0.3",
         "wa-sticker-formatter": "^4.4.4",
         "youtube-dl-exec": "^3.1.5",
         "yt-search": "^2.13.1"
+    },
+    "overrides": {
+        "protobufjs": "^7.5.5",
+        "axios": "^1.13.5",
+        "tar": "^7.5.11",
+        "minimatch": "^9.0.5",
+        "file-type": "^21.3.1",
+        "uuid": "^14.0.0",
+        "wa-sticker-formatter": {
+            "sharp": "^0.34.0"
+        }
     }
 }
