@@ -46,7 +46,7 @@
     },
     "dependencies": {
         "@hapi/boom": "^10.0.1",
-        "audio-decode": "^2.2.2",
+        "audio-decode": "^3.10.1",
         "axios": "^1.13.5",
         "baileys": "^7.0.0-rc.9",
         "canvas": "^3.2.3",
