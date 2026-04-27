@@ -1,4 +1,3 @@
-import axios from 'axios'
 import chalk from 'chalk'
 import { dirname, join } from 'path'
 import { fileURLToPath, pathToFileURL } from 'url'
@@ -27,43 +26,27 @@ export default class MessageHandler {
 
         if (M.from.includes('status')) return void null
         const { args, groupMetadata, sender } = M
-        if (M.chat === 'dm' && this.client.isFeature('chatbot')) {
-            if (this.client.config.chatBotUrl) {
-                const myUrl = new URL(this.client.config.chatBotUrl)
-                const params = myUrl.searchParams
-                // Use the actual message text (M.content) — `M.args` is an
-                // array and interpolating it produces a comma-joined string.
-                const messageText = (M.content || '').trim()
-                if (messageText) {
-                    await axios
-                        .get(
-                            `http://api.brainshop.ai/get?bid=${encodeURIComponent(
-                                params.get('bid') || ''
-                            )}&key=${encodeURIComponent(params.get('key') || '')}&uid=${encodeURIComponent(
-                                M.sender.jid
-                            )}&msg=${encodeURIComponent(messageText)}`,
-                            { timeout: 15_000 }
-                        )
-                        .then((res) => {
-                            if (res.status !== 200) return void M.reply(`🔍 Error: ${res.status}`)
-                            return void M.reply(res.data.cnt)
-                        })
-                        .catch(() => {
-                            M.reply(`Ummmmmmmmm.`)
-                        })
-                }
-            }
-        }
         if (!M.groupMetadata && !(M.chat === 'dm')) return void null
 
         if ((await this.client.getGroupData(M.from)).mod && this.client.isBotAdmin(M.groupMetadata))
             this.moderate(M)
-        if (!args[0] || !args[0].startsWith(this.client.config.prefix))
+        if (!args[0] || !args[0].startsWith(this.client.config.prefix)) {
+            // Non-command message. In DMs where a mod has enabled chat for this
+            // user, route into the LLM. Group messages without a prefix are never
+            // auto-answered (would spam unrelated chatter).
+            if (
+                M.chat === 'dm' &&
+                !M.WAMessage.key?.fromMe &&
+                this.client.isFeature('chatbot')
+            ) {
+                await this.handleAutoChat(M)
+            }
             return void this.client.log(
                 `${chalk.blueBright('MSG')} from ${chalk.green(sender.username)} in ${chalk.cyanBright(
                     groupMetadata?.subject || ''
                 )}`
             )
+        }
         const cmd = args[0].slice(this.client.config.prefix.length).toLowerCase()
         const allowedCommands = ['activate', 'deactivate', 'act', 'deact']
         if (!(allowedCommands.includes(cmd) || (await this.client.getGroupData(M.from)).cmd))
@@ -100,6 +83,55 @@ export default class MessageHandler {
             const message = err instanceof Error ? err.message : String(err)
             return void this.client.log(message, true)
         }
+    }
+
+    /** DM auto-reply path: routes the user's message (text or voice note) into
+     * the LLM provider chain. Quota-gated; opt-in per user via `!chat start`. */
+    handleAutoChat = async (M: ISimplifiedMessage): Promise<void> => {
+        const user = await this.client.getUser(M.sender.jid)
+        if (user.ban) return
+        if (!user.chatEnabled) return
+
+        // Audio voice notes go to a multimodal provider with the raw buffer; text
+        // messages go through the regular text chain.
+        const isAudio = M.type === 'audioMessage'
+        const text = (M.content || '').trim()
+        if (!isAudio && !text) return
+
+        let audio: { buffer: Buffer; mime: string } | undefined
+        if (isAudio) {
+            try {
+                const buffer = await this.client.downloadMediaMessage(M.WAMessage)
+                const audioMsg = (M.WAMessage.message as { audioMessage?: { mimetype?: string } } | null)
+                    ?.audioMessage
+                const mime = (audioMsg?.mimetype || 'audio/ogg').split(';')[0].trim()
+                audio = { buffer, mime }
+            } catch (err) {
+                this.client.log(
+                    `Failed to download voice note: ${err instanceof Error ? err.message : String(err)}`,
+                    true
+                )
+                return void M.reply(`Couldn't read your voice note, sorry.`)
+            }
+        }
+
+        const quota = await this.client.consumeChatQuota(M.sender.jid)
+        if (!quota.allowed)
+            return void M.reply(
+                `You've used your ${quota.limit} chat messages for today. A mod can extend with ${this.client.config.prefix}quota extend.`
+            )
+
+        const result = await this.client.chatAI.chat({
+            jid: M.from,
+            senderName: M.sender.username,
+            text,
+            audio
+        })
+        if (!result.ok) {
+            this.client.log(`ChatAI error in DM ${M.from}: ${result.error}`, true)
+            return void M.reply(`Hmm, my brain glitched. Try again in a sec.`)
+        }
+        return void M.reply(result.reply)
     }
 
     moderate = async (M: ISimplifiedMessage): Promise<void> => {

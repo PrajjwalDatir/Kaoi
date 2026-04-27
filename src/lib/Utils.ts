@@ -19,6 +19,22 @@ export default class {
         return buffer
     }
 
+    /** Transcode any audio buffer to mono 16kHz WAV. Used to normalize WhatsApp
+     * PTT (OGG/Opus) before handing it to multimodal models — WAV is universally
+     * accepted, and 16kHz mono is the speech-recognition default. */
+    transcodeAudioToWav = async (audio: Buffer): Promise<Buffer> => {
+        const base = `${tmpdir()}/${Math.random().toString(36)}`
+        const inPath = `${base}.in`
+        const outPath = `${base}.wav`
+        await writeFile(inPath, audio)
+        try {
+            await this.exec(`ffmpeg -y -i ${inPath} -ar 16000 -ac 1 -f wav ${outPath}`)
+            return await readFile(outPath)
+        } finally {
+            Promise.all([unlink(inPath).catch(() => undefined), unlink(outPath).catch(() => undefined)])
+        }
+    }
+
     readdirRecursive = (directory: string): string[] => {
         const results: string[] = []
 

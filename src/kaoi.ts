@@ -20,7 +20,10 @@ const client = new WAClient({
     prefix: process.env.PREFIX || '!',
     mods: (process.env.MODS || '').split(',').filter(Boolean).map((number) => `${number}@s.whatsapp.net`),
     gkey: process.env.GOOGLE_API_KEY || '',
-    chatBotUrl: process.env.CHAT_BOT_URL || ''
+    groqKey: process.env.GROQ_API_KEY || '',
+    cerebrasKey: process.env.CEREBRAS_API_KEY || '',
+    geminiKey: process.env.GEMINI_API_KEY || '',
+    openrouterKey: process.env.OPENROUTER_API_KEY || ''
 })
 client.log('Starting...')
 

@@ -21,6 +21,26 @@ const UserSchema = new Schema({
         type: Number,
         required: true,
         default: 0
+    },
+    chatEnabled: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    chatQuotaLimit: {
+        type: Number,
+        required: true,
+        default: 20
+    },
+    chatQuotaUsed: {
+        type: Number,
+        required: true,
+        default: 0
+    },
+    chatQuotaResetAt: {
+        type: Date,
+        required: true,
+        default: () => new Date(0)
     }
 })
 export default model<IUserModel>('users', UserSchema)

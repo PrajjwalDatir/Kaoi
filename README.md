@@ -11,7 +11,7 @@
 
 Deployed on [Railway](https://railway.app/) using the `nixpacks.toml` and `railway.toml` in this repo.
 
-[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FPrajjwalDatir%2FKaoi%2F&envs=PREFIX%2CSESSION%2CMODS%2CCRON%2CMONGO_URI%2CGOOGLE_API_KEY%2CCHAT_BOT_URL&optionalEnvs=MODS%2CCRON%2CGOOGLE_API_KEY%2CCHAT_BOT_URL)
+[![Deploy on Railway](https://railway.app/button.svg)](https://railway.app/new/template?template=https%3A%2F%2Fgithub.com%2FPrajjwalDatir%2FKaoi%2F&envs=PREFIX%2CSESSION%2CMODS%2CCRON%2CMONGO_URI%2CGOOGLE_API_KEY%2CGROQ_API_KEY%2CCEREBRAS_API_KEY%2CGEMINI_API_KEY%2COPENROUTER_API_KEY&optionalEnvs=MODS%2CCRON%2CGOOGLE_API_KEY%2CGROQ_API_KEY%2CCEREBRAS_API_KEY%2CGEMINI_API_KEY%2COPENROUTER_API_KEY)
 
 </div><br/>
 <br/>

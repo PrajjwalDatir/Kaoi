@@ -26,7 +26,6 @@ export default class Command extends BaseCommand {
             Follow this video Guide but instead of using the *WhatsApp Botto Xre* Link, use the *Kaoi Github Link* given above.\n`
         text += '🔗 Deploy Text Guide (Detailed) 🔗 : https://github.com/Hiroto77/Kaoi-Guides#readme\n'
         text += '\n👾 SPECIFIC GUIDES 👾\n'
-        text += '🔗 How to get the ChatBot URL : https://github.com/Hiroto77/Kaoi-Guides/blob/main/Chat_Bot_Url.md\n'
         text += `🔗 How to use ${this.client.config.prefix}sticker effectively : https://github.com/Hiroto77/Kaoi-Guides/blob/main/Sticker-feature-Guide.md\n`
         text +=
             '🔗 How to get the MongoDB URL : https://github.com/Hiroto77/Kaoi-Guides/blob/main/Mongo-Atlas-guide.md\n'

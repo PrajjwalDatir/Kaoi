@@ -10,7 +10,10 @@ export interface IConfig {
     prefix: string
     session: string
     gkey: string
-    chatBotUrl: string
+    groqKey: string
+    cerebrasKey: string
+    geminiKey: string
+    openrouterKey: string
 }
 
 export interface IParsedArgs {
@@ -39,6 +42,7 @@ export interface IGroup {
     mod: boolean
     cmd: boolean
     invitelink: boolean
+    chatEnabled: boolean
 }
 
 export interface IUser {
@@ -46,6 +50,10 @@ export interface IUser {
     ban: boolean
     warnings: number
     Xp: number
+    chatEnabled: boolean
+    chatQuotaLimit: number
+    chatQuotaUsed: number
+    chatQuotaResetAt: Date
 }
 
 export interface IFeature {
