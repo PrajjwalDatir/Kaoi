@@ -4,6 +4,10 @@ import WAClient from '../../lib/WAClient.js'
 import { IParsedArgs, ISimplifiedMessage } from '../../typings/index.js'
 import { MessageType, Mimetype } from '../../lib/types.js'
 import EventEmitter from 'events'
+import { readFile } from 'fs/promises'
+import { dirname, join } from 'path'
+import { createRequire } from 'module'
+import sharp from 'sharp'
 // chess-node ships Game and genRealMove as named exports, but its `default`
 // is also a namespace object containing the same names. Resolve to whichever
 // shape is present so this works under both ESM and CJS-interop.
@@ -22,13 +26,71 @@ type ChessGame = {
     black: unknown
     start(...args: unknown[]): void
 }
-import CIG from 'chess-image-generator-ts'
 
-// Lichess-style green/cream — much more visible than the library's pale-beige
-// defaults, especially on small phone screens.
-const BOARD_THEME = {
-    light: 'rgb(238, 238, 210)',
-    dark: 'rgb(118, 150, 86)'
+// We render the board ourselves via sharp instead of chess-image-generator-ts.
+// CIG relies on node-canvas's `ctx.fill()` to paint squares; in practice the
+// resulting PNG was reaching WhatsApp with the squares missing (only pieces
+// visible). Building the board as an SVG and compositing piece PNGs is fully
+// deterministic and uses sharp, which is already a dep. We still source the
+// piece artwork from CIG's resources so the visual style stays familiar.
+const require_ = createRequire(import.meta.url)
+const PIECES_DIR = join(
+    dirname(require_.resolve('chess-image-generator-ts')),
+    'resources',
+    'merida'
+)
+
+/** chess-node tile codes → CIG piece-asset filenames. Knight is 'wk'/'bk'
+ * (lowercase k) in chess-node, which collides with king if you only lowercase
+ * — keep the original case for lookup. */
+const PIECE_FILE: Record<string, string> = {
+    wQ: 'WhiteQueen',
+    wK: 'WhiteKing',
+    wk: 'WhiteKnight',
+    wR: 'WhiteRook',
+    wB: 'WhiteBishop',
+    wP: 'WhitePawn',
+    bQ: 'BlackQueen',
+    bK: 'BlackKing',
+    bk: 'BlackKnight',
+    bR: 'BlackRook',
+    bB: 'BlackBishop',
+    bP: 'BlackPawn'
+}
+
+const BOARD_PX = 480
+const SQ_PX = BOARD_PX / 8
+
+const buildBoardSVG = (): Buffer => {
+    const rects: string[] = []
+    for (let r = 0; r < 8; r++) {
+        for (let c = 0; c < 8; c++) {
+            const isDark = (r + c) % 2 === 1
+            const fill = isDark ? 'rgb(118,150,86)' : 'rgb(238,238,210)'
+            rects.push(
+                `<rect x="${c * SQ_PX}" y="${r * SQ_PX}" width="${SQ_PX}" height="${SQ_PX}" fill="${fill}"/>`
+            )
+        }
+    }
+    return Buffer.from(
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${BOARD_PX}" height="${BOARD_PX}">${rects.join('')}</svg>`
+    )
+}
+const BOARD_SVG = buildBoardSVG()
+
+const pieceCache = new Map<string, Buffer>()
+const getPieceBuf = async (code: string): Promise<Buffer | null> => {
+    const filename = PIECE_FILE[code]
+    if (!filename) return null
+    const cached = pieceCache.get(code)
+    if (cached) return cached
+    const raw = await readFile(join(PIECES_DIR, `${filename}.png`))
+    const sized = await sharp(raw)
+        .resize(SQ_PX, SQ_PX, { fit: 'contain', background: { r: 0, g: 0, b: 0, alpha: 0 } })
+        .png()
+        .toBuffer()
+    pieceCache.set(code, sized)
+    return sized
 }
 
 const RENDER_RETRIES = 3
@@ -38,23 +100,38 @@ const RENDER_RETRIES = 3
 const isTile = (s: string | undefined): boolean => !!s && /^[a-hA-H][1-8]$/.test(s)
 
 /** Render the current chess-node board as a PNG buffer and send it. Caps
- * retries so a permanent failure (canvas/asset issue, WhatsApp rejecting the
- * media) can't peg the CPU. */
+ * retries so a permanent failure (asset read, WhatsApp rejecting the media)
+ * can't peg the CPU. */
 async function renderBoard(
-    parseBoard: (b: string[]) => string[][],
     game: ChessGame,
     send: (buf: Buffer) => Promise<unknown>,
     log: (msg: string, error?: boolean) => void
 ): Promise<void> {
-    for (let i = 0; i < RENDER_RETRIES; i++) {
+    for (let attempt = 0; attempt < RENDER_RETRIES; attempt++) {
         try {
-            const cig = new CIG(BOARD_THEME)
-            cig.loadArray(parseBoard(game.board.getPieces(game.white, game.black)))
-            const buf = await cig.generateBuffer()
-            await send(buf)
+            // chess-node Board.getPieces() returns a flat 64-entry array,
+            // index k → file=(k%8), rank=floor(k/8) (rank 0 = rank 1 = white's
+            // back row, so we flip y). Empty squares come back as '  '.
+            const tiles = game.board.getPieces(game.white, game.black)
+            const composites: sharp.OverlayOptions[] = []
+            for (let k = 0; k < tiles.length; k++) {
+                const code = tiles[k]
+                if (!PIECE_FILE[code]) continue
+                const file = k % 8
+                const rank = Math.floor(k / 8)
+                const buf = await getPieceBuf(code)
+                if (buf) composites.push({ input: buf, top: (7 - rank) * SQ_PX, left: file * SQ_PX })
+            }
+            const out = await sharp(BOARD_SVG).composite(composites).png().toBuffer()
+            await send(out)
             return
         } catch (err) {
-            log(`chess: board render failed (try ${i + 1}/${RENDER_RETRIES}): ${err instanceof Error ? err.message : String(err)}`, true)
+            log(
+                `chess: board render failed (try ${attempt + 1}/${RENDER_RETRIES}): ${
+                    err instanceof Error ? err.message : String(err)
+                }`,
+                true
+            )
         }
     }
     log('chess: board render gave up after retries — game continues, image skipped', true)
@@ -74,21 +151,6 @@ export default class Command extends BaseCommand {
     games = new Map<string, ChessGame | undefined>()
     challenges = new Map<string, { challenger: string; challengee: string } | undefined>()
     ongoing = new Set<string>()
-
-    parseBoard = (board: string[]): string[][] =>
-        this.client.util
-            .chunk(
-                board.map((tile) => {
-                    if (tile === 'bK') return 'k'
-                    if (tile === 'wK') return 'K'
-                    if (tile === 'wk') return 'N'
-                    if (tile === 'bk') return 'n'
-                    if (tile[0] === 'w') return tile[1].toUpperCase()
-                    return tile[1].toLowerCase()
-                }),
-                8
-            )
-            .reverse()
 
     run = async (M: ISimplifiedMessage, { args }: IParsedArgs): Promise<void> => {
         const end = async (winner?: 'Black' | 'White' | string) => {
@@ -174,7 +236,6 @@ export default class Command extends BaseCommand {
                 )
                 game.start(print, challenge.challenger, challenge.challengee, () =>
                     void renderBoard(
-                        this.parseBoard,
                         game,
                         (buf) => this.client.sendMessage(M.from, buf, MessageType.image),
                         this.client.log
@@ -211,7 +272,6 @@ export default class Command extends BaseCommand {
                     )
                 const renderAfter = () =>
                     void renderBoard(
-                        this.parseBoard,
                         g,
                         (buf) => M.reply(buf, MessageType.image) as Promise<unknown>,
                         this.client.log
