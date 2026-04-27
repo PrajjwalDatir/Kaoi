@@ -2,7 +2,7 @@ import MessageHandler from '../../Handlers/MessageHandler.js'
 import BaseCommand from '../../lib/BaseCommand.js'
 import WAClient from '../../lib/WAClient.js'
 import { ISimplifiedMessage } from '../../typings/index.js'
-import { computeRizz } from '../../lib/Ship/index.js'
+import { computeRizz, normalizeJid } from '../../lib/Ship/index.js'
 import { MessageType } from '../../lib/types.js'
 
 const tagFor = (jid: string): string => `@${jid.split('@')[0]}`
@@ -20,7 +20,11 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        const target = M.quoted?.sender || M.mentioned[0] || M.sender.jid
+        // Normalize: M.mentioned[] is raw and can carry a :NN device suffix,
+        // which would create a duplicate rizz doc keyed on the suffixed form.
+        const target =
+            normalizeJid(M.quoted?.sender || M.mentioned[0] || M.sender.jid) ||
+            M.sender.jid
         const b = await computeRizz(this.client, target)
         const lines = [
             `✨ *${tagFor(target)}'s Rizz Sheet* ✨`,

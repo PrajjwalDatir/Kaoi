@@ -3,7 +3,7 @@ import MessageHandler from '../../Handlers/MessageHandler.js'
 import BaseCommand from '../../lib/BaseCommand.js'
 import WAClient from '../../lib/WAClient.js'
 import { IBondModel, ISimplifiedMessage } from '../../typings/index.js'
-import { bondScore } from '../../lib/Ship/index.js'
+import { bondScore, normalizeJid } from '../../lib/Ship/index.js'
 import { MessageType, Mimetype } from '../../lib/types.js'
 
 const SIZE = 900
@@ -41,7 +41,12 @@ export default class Command extends BaseCommand {
     }
 
     run = async (M: ISimplifiedMessage): Promise<void> => {
-        const focal = M.quoted?.sender || M.mentioned[0] || M.sender.jid
+        // Normalize: M.mentioned[] is raw. Without normalization, a query for
+        // `1234:5@s.whatsapp.net` won't find the normalized bonds stored under
+        // `1234@s.whatsapp.net`, and the user sees "No bonds yet" lying.
+        const focal =
+            normalizeJid(M.quoted?.sender || M.mentioned[0] || M.sender.jid) ||
+            M.sender.jid
         const botJid = this.client.user?.jid
         // Bot-exclusion is pushed to the DB query (`$nin: [bot]` on the
         // multikey members array means "no member is the bot"). Saves us from

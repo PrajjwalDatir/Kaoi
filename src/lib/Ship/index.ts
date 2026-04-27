@@ -35,28 +35,33 @@ const hash32 = (s: string): number => {
  * but we never actually need to decode — we only iterate values. */
 const encodeJidKey = (jid: string): string => encodeURIComponent(jid)
 
-/** Normalize + sort + dedupe + drop empties. Order-independent identity for
- * bond keys.
+/** Normalize a single JID. Strips device suffixes (`:NN`) and yields the
+ * canonical form Baileys uses internally. Falls back to the trimmed input
+ * on malformed JIDs so callers never get an empty string.
  *
- * Crucial detail: WAClient normalizes `quoted.sender` via jidNormalizedUser
- * but leaves `mentioned[]` as the raw `ctxInfo.mentionedJid` (which can carry
- * a `:NN` device suffix). Without normalizing here, the same human appears as
- * two different JIDs depending on whether you @-tagged them or quoted them
- * — producing two different bond keys for what should be one relationship.
- */
+ * Why we expose this: WAClient normalizes `M.sender.jid` and
+ * `M.quoted.sender` but leaves `M.mentioned[]`, `M.from`, and
+ * `groupMetadata.participants[].id` raw. Any code that compares these
+ * against bond.members or rizz._id (which are stored normalized) will
+ * mismatch unless it normalizes first. */
+export const normalizeJid = (jid: string | null | undefined): string => {
+    if (!jid) return ''
+    const t = jid.trim()
+    if (!t) return ''
+    try {
+        return jidNormalizedUser(t)
+    } catch {
+        return t
+    }
+}
+
+/** Normalize + sort + dedupe + drop empties. Order-independent identity for
+ * bond keys. */
 export const canonicalizeJids = (jids: Array<string | null | undefined>): string[] => {
     const out = new Set<string>()
     for (const j of jids) {
-        if (!j) continue
-        const t = j.trim()
-        if (!t) continue
-        try {
-            out.add(jidNormalizedUser(t))
-        } catch {
-            // jidNormalizedUser throws on malformed JIDs; fall back to the
-            // trimmed original so we never silently drop a user.
-            out.add(t)
-        }
+        const n = normalizeJid(j)
+        if (n) out.add(n)
     }
     return Array.from(out).sort()
 }
@@ -77,31 +82,44 @@ export const baseRizzFor = (jid: string): number => (hash32(SHIP_PREFIX + jid) %
 
 /** Resolve `!ship` participants.
  *
- * Rules:
- *   `!ship`                  → self-ship of caller
- *   `!ship @sender` only     → self-ship of caller (dedupe)
- *   `!ship @a` (a ≠ caller)  → self-ship of `a` (rizz of a)
- *   `!ship @a @b` (≠)        → bond {a,b}
- *   `!ship @a ... @e`        → bond up to 5 members; >5 truncates with harem flag
+ * Core rule: **the sender is always part of any bond they create.** A bond
+ * is the set of {sender} ∪ {everyone they named} after dedupe + normalize.
  *
- * Note: `!ship @a` alone shows a's profile rizz; to ship caller × a explicitly,
- * the caller mentions both themselves and a (or any 2+ distinct people).
+ *   `!ship`                       → self-rizz of caller (no others named)
+ *   `!ship @sender`               → self-rizz of caller (only self named)
+ *   `!ship @a`                    → bond {caller, a}
+ *   `!ship` quoting a             → bond {caller, a}            (quote == @-tag)
+ *   `!ship @a @b`                 → bond {caller, a, b}         ← caller included
+ *   `!ship @a @b @c`              → bond {caller, a, b, c}
+ *   `!ship @a @b @c @d @e`        → bond {caller, a, b, c, d}; harem flag on
+ *
+ * Cap is 5 members total; if (1 + others) > 5 we keep the sender plus the
+ * first MAX_BOND_SIZE-1 others (sorted JID order, deterministic) and set the
+ * harem flag for the caption.
  */
 export const canonicalizeShip = (
     sender: string,
     mentioned: string[],
     quotedSender?: string | null
 ): Canonicalized => {
-    const members = canonicalizeJids([quotedSender, ...mentioned])
-    if (members.length === 0) return { kind: 'self', member: sender }
-    if (members.length === 1) return { kind: 'self', member: members[0] }
-    let m = members
+    // Normalize sender once and exclude them from "others" so the count below
+    // reflects only people *other than* the caller.
+    const senderNorm = normalizeJid(sender) || sender
+    const others = canonicalizeJids([quotedSender, ...mentioned]).filter(
+        (j) => j !== senderNorm
+    )
+
+    if (others.length === 0) return { kind: 'self', member: senderNorm }
+
+    const slotsForOthers = MAX_BOND_SIZE - 1
+    let kept = others
     let harem = false
-    if (m.length > MAX_BOND_SIZE) {
-        m = m.slice(0, MAX_BOND_SIZE)
+    if (kept.length > slotsForOthers) {
+        kept = kept.slice(0, slotsForOthers)
         harem = true
     }
-    return { kind: 'bond', members: m, key: bondKey(m), harem }
+    const members = canonicalizeJids([senderNorm, ...kept])
+    return { kind: 'bond', members, key: bondKey(members), harem }
 }
 
 /** Resolve `!react` participants. Sender is always included.
@@ -156,17 +174,27 @@ export const clamp = (n: number, lo: number, hi: number): number =>
 export const bondScore = (bond: IBondModel): number =>
     clamp(Math.round(bond.base + computeBondGrowth(bond.contributions)), 1, 99)
 
-/** Build the immutable insert payload for a fresh bond. Centralized so the
- * !ship and !react paths both create bonds the same way on first touch. */
+/** Build the $setOnInsert payload for a fresh bond.
+ *
+ * IMPORTANT: only include fields that the same update isn't ALSO touching via
+ * $set / $inc / $addToSet. MongoDB rejects an update with operators that
+ * overlap on the same path ("Updating the path 'shipCount' would create a
+ * conflict at 'shipCount'"). The fields this returns are the ones that are
+ * either truly immutable (`_id`, `members`, `size`, `base`) or only set on
+ * first insert and never touched again (`firstShippedAt`).
+ *
+ * Schema defaults supply the rest on insert: `shipCount` defaults to 0,
+ * `shippers` to [], `lastShippedAt` to a fresh Date, `contributions` to a
+ * fresh Map. Those defaults compose cleanly with $inc / $addToSet / $set
+ * because they're applied during document construction, not via an update
+ * operator.
+ */
 const buildBondInsert = (sortedMembers: string[], key: string, now: Date) => ({
     _id: key,
     members: sortedMembers,
     size: sortedMembers.length,
     base: baseScoreForBondKey(key),
-    shipCount: 0,
-    shippers: [],
-    firstShippedAt: now,
-    lastShippedAt: now
+    firstShippedAt: now
 })
 
 /** Build the rizz-credit bulk-write ops for a `!ship` invocation. Each

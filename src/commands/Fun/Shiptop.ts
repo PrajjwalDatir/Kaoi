@@ -5,7 +5,8 @@ import { IBondModel, IUserRizzModel, ISimplifiedMessage } from '../../typings/in
 import {
     baseRizzFor,
     computeBondGrowth,
-    computeRizzScore
+    computeRizzScore,
+    normalizeJid
 } from '../../lib/Ship/index.js'
 import { MessageType } from '../../lib/types.js'
 
@@ -25,16 +26,28 @@ export default class Command extends BaseCommand {
     run = async (M: ISimplifiedMessage): Promise<void> => {
         // Restrict the leaderboard to people involved with the current chat.
         // For groups: members of the group. For DMs: just the two participants.
+        //
+        // CRITICAL: normalize every JID we put into scope. groupMetadata
+        // participants and M.from are raw (whatever form WhatsApp returned),
+        // but bond.members are stored normalized — without this, `every(m =>
+        // scope.has(m))` filters out every legitimate bond and the
+        // leaderboard ends up empty in groups.
         const scope = new Set<string>()
         if (M.groupMetadata) {
-            for (const p of M.groupMetadata.participants) scope.add(p.id)
+            for (const p of M.groupMetadata.participants) {
+                const n = normalizeJid(p.id)
+                if (n) scope.add(n)
+            }
         } else {
-            scope.add(M.sender.jid)
-            scope.add(M.from)
+            const a = normalizeJid(M.sender.jid)
+            const b = normalizeJid(M.from)
+            if (a) scope.add(a)
+            if (b) scope.add(b)
         }
         // The bot is technically a chat participant but should never appear
-        // in romance leaderboards.
-        const botJid = this.client.user?.jid
+        // in romance leaderboards. Use the normalized bot JID so the delete
+        // actually matches whatever form went into scope above.
+        const botJid = normalizeJid(this.client.user?.jid)
         if (botJid) scope.delete(botJid)
 
         // Bot-exclusion happens at the DB layer ($nin on the multikey members
