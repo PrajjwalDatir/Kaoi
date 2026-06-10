@@ -48,7 +48,7 @@
         "@hapi/boom": "^10.0.1",
         "audio-decode": "^2.2.2",
         "axios": "^1.13.5",
-        "baileys": "^7.0.0-rc.9",
+        "baileys": "^7.0.0-rc12",
         "canvas": "^3.2.3",
         "chalk": "^4.1.2",
         "chess-image-generator-ts": "^1.0.0",
