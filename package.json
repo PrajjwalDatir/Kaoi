@@ -68,7 +68,7 @@
         "node-cron": "^4.2.1",
         "pino": "^9.6.0",
         "qrcode": "^1.5.4",
-        "sharp": "^0.34.0",
+        "sharp": "^0.35.0",
         "spotifydl-core": "^0.2.0",
         "ultra-lyrics": "^1.0.3",
         "wa-sticker-formatter": "^4.4.4",
